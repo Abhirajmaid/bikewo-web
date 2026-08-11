@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   BikeWo Design Tokens — Brand Guidelines v1.0
+   Source of truth: BikeWo_Brand_Kit/tokens/bikewo-tokens.json
+   ========================================================================== */
+
+@theme {
+  /* Replace Tailwind's stock indigo/green with the BikeWo ramps so a stray
+     `text-indigo-500` can never sneak an off-brand colour into the page. */
+  --color-indigo-*: initial;
+  --color-green-*: initial;
+
+  --color-indigo-950: #14113a;
+  --color-indigo-900: #1e194c;
+  --color-indigo-800: #241f5d;
+  --color-indigo-700: #322b7a;
+  --color-indigo-600: #504c7d;
+  --color-indigo-400: #7c799e;
+  --color-indigo-300: #a7a5be;
+  --color-indigo-200: #d3d2df;
+  --color-indigo-100: #ededf2;
+  --color-indigo: #241f5d;
+
+  --color-green-800: #14603f;
+  --color-green-700: #17754f; /* text-safe on white — 5.69:1 */
+  --color-green-600: #229666;
+  --color-green-500: #2ab77c;
+  --color-green-400: #55c596;
+  --color-green-300: #7fd4b0;
+  --color-green-200: #aae2cb;
+  --color-green-100: #d4f1e5;
+  --color-green-50: #eef9f5;
+  --color-green: #2ab77c;
+
+  /* Screen-only highlight — never for text on light surfaces */
+  --color-charge: #35d68f;
+
+  /* Division & signal — the base tones are for fills, bars and rules. */
+  --color-cyan: #1fa6b8; /* Energy Infrastructure */
+  --color-amber: #f2a93b; /* Shram Sainik */
+  --color-violet: #7b5cd6; /* BikeWo VZN */
+  --color-coral: #e2574c; /* errors & alerts only */
+
+  /* Text-safe darkenings of the signal colours. The base tones fail WCAG AA
+     as text on white (cyan 2.91:1, amber 1.77:1) — use these whenever the
+     signal colour has to carry actual words on a light surface. */
+  --color-cyan-700: #157a87; /* 5.04:1 on white */
+  --color-amber-700: #8a5a0e; /* 5.9:1 on white, 5.25:1 on Cloud */
+
+  /* Neutrals — never pure black */
+  --color-ink: #14122b;
+  --color-slate: #4a4869;
+  --color-slate-400: #918fae;
+  --color-mist: #c8c7d6;
+  --color-cloud: #f1f1f5;
+
+  /* Type */
+  --font-display: var(--font-poppins), "Segoe UI", Roboto,
+    "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+
+  /* Radius — cards 16, buttons full. Never mix >2 radii in one block. */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Elevation */
+  --shadow-card: 0 2px 8px rgb(36 31 93 / 0.06);
+  --shadow-lift: 0 12px 32px rgb(36 31 93 / 0.12);
+  --shadow-deep: 0 32px 64px -16px rgb(20 17 58 / 0.28);
+
+  /* Motion */
+  --ease-brand: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Breakpoints follow the brand kit: 640 / 768 / 1024 / 1280 */
+  --container-page: 1280px;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Display face carries headings only. Body copy is never set in Poppins. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--color-indigo-800);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Accessibility is a build requirement, not a review step. */
+  :focus-visible {
+    outline: 2px solid var(--color-green-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection {
+    background: var(--color-green-200);
+    color: var(--color-indigo-900);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utilities
+   -------------------------------------------------------------------------- */
+
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+
+  @media (width >= 1024px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Monospaced, letterspaced kicker used above every section title. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@utility glass {
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgb(255 255 255 / 0.6);
+}
+
+@utility glass-dark {
+  background: rgb(20 17 58 / 0.44);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+/* The Rider Pattern — brandmark tiled on a half-drop grid at 8–16% opacity. */
+@utility rider-pattern {
+  background-image: url("/brand/rider-pattern.svg");
+  background-size: 180px 180px;
+}
+
+@utility text-gradient-flow {
+  background: linear-gradient(100deg, #241f5d, #17754f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Motion — every entrance is fade + 16px rise, 400ms
+   -------------------------------------------------------------------------- */
+
+@keyframes bw-arc-draw {
+  from {
+    stroke-dashoffset: 1400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes bw-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes bw-scroll-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+@keyframes bw-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bw-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Honour the user's motion preference everywhere, including GSAP-driven
+   transforms which we neutralise by killing the transition, not the layout. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

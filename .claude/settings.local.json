@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($py = \\(Get-Command python -ErrorAction SilentlyContinue\\); if \\($py\\) { python -c \"import sys; print\\(sys.version\\)\"; python -c \"import pypdf; print\\('pypdf ok'\\)\" } else { \"no python\" }; $node = \\(Get-Command node -ErrorAction SilentlyContinue\\); if \\($node\\) { node -v } else { \"no node\" }; npm -v)",
+      "PowerShell(python -m pip install pypdf --quiet --disable-pip-version-check 2>&1)",
+      "mcp__25b9489a-524c-4392-a375-34f0090fc221__balance",
+      "mcp__25b9489a-524c-4392-a375-34f0090fc221__models_explore",
+      "mcp__25b9489a-524c-4392-a375-34f0090fc221__generate_image_batch",
+      "mcp__25b9489a-524c-4392-a375-34f0090fc221__jobs_wait",
+      "PowerShell($s = \"D:\\\\Work\\\\WebFudge\\\\Clients\\\\BikeWo\\\\bikewo-web\\\\server\"; Get-ChildItem $s -Force | Select-Object -ExpandProperty Name; \"--- db config ---\"; Get-Content \"$s\\\\config\\\\database.ts\" -TotalCount 25; \"--- env db lines ---\"; Select-String -Path \"$s\\\\.env\" -Pattern \"DATABASE\" | ForEach-Object { $_.Line })",
+      "PowerShell(node \"C:\\\\Users\\\\hp\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--Work-WebFudge-Clients-BikeWo-bikewo-web\\\\69d25037-cbae-41e4-a5ba-71ca6b68db06\\\\scratchpad\\\\gen-routes.mjs\"; \\(Get-ChildItem -Recurse \"D:\\\\Work\\\\WebFudge\\\\Clients\\\\BikeWo\\\\bikewo-web\\\\client\\\\src\\\\app\" -Filter page.tsx\\).Count)",
+      "PowerShell(node \"C:\\\\Users\\\\hp\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--Work-WebFudge-Clients-BikeWo-bikewo-web\\\\69d25037-cbae-41e4-a5ba-71ca6b68db06\\\\scratchpad\\\\fix-contrast.mjs\")"
+    ]
+  }
+}
