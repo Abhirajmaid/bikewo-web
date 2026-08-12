@@ -17,11 +17,23 @@ import { ArrowRightIcon } from "@/components/brand/Icons";
 export function placeholderMetadata(href: string): Metadata {
   const entry = ROUTE_INDEX[href];
   const title = entry?.title ?? "BikeWo";
+  const description = entry?.blurb ?? undefined;
   return {
     title,
-    description: entry?.blurb ?? undefined,
+    description,
+    alternates: { canonical: href },
+    openGraph: {
+      title,
+      description,
+      url: href,
+      type: "website",
+    },
+    twitter: {
+      title,
+      description,
+    },
     // Nothing here is worth indexing until the section has real content.
-    robots: { index: false, follow: true },
+    robots: { index: false, follow: true, nocache: true },
   };
 }
 

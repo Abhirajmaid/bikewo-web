@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE } from "@/lib/site";
+import { SITE, SOCIALS } from "@/lib/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
@@ -27,28 +27,94 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+const title = `${SITE.name} — ${SITE.tagline}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — ${SITE.tagline}`,
+    default: title,
     template: `%s — ${SITE.name}`,
   },
   description: SITE.description,
   applicationName: SITE.name,
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.legalName, url: SITE.url }],
+  creator: SITE.legalName,
+  publisher: SITE.legalName,
+  category: "business",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     siteName: SITE.legalName,
-    title: `${SITE.name} — ${SITE.tagline}`,
+    title,
     description: SITE.description,
-    locale: "en_IN",
+    url: SITE.url,
+    locale: SITE.locale,
   },
-  twitter: { card: "summary_large_image" },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  appleWebApp: {
+    title: SITE.name,
+    statusBarStyle: "default",
+    capable: true,
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#241F5D",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#241F5D" },
+    { media: "(prefers-color-scheme: dark)", color: "#241F5D" },
+  ],
   colorScheme: "light",
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE.legalName,
+  alternateName: SITE.name,
+  url: SITE.url,
+  logo: `${SITE.url}/brand/logo-primary.png`,
+  description: SITE.description,
+  email: SITE.brandEmail,
+  sameAs: SOCIALS.map((s) => s.href),
+  slogan: SITE.corporateTagline,
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.name,
+  alternateName: SITE.legalName,
+  url: SITE.url,
+  description: SITE.description,
+  publisher: {
+    "@type": "Organization",
+    name: SITE.legalName,
+    url: SITE.url,
+  },
+  inLanguage: "en-IN",
 };
 
 export default function RootLayout({
@@ -60,6 +126,12 @@ export default function RootLayout({
       className={`${poppins.variable} ${inter.variable} ${jetbrains.variable}`}
     >
       <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([organizationJsonLd, websiteJsonLd]),
+          }}
+        />
         {/* Keyboard users land here first. */}
         <a
           href="#main"

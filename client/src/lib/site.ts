@@ -22,8 +22,21 @@ export const SITE = {
   campaignTagline: "The Mobility India Deserves.",
   url: "https://www.bikewo.in",
   brandEmail: "brand@bikewo.in",
+  locale: "en_IN",
   description:
     "BikeWo Green Tech Limited is building India's integrated energy & mobility infrastructure — from the vehicle you buy to the charge you take and the service you rely on.",
+  keywords: [
+    "BikeWo",
+    "BikeWo Green Tech",
+    "electric mobility India",
+    "EV infrastructure",
+    "energy and mobility",
+    "EV charging",
+    "mobility distribution",
+    "Shram Sainik",
+    "PositiEV",
+    "Enlite EV Care",
+  ],
 } as const;
 
 export const NAV: NavNode[] = [
