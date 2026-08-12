@@ -122,17 +122,6 @@ export const MonitorIcon = (p: IconProps) => (
 
 /* Extensions drawn on the same grid and stroke discipline. */
 
-export const DroneIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <rect x="9" y="9" width="6" height="6" rx="1.5" />
-    <path d="M9 9 5.5 5.5M15 9l3.5-3.5M9 15l-3.5 3.5M15 15l3.5 3.5" />
-    <circle cx="4" cy="4" r="2" />
-    <circle cx="20" cy="4" r="2" />
-    <circle cx="4" cy="20" r="2" />
-    <circle cx="20" cy="20" r="2" />
-  </Icon>
-);
-
 export const BoxIcon = (p: IconProps) => (
   <Icon {...p}>
     <path d="M21 8 12 3 3 8v8l9 5 9-5V8Z" />
@@ -212,7 +201,6 @@ export const DIVISION_ICONS = {
   leasing: WalletIcon,
   energy: BoltIcon,
   lifecycle: BatteryIcon,
-  aviation: DroneIcon,
   sourcing: BoxIcon,
   vzn: PulseIcon,
 } as const;

@@ -1,4 +1,5 @@
 import { Container } from "@/components/layout/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { EnergyArc } from "@/components/brand/EnergyArc";
@@ -20,10 +21,7 @@ export function ContactCTA() {
         <div className="flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <Reveal>
-              <p className="eyebrow flex items-center gap-2.5 text-green-400">
-                <span aria-hidden className="h-px w-6 bg-green-400/50" />
-                Get in touch
-              </p>
+              <Eyebrow tone="dark">Get in touch</Eyebrow>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="mt-5 text-[clamp(1.875rem,1.1rem+2.8vw,3.25rem)] leading-[1.1] text-white">

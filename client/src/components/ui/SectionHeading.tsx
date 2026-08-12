@@ -34,10 +34,7 @@ export function SectionHeading({
       <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center")}>
         {eyebrow && (
           <Reveal>
-            <Eyebrow
-              tone={tone === "dark" ? "dark" : "light"}
-              className={align === "center" ? "justify-center" : undefined}
-            >
+            <Eyebrow tone={tone === "dark" ? "dark" : "light"}>
               {eyebrow}
             </Eyebrow>
           </Reveal>

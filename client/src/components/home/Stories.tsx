@@ -2,9 +2,8 @@ import Image from "next/image";
 import { STORIES } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
-import { stagger } from "@/lib/utils";
 
 /**
  * 5.8 — Customer success stories.
@@ -15,41 +14,70 @@ import { stagger } from "@/lib/utils";
  * releases before launch.
  */
 export function Stories() {
-  return (
-    <Section>
-      <Container>
-        <SectionHeading
-          eyebrow="Customer success"
-          title="The proof is in the uptime."
-          lede="Fleet operators, dealers and driver-partners on what changed when the whole chain came from one company."
-        />
+  // One half must be wider than the viewport or the loop leaves a blank gap.
+  const half = [...STORIES, ...STORIES, ...STORIES];
 
-        <ul className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-3">
-          {STORIES.map((story, i) => (
-            <Reveal as="li" key={story.role} delay={stagger(i)}>
-              <figure className="flex h-full flex-col rounded-lg border border-indigo-100 bg-white p-8">
-                <span aria-hidden className="h-1 w-10 rounded-full bg-green-500" />
-                <blockquote className="mt-6 flex-1 font-display text-[1.0625rem] font-medium leading-relaxed text-indigo-800">
-                  “{story.quote}”
-                </blockquote>
-                <figcaption className="mt-8 flex items-center gap-4 border-t border-indigo-100 pt-6">
-                  <Image
-                    src={story.avatar}
-                    alt=""
-                    width={48}
-                    height={48}
-                    className="size-12 shrink-0 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="text-[14px] font-medium text-indigo-800">{story.name}</p>
-                    <p className="mt-0.5 text-[13px] text-slate">{story.role}</p>
-                  </div>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </ul>
+  return (
+    <Section tone="cloud">
+      <Container>
+        <Reveal>
+          <div className="mx-auto max-w-3xl text-center">
+            <Eyebrow>Client stories</Eyebrow>
+            <h2 className="mt-5 text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] leading-[1.12]">
+              What our global partners say worldwide today
+            </h2>
+          </div>
+        </Reveal>
       </Container>
+
+      <div className="mt-14 overflow-hidden lg:mt-16">
+        <div className="flex w-max shrink-0 [animation:bw-marquee_48s_linear_infinite] motion-reduce:[animation:none]">
+          {[0, 1].map((copy) => (
+            <ul
+              key={copy}
+              className="flex gap-6 pr-6"
+              aria-hidden={copy === 1 || undefined}
+              aria-label={copy === 0 ? "Customer success stories" : undefined}
+            >
+              {half.map((story, i) => (
+                <li
+                  key={`${copy}-${story.role}-${i}`}
+                  className="w-[min(85vw,22.5rem)] shrink-0"
+                >
+                  <figure className="flex h-full flex-col bg-white p-8 shadow-card">
+                    <span
+                      aria-hidden
+                      className="font-display text-[2.75rem] leading-none text-indigo-800"
+                    >
+                      “
+                    </span>
+                    <blockquote className="mt-5 flex-1 text-[1.0625rem] leading-relaxed text-indigo-800">
+                      {story.quote}
+                    </blockquote>
+                    <figcaption className="mt-8 flex items-center gap-3">
+                      <Image
+                        src={story.avatar}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="size-12 shrink-0 rounded-full object-cover"
+                      />
+                      <div>
+                        <p className="text-[14px] font-semibold text-indigo-800">
+                          {story.name}
+                        </p>
+                        <p className="mt-0.5 text-[13px] text-slate">
+                          {story.role}
+                        </p>
+                      </div>
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
     </Section>
   );
 }

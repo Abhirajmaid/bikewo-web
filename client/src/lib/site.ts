@@ -47,13 +47,12 @@ export const NAV: NavNode[] = [
   {
     title: "Businesses",
     href: "/businesses",
-    blurb: "Seven divisions operating as one accountable system.",
+    blurb: "Six divisions operating as one accountable system.",
     children: [
       { title: "Mobility Distribution", href: "/businesses/mobility-distribution" },
       { title: "Mobility Asset Leasing", href: "/businesses/mobility-asset-leasing" },
       { title: "Energy Infrastructure", href: "/businesses/energy-infrastructure" },
       { title: "Lifecycle Services", href: "/businesses/lifecycle-services" },
-      { title: "Aviation Services", href: "/businesses/aviation-services" },
       {
         title: "Global Sourcing & Supply Chain",
         href: "/businesses/global-sourcing-supply-chain",

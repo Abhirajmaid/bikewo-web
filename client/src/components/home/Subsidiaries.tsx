@@ -1,24 +1,58 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SUBSIDIARIES } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { Mark } from "@/components/brand/Mark";
-import { ArrowRightIcon } from "@/components/brand/Icons";
+import { ArrowUpRightIcon } from "@/components/brand/Icons";
 import { cn, stagger } from "@/lib/utils";
 
 /**
- * 5.5 — Subsidiaries, as premium interactive company cards rather than a row
- * of logos. Every card carries the endorsement, because that is the rule:
- * a subsidiary may hold its own name, but never without "A BikeWo Company".
+ * 5.5 — Subsidiaries as notched company cards. Whole card is the hit target;
+ * the corner disc is the visual affordance only.
  */
 
-const ACCENT = {
-  green: { bar: "bg-green-500", text: "text-green-700", glow: "bg-green-500/10" },
-  cyan: { bar: "bg-cyan", text: "text-cyan-700", glow: "bg-cyan/10" },
-  violet: { bar: "bg-violet", text: "text-violet", glow: "bg-violet/10" },
-  muted: { bar: "bg-indigo-200", text: "text-slate", glow: "bg-indigo-100" },
+const NOTCH =
+  "[mask-image:radial-gradient(circle_30px_at_calc(100%-22px)_calc(100%-22px),transparent_30px,#000_30.5px)] [-webkit-mask-image:radial-gradient(circle_30px_at_calc(100%-22px)_calc(100%-22px),transparent_30px,#000_30.5px)]";
+
+const VARIANT = {
+  dark: {
+    shell: "bg-indigo-800",
+    index: "text-white/55",
+    rule: "bg-white/25",
+    title: "text-white",
+    copy: "text-white/70",
+    cta: "text-white/85 decoration-white/40",
+    align: "justify-end",
+  },
+  accent: {
+    shell: "bg-green-500",
+    index: "text-indigo-800/55",
+    rule: "bg-indigo-800/20",
+    title: "text-indigo-800",
+    copy: "text-indigo-800/75",
+    cta: "text-indigo-800 decoration-indigo-800/35",
+    align: "justify-start",
+  },
+  photo: {
+    shell: "bg-indigo-950",
+    index: "text-white/55",
+    rule: "bg-white/25",
+    title: "text-white",
+    copy: "text-white/70",
+    cta: "text-white/85 decoration-white/40",
+    align: "justify-end",
+  },
+  muted: {
+    shell: "bg-cloud",
+    index: "text-slate",
+    rule: "bg-indigo-200",
+    title: "text-indigo-800",
+    copy: "text-slate",
+    cta: "text-indigo-800 decoration-indigo-300",
+    align: "justify-end",
+  },
 } as const;
 
 export function Subsidiaries() {
@@ -31,70 +65,113 @@ export function Subsidiaries() {
           lede="The masterbrand always leads. Sub-brands earn distinction only where they serve a genuinely different customer."
         />
 
-        <ul className="mt-14 grid gap-6 md:grid-cols-2 lg:mt-16 lg:grid-cols-4">
+        <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
           {SUBSIDIARIES.map((sub, i) => {
-            const accent = ACCENT[sub.accent];
-            const isPlaceholder = sub.accent === "muted";
+            const v = VARIANT[sub.variant];
+            const hasImage = "image" in sub && !!sub.image;
 
             return (
               <Reveal key={sub.name} as="li" delay={stagger(i)}>
                 <Link
                   href={sub.href}
-                  className={cn(
-                    "group relative flex h-full flex-col overflow-hidden rounded-lg border p-7 transition-shadow duration-300 hover:shadow-[0_12px_32px_rgb(36_31_93/0.12)]",
-                    isPlaceholder
-                      ? "border-dashed border-indigo-200 bg-cloud"
-                      : "border-indigo-100 bg-white",
-                  )}
+                  className="group relative block h-full min-h-100 lg:min-h-108"
                 >
-                  {/* Accent wash that resolves on hover */}
-                  <span
-                    aria-hidden
+                  <article
                     className={cn(
-                      "pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100",
-                      accent.glow,
+                      "relative flex h-full flex-col overflow-hidden rounded-[1.75rem] p-7 pb-14",
+                      NOTCH,
+                      v.shell,
+                      v.align,
                     )}
-                  />
-                  <span aria-hidden className={cn("h-1 w-10 rounded-full", accent.bar)} />
-
-                  <h3 className="mt-6 font-display text-xl font-semibold text-indigo-800">
-                    {sub.name}
-                  </h3>
-                  <p className={cn("eyebrow mt-2", accent.text)}>{sub.kind}</p>
-
-                  <p className="mt-4 flex-1 text-[15px] leading-relaxed text-slate">
-                    {sub.copy}
-                  </p>
-
-                  <ul className="mt-6 space-y-2">
-                    {sub.points.map((point) => (
-                      <li
-                        key={point}
-                        className="flex items-center gap-2.5 text-[13.5px] text-indigo-800/75"
-                      >
+                  >
+                    {sub.variant === "photo" && hasImage ? (
+                      <Image
+                        src={sub.image!}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover object-[center_30%]"
+                      />
+                    ) : null}
+                    {sub.variant === "photo" ? (
+                      <>
                         <span
                           aria-hidden
-                          className={cn("size-1.5 shrink-0 rounded-full", accent.bar)}
+                          className="absolute inset-0 bg-indigo-950/25"
                         />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
+                        <span
+                          aria-hidden
+                          className="absolute inset-x-0 bottom-0 h-[65%] bg-linear-to-t from-indigo-950 via-indigo-950/85 to-transparent"
+                        />
+                      </>
+                    ) : null}
 
-                  <div className="mt-7 flex items-center justify-between border-t border-indigo-100 pt-5">
-                    {isPlaceholder ? (
-                      <span className="eyebrow text-slate">Future ventures</span>
-                    ) : (
-                      <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-slate">
-                        <Mark className="h-3 w-auto text-indigo-800" />
-                        A BikeWo Company
+                    {sub.variant === "accent" && hasImage ? (
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] overflow-hidden">
+                        <Image
+                          src={sub.image!}
+                          alt=""
+                          fill
+                          sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                          className="object-cover object-center"
+                        />
+                        <span
+                          aria-hidden
+                          className="absolute inset-0 bg-linear-to-b from-green-500 via-green-500/45 to-green-500/10"
+                        />
+                      </div>
+                    ) : null}
+
+                    <div className="relative z-10 flex flex-col">
+                      <span
+                        className={cn(
+                          "font-mono text-[11px] tracking-[0.08em]",
+                          v.index,
+                        )}
+                      >
+                        {sub.index}.
                       </span>
-                    )}
-                    <ArrowRightIcon
+                      <span
+                        aria-hidden
+                        className={cn("mt-3 h-px w-full", v.rule)}
+                      />
+
+                      <h3
+                        className={cn(
+                          "mt-6 font-display text-[1.35rem] font-semibold leading-snug",
+                          v.title,
+                        )}
+                      >
+                        {sub.name}
+                      </h3>
+                      <p
+                        className={cn(
+                          "mt-3 text-[14px] leading-relaxed",
+                          v.copy,
+                        )}
+                      >
+                        {sub.copy}
+                      </p>
+                      <span
+                        className={cn(
+                          "mt-5 inline-block text-[13px] font-medium underline underline-offset-[5px] transition-opacity duration-200 group-hover:opacity-80",
+                          v.cta,
+                        )}
+                      >
+                        {sub.cta}
+                      </span>
+                    </div>
+                  </article>
+
+                  <span
+                    aria-hidden
+                    className="absolute bottom-0 right-0 flex size-11 items-center justify-center rounded-full bg-green-500 text-indigo-800 shadow-[0_4px_12px_rgb(36_31_93/0.18)] transition-transform duration-300 ease-out-expo group-hover:scale-105"
+                  >
+                    <ArrowUpRightIcon
                       size={18}
-                      className="shrink-0 text-indigo-800 transition-transform duration-200 group-hover:translate-x-1"
+                      className="transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     />
-                  </div>
+                  </span>
                 </Link>
               </Reveal>
             );

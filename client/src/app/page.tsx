@@ -21,12 +21,12 @@ export default function HomePage() {
       <Ecosystem />
       <Divisions />
       <Subsidiaries />
-      <ShramSainik />
+      {/* <ShramSainik /> */}
       <Sustainability />
       <Stories />
       <Investors />
-      <News />
-      <Careers />
+      {/* <News /> */}
+      {/* <Careers /> */}
       <ContactCTA />
     </>
   );

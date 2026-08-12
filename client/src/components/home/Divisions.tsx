@@ -16,7 +16,7 @@ export function Divisions() {
       <Container>
         <SectionHeading
           eyebrow="Businesses"
-          title="Seven divisions. One accountable system."
+          title="Six divisions. One accountable system."
           lede="Each division runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam."
           action={
             <Button href="/businesses" variant="ghost" withArrow>
@@ -32,7 +32,11 @@ export function Divisions() {
               as="li"
               delay={stagger(i, 0.05)}
               /* The seventh card fills the trailing gap on 3-up. */
-              className={i === 6 ? "lg:col-span-1 sm:col-span-2 lg:col-start-3" : undefined}
+              className={
+                i === 6
+                  ? "lg:col-span-1 sm:col-span-2 lg:col-start-3"
+                  : undefined
+              }
             >
               <Link
                 href={division.href}
@@ -44,7 +48,7 @@ export function Divisions() {
                     alt=""
                     fill
                     sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.04]"
+                    className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.04] rounded-2xl"
                   />
                   <span className="absolute left-4 top-4 flex size-9 items-center justify-center rounded-full bg-green-500 font-mono text-xs font-medium text-indigo-800">
                     {division.index}

@@ -62,7 +62,7 @@ export function ShramSainik() {
           {/* Copy */}
           <div>
             <Reveal>
-              <Eyebrow className="text-amber-700">{SHRAM_SAINIK.eyebrow}</Eyebrow>
+              <Eyebrow>{SHRAM_SAINIK.eyebrow}</Eyebrow>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="mt-5 text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] leading-[1.12]">

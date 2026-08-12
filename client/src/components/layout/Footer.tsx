@@ -14,10 +14,10 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-indigo-950 text-white">
       {/* Rider Pattern at 8% — packaging, endpapers and empty states. */}
-      <div
+      {/* <div
         aria-hidden
         className="rider-pattern pointer-events-none absolute inset-0 opacity-[0.08] invert"
-      />
+      /> */}
 
       <Container className="relative py-20 lg:py-24">
         <div className="flex flex-col gap-12 border-b border-white/10 pb-14 lg:flex-row lg:items-end lg:justify-between">
@@ -28,8 +28,8 @@ export function Footer() {
               <span className="text-green-400">easy</span> choice.
             </p>
             <p className="mt-4 max-w-md leading-relaxed text-white/60">
-              So we build everything it takes to make it easy — from the vehicle you
-              buy to the charge you take and the service you rely on.
+              So we build everything it takes to make it easy — from the vehicle
+              you buy to the charge you take and the service you rely on.
             </p>
           </div>
 
@@ -103,11 +103,15 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <Mark className="h-5 w-auto text-green-400" />
             <p>
-              © {new Date().getFullYear()} {SITE.legalName}. All rights reserved.
+              © {new Date().getFullYear()} {SITE.legalName}. All rights
+              reserved.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <Link href="/privacy" className="transition-colors hover:text-white">
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-white"
+            >
               Privacy
             </Link>
             <Link href="/terms" className="transition-colors hover:text-white">
