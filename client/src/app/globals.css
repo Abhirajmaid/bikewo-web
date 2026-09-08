@@ -179,6 +179,41 @@
   color: transparent;
 }
 
+/* Contact FAQ bento — 5-column masonry matching the category reference */
+@media (min-width: 1024px) {
+  .contact-help-bento {
+    grid-template-areas:
+      "featured pricing technology fleet support"
+      "featured maintenance technology fleet support"
+      "featured maintenance charging subsidies support";
+  }
+
+  .contact-help-bento > [data-area="featured"] {
+    grid-area: featured;
+  }
+  .contact-help-bento > [data-area="pricing"] {
+    grid-area: pricing;
+  }
+  .contact-help-bento > [data-area="maintenance"] {
+    grid-area: maintenance;
+  }
+  .contact-help-bento > [data-area="technology"] {
+    grid-area: technology;
+  }
+  .contact-help-bento > [data-area="charging"] {
+    grid-area: charging;
+  }
+  .contact-help-bento > [data-area="fleet"] {
+    grid-area: fleet;
+  }
+  .contact-help-bento > [data-area="subsidies"] {
+    grid-area: subsidies;
+  }
+  .contact-help-bento > [data-area="support"] {
+    grid-area: support;
+  }
+}
+
 /* --------------------------------------------------------------------------
    Motion — every entrance is fade + 16px rise, 400ms
    -------------------------------------------------------------------------- */

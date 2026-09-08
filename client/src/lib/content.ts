@@ -19,7 +19,7 @@ export const HERO = {
   titleLines: ["Building India's Energy &", "Mobility Infrastructure."],
   lede: "One company — from the vehicle you buy to the charge you take and the service you rely on.",
   primaryCta: { label: "Explore Ecosystem", href: "#ecosystem" },
-  secondaryCta: { label: "Watch Our Story", href: "/about/our-story" },
+  secondaryCta: { label: "About us", href: "/about" },
   marquee: [
     "Mobility Distribution",
     "Asset Leasing",
@@ -36,7 +36,7 @@ export const GLANCE = {
   badge: "About us",
   lead: "BikeWo delivers energy and mobility infrastructure, helping riders, fleets and cities transition to",
   rest: "clean, reliable power with an integrated ecosystem and expert support nationwide.",
-  cta: { label: "Read more about us", href: "/about/our-story" },
+  cta: { label: "Read more about us", href: "/about" },
   image: {
     src: "/assets/hf_20260806_145122_f7847d04-e4a6-488e-9f6b-3d0507bdc52a.png",
     alt: "Fleet of BikeWo electric three-wheelers parked at a branded facility with EV charging stations.",
@@ -198,7 +198,9 @@ export const SUBSIDIARIES = [
     kind: "Subsidiary",
     copy: "Distribution and leasing platform — dealer network, fleet rentals and channel partners.",
     cta: "Explore",
-    href: "/subsidiaries/positiev-mobility",
+    href: "https://positievmobility.com/",
+    external: true,
+    logo: "/assets/positievlogo.webp",
     variant: "dark" as const,
   },
   {
@@ -207,7 +209,9 @@ export const SUBSIDIARIES = [
     kind: "Subsidiary",
     copy: "Service and after-sales network maintenance, spares, roadside assistance and battery health.",
     cta: "Explore",
-    href: "/subsidiaries/enlite-ev-care",
+    href: "https://enliteev.com/",
+    external: true,
+    logo: "/assets/enliteev_logo-removebg-preview.png",
     variant: "accent" as const,
     image: "/assets/hf_20260806_145121_57e54b4f-5e29-4c50-9620-8bbfdc06eac5.png",
   },
@@ -217,18 +221,10 @@ export const SUBSIDIARIES = [
     kind: "Subsidiary",
     copy: "AI, wearables and connected intelligence for fleets that need to know everything, now.",
     cta: "Explore",
-    href: "/subsidiaries/bikewo-vzn",
+    href: "/",
+    logo: "/assets/bikewo_vzn.png",
     variant: "photo" as const,
     image: "/assets/div-vzn.png",
-  },
-  {
-    index: "04",
-    name: "Future Companies",
-    kind: "Expandable",
-    copy: "New ventures join under the same endorsement rule: the masterbrand always leads.",
-    cta: "Learn more",
-    href: "/subsidiaries/future-companies",
-    variant: "muted" as const,
   },
 ];
 
@@ -264,18 +260,21 @@ export const SUSTAINABILITY = {
       value: "2.5 Mn+",
       detail:
         "Emissions avoided annually through electrified kilometres across BikeWo’s mobility network.",
+      icon: "leaf" as const,
     },
     {
       label: "Kilometres electrified",
       value: "100 Mn+",
       detail:
         "Clean kilometres delivered on India’s roads through lease, charge and service.",
+      icon: "bolt" as const,
     },
     {
       label: "Battery packs into second life",
       value: "18,400",
       detail:
         "Packs recovered into second-life and end-of-life pathways through Enlite.",
+      icon: "recycle" as const,
     },
   ],
   map: {
@@ -331,7 +330,7 @@ export const INVESTORS = {
   links: [
     { label: "Annual reports", href: "/investors" },
     { label: "Quarterly presentations", href: "/investors" },
-    { label: "Corporate governance", href: "/about/corporate-governance" },
+    { label: "ESG reporting", href: "/about/esg" },
   ],
 };
 
@@ -343,21 +342,21 @@ export const NEWS = [
     date: "2026-07-22",
     title: "Charge hub network crosses its next corridor milestone",
     copy: "The highway corridor build-out adds fast-charging capacity between three states.",
-    href: "/media",
+    href: "/media/charge-hub-corridor-milestone",
   },
   {
     tag: "Shram Sainik",
     date: "2026-06-30",
     title: "Training academy expands to five new cities",
     copy: "Road safety, battery handling and customer service, delivered in regional languages.",
-    href: "/media",
+    href: "/media/training-academy-expansion",
   },
   {
     tag: "BikeWo VZN",
     date: "2026-06-11",
     title: "Predictive maintenance moves from pilot to fleet-wide",
     copy: "Telemetry now flags battery degradation before it becomes an unplanned workshop visit.",
-    href: "/media",
+    href: "/media/predictive-maintenance-fleet-wide",
   },
 ];
 

@@ -56,21 +56,36 @@ export function Footer() {
         >
           {columns.map((col) => (
             <div key={col.href}>
-              <Link
-                href={col.href}
-                className="eyebrow inline-block text-green-400 transition-opacity hover:opacity-80"
-              >
-                {col.title}
-              </Link>
+              {col.href === "/subsidiaries" ? (
+                <span className="eyebrow inline-block text-green-400">{col.title}</span>
+              ) : (
+                <Link
+                  href={col.href}
+                  className="eyebrow inline-block text-green-400 transition-opacity hover:opacity-80"
+                >
+                  {col.title}
+                </Link>
+              )}
               <ul className="mt-5 space-y-3">
                 {col.children!.map((child) => (
                   <li key={child.href}>
-                    <Link
-                      href={child.href}
-                      className="flex min-h-6 items-center text-[14.5px] leading-snug text-white/60 transition-colors hover:text-white"
-                    >
-                      {child.title}
-                    </Link>
+                    {child.external ? (
+                      <a
+                        href={child.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="flex min-h-6 items-center text-[14.5px] leading-snug text-white/60 transition-colors hover:text-white"
+                      >
+                        {child.title}
+                      </a>
+                    ) : (
+                      <Link
+                        href={child.href}
+                        className="flex min-h-6 items-center text-[14.5px] leading-snug text-white/60 transition-colors hover:text-white"
+                      >
+                        {child.title}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

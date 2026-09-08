@@ -130,13 +130,13 @@ export function Ecosystem() {
                   >
                     <span
                       className={cn(
-                        "flex size-14 items-center justify-center rounded-full border transition-all duration-300 md:size-16 lg:size-[4.5rem]",
+                        "flex size-20 items-center justify-center rounded-full border transition-all duration-300 md:size-24 lg:size-28",
                         on
                           ? "scale-110 border-green-500 bg-green-500 text-indigo-950 shadow-[0_0_28px_rgb(42_183_124/0.5)]"
                           : "border-white/20 bg-indigo-950/90 text-white/65 hover:border-white/40 hover:text-white",
                       )}
                     >
-                      <Icon size={26} />
+                      <Icon size={52} tone="onDark" />
                     </span>
                     <span
                       className={cn(
@@ -163,8 +163,8 @@ export function Ecosystem() {
                 transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
                 className="relative border-l-2 border-green-500 pl-6 sm:pl-8"
               >
-                <div className="flex size-11 items-center justify-center rounded-full bg-green-500/15 text-green-400">
-                  <ActiveIcon size={22} />
+                <div className="flex size-16 items-center justify-center rounded-full bg-green-500/15 text-green-400">
+                  <ActiveIcon size={44} tone="onDark" />
                 </div>
                 <h3 className="mt-5 font-display text-2xl font-semibold text-white lg:text-[1.85rem]">
                   {active.title}

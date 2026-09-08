@@ -11,6 +11,10 @@ export type NavNode = {
   href: string;
   /** One-line summary shown in the mega-menu and on the placeholder page. */
   blurb?: string;
+  /** Open href in a new tab (external subsidiary sites, etc.). */
+  external?: boolean;
+  /** Optional brand mark shown in mega-menus (e.g. subsidiaries). */
+  logo?: string;
   children?: NavNode[];
 };
 
@@ -45,16 +49,12 @@ export const NAV: NavNode[] = [
     href: "/about",
     blurb: "Who we are, what we stand for and how we govern ourselves.",
     children: [
-      { title: "Our Story", href: "/about/our-story" },
-      { title: "Leadership Letter", href: "/about/leadership-letter" },
+      { title: "About us", href: "/about", blurb: "Who we are and what we stand for." },
       { title: "Leadership Team", href: "/about/leadership-team" },
-      { title: "Vision, Mission & Values", href: "/about/vision-mission-values" },
-      { title: "Why BikeWo", href: "/about/why-bikewo" },
-      { title: "Corporate Governance", href: "/about/corporate-governance" },
+      { title: "Vision, Mission & Values", href: "/about#mission-vision" },
       { title: "ESG", href: "/about/esg" },
       { title: "Awards & Recognition", href: "/about/awards" },
-      { title: "Global Presence", href: "/about/global-presence" },
-      { title: "Timeline", href: "/about/timeline" },
+      { title: "News & media", href: "/media", blurb: "Newsroom, announcements and press resources." },
     ],
   },
   {
@@ -78,10 +78,29 @@ export const NAV: NavNode[] = [
     href: "/subsidiaries",
     blurb: "Endorsed companies that carry the masterbrand forward.",
     children: [
-      { title: "PositiEV Mobility", href: "/subsidiaries/positiev-mobility" },
-      { title: "Enlite EV Care", href: "/subsidiaries/enlite-ev-care" },
-      { title: "BikeWo VZN", href: "/subsidiaries/bikewo-vzn" },
-      { title: "Future Companies", href: "/subsidiaries/future-companies" },
+      {
+        title: "PositiEV Mobility",
+        href: "https://positievmobility.com/",
+        external: true,
+        logo: "/assets/positievlogo.webp",
+        blurb:
+          "Distribution and leasing platform — dealer network, fleet rentals and channel partners across India.",
+      },
+      {
+        title: "Enlite EV Care",
+        href: "https://enliteev.com/",
+        external: true,
+        logo: "/assets/enliteev_logo-removebg-preview.png",
+        blurb:
+          "Service and after-sales network — maintenance, spares, roadside assistance and battery health.",
+      },
+      {
+        title: "BikeWo VZN",
+        href: "/",
+        logo: "/assets/bikewo_vzn.png",
+        blurb:
+          "AI, wearables and connected intelligence for fleets that need to know everything, now.",
+      },
     ],
   },
   {
@@ -113,11 +132,19 @@ export const NAV: NavNode[] = [
 ];
 
 /** Primary nav shown in the header — the rest live in the footer. */
-export const PRIMARY_NAV = NAV.filter((n) =>
-  ["About BikeWo", "Businesses", "Subsidiaries", "Shram Sainik", "Sustainability", "Investors"].includes(
-    n.title,
+export const PRIMARY_NAV: NavNode[] = [
+  { title: "Home", href: "/" },
+  ...NAV.filter((n) =>
+    [
+      "About BikeWo",
+      "Businesses",
+      "Subsidiaries",
+      "Shram Sainik",
+      "Sustainability",
+      "Investors",
+    ].includes(n.title),
   ),
-);
+];
 
 /** Legal routes — linked from the footer, outside the main sitemap. */
 export const LEGAL: NavNode[] = [
@@ -129,8 +156,12 @@ export const LEGAL: NavNode[] = [
 export const ROUTE_INDEX: Record<string, { title: string; parent?: string; blurb?: string }> =
   [...NAV, ...LEGAL].reduce(
     (acc, node) => {
-      acc[node.href] = { title: node.title, blurb: node.blurb };
+      // Hub-only entries (no dedicated page) stay out of the route index.
+      if (!node.href.startsWith("http") && node.href !== "/subsidiaries") {
+        acc[node.href] = { title: node.title, blurb: node.blurb };
+      }
       node.children?.forEach((child) => {
+        if (child.href.startsWith("http")) return;
         acc[child.href] = { title: child.title, parent: node.title, blurb: child.blurb };
       });
       return acc;

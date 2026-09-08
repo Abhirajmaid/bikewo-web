@@ -1,18 +1,300 @@
 /**
- * BikeWo icon set — Brand Guidelines 05.1.
+ * BikeWo icons — DP Energy brand set from /public/icons.
  *
- * 24×24 grid · 2px stroke · round caps and joins · no fills, no duotone,
- * no perspective. Stroke colour comes from `currentColor`: Indigo on light,
- * White on dark, Green only when the icon *is* the accent.
+ * Thematic icons load the shared SVG assets (green→yellow accent).
+ * UI chrome (arrows, menu, close, chevron, play, pin, clock) stays as
+ * simple currentColor strokes — those shapes aren't in the brand pack.
  *
- * Do not scale the stroke — keep it optically constant at 16/20/24/32/48px.
+ * `tone`: "onLight" (default) = dark-stroke assets for light backgrounds.
+ *         "onDark" = white-stroke assets for dark backgrounds.
  */
 
 import type { SVGProps } from "react";
+import { cn } from "@/lib/utils";
 
-type IconProps = SVGProps<SVGSVGElement> & { size?: number };
+type Tone = "onLight" | "onDark";
 
-function Icon({ size = 24, children, ...props }: IconProps) {
+type IconProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+  tone?: Tone;
+};
+
+type AssetProps = {
+  size?: number;
+  tone?: Tone;
+  className?: string;
+  alt?: string;
+};
+
+const DARK = "/icons/dp-energy-dark-icons";
+const LIGHT = "/icons/dp-energy-light-icons";
+
+function AssetIcon({
+  onLight,
+  onDark,
+  size = 48,
+  tone = "onLight",
+  className,
+  alt = "",
+}: AssetProps & { onLight: string; onDark?: string }) {
+  const src = tone === "onDark" && onDark ? onDark : onLight;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- brand SVG assets; avoid Image ID/cache issues
+    <img
+      src={src}
+      alt={alt}
+      width={size}
+      height={size}
+      aria-hidden={alt ? undefined : true}
+      className={cn("shrink-0 object-contain", className)}
+      draggable={false}
+    />
+  );
+}
+
+/* ── Thematic brand assets ─────────────────────────────────────────── */
+
+/** Lightning / green energy */
+export const BoltIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-05.svg`}
+    onDark={`${LIGHT}-09.svg`}
+    {...p}
+  />
+);
+
+/** EV / mobility */
+export const VehicleIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-21.svg`}
+    onDark={`${LIGHT}-11.svg`}
+    {...p}
+  />
+);
+
+/** Battery / storage */
+export const BatteryIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-05.svg`}
+    onDark={`${LIGHT}-06.svg`}
+    {...p}
+  />
+);
+
+/** Nature / sustainability */
+export const LeafIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-14.svg`}
+    onDark={`${LIGHT}-14.svg`}
+    {...p}
+  />
+);
+
+/** Saplings / growth / community */
+export const GrowthIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-02.svg`}
+    onDark={`${LIGHT}-07.svg`}
+    {...p}
+  />
+);
+
+/** Building / HQ */
+export const BuildingIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-23.svg`}
+    onDark={`${LIGHT}-23.svg`}
+    {...p}
+  />
+);
+
+/** City / urban presence */
+export const CityIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-23.svg`}
+    onDark={`${LIGHT}-24.svg`}
+    {...p}
+  />
+);
+
+/** Solar */
+export const SunIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-21.svg`}
+    onDark={`${LIGHT}-06.svg`}
+    {...p}
+  />
+);
+
+/** Wind / renewable */
+export const WindIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-14.svg`}
+    onDark={`${LIGHT}-08.svg`}
+    {...p}
+  />
+);
+
+/** Recycle / lifecycle */
+export const RecycleIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-10.svg`}
+    onDark={`${LIGHT}-06.svg`}
+    {...p}
+  />
+);
+
+/** Wallet / payments */
+export const WalletIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-16.svg`}
+    onDark={`${LIGHT}-20.svg`}
+    {...p}
+  />
+);
+
+/** Investment / earnings growth */
+export const InvestIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-17.svg`} {...p} />
+);
+
+/** Certificate / training */
+export const AcademyIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-22.svg`} {...p} />
+);
+
+/** Institution / trust */
+export const ShieldIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-25.svg`} {...p} />
+);
+
+/** People / community — growth saplings */
+export const PeopleIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-02.svg`}
+    onDark={`${LIGHT}-15.svg`}
+    {...p}
+  />
+);
+
+/** Support headset */
+export const HeadsetIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-29.svg`} {...p} />
+);
+
+/** Phone */
+export const PhoneIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-28.svg`} {...p} />
+);
+
+/** Email */
+export const MailIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-26.svg`} {...p} />
+);
+
+/** Chat */
+export const ChatIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-30.svg`} {...p} />
+);
+
+/** Chip / tech / VZN */
+export const PulseIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-05.svg`}
+    onDark={`${LIGHT}-18.svg`}
+    {...p}
+  />
+);
+
+/** Monitor / tech gear */
+export const MonitorIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-22.svg`}
+    onDark={`${LIGHT}-18.svg`}
+    {...p}
+  />
+);
+
+/** Sourcing / commerce */
+export const BoxIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-16.svg`}
+    onDark={`${LIGHT}-20.svg`}
+    {...p}
+  />
+);
+
+/** Truck — closest: utility / distribution network */
+export const TruckIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-21.svg`}
+    onDark={`${LIGHT}-11.svg`}
+    {...p}
+  />
+);
+
+/** Weekly timing — coin growth stands in (no clock in pack) */
+export const ClockIcon = (p: AssetProps) => (
+  <AssetIcon onLight={`${DARK}-17.svg`} {...p} />
+);
+
+/** Location — building stands in (no pin in pack) */
+export const PinIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-23.svg`}
+    onDark={`${LIGHT}-24.svg`}
+    {...p}
+  />
+);
+
+/** Grid / infrastructure */
+export const GridIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-05.svg`}
+    onDark={`${LIGHT}-11.svg`}
+    {...p}
+  />
+);
+
+/** Green energy (bolt ringed by leaves) */
+export const GreenEnergyIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-10.svg`}
+    onDark={`${LIGHT}-09.svg`}
+    {...p}
+  />
+);
+
+/** Lamp / ideas — solar / energy */
+export const LampIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-21.svg`}
+    onDark={`${LIGHT}-09.svg`}
+    {...p}
+  />
+);
+
+/** Gear / technology */
+export const GearIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-22.svg`}
+    onDark={`${LIGHT}-18.svg`}
+    {...p}
+  />
+);
+
+/** Plus / install — solar panel */
+export const PlusIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight={`${DARK}-21.svg`}
+    onDark={`${LIGHT}-06.svg`}
+    {...p}
+  />
+);
+
+/* ── UI chrome (not in brand pack) ─────────────────────────────────── */
+
+function StrokeIcon({ size = 24, children, ...props }: IconProps) {
   return (
     <svg
       width={size}
@@ -32,167 +314,41 @@ function Icon({ size = 24, children, ...props }: IconProps) {
   );
 }
 
-/* Lifted verbatim from the brand book's approved icon grid. */
-
-export const BoltIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M13 2 5 14h6l-1 8 8-12h-6l1-8Z" />
-  </Icon>
-);
-
-export const VehicleIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <rect x="3" y="7" width="14" height="10" rx="2" />
-    <path d="M17 10h2l2 3v4h-4" />
-    <circle cx="7" cy="19" r="2" />
-    <circle cx="17" cy="19" r="2" />
-  </Icon>
-);
-
-export const BatteryIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <rect x="2" y="8" width="14" height="8" rx="2" />
-    <path d="M19 11v2M16 12h3" />
-    <path d="M5 12h5" />
-  </Icon>
-);
-
-export const ClockIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7v5l3 3" />
-  </Icon>
-);
-
-export const LeafIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10Z" />
-  </Icon>
-);
-
-export const BuildingIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M4 20V9l8-6 8 6v11" />
-    <path d="M9 20v-6h6v6" />
-  </Icon>
-);
-
-export const SunIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <circle cx="12" cy="12" r="3" />
-    <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" />
-  </Icon>
-);
-
-export const TruckIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M3 17V9a2 2 0 0 1 2-2h11l5 5v5a2 2 0 0 1-2 2" />
-    <circle cx="8" cy="18" r="2" />
-    <circle cx="17" cy="18" r="2" />
-  </Icon>
-);
-
-export const PinIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" />
-    <circle cx="12" cy="10" r="2.5" />
-  </Icon>
-);
-
-export const PeopleIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <circle cx="8" cy="8" r="3" />
-    <circle cx="17" cy="10" r="2.5" />
-    <path d="M3 20c0-3 2.2-5 5-5s5 2 5 5M15 20c0-2.4 1.4-4 3.5-4S22 17.6 22 20" />
-  </Icon>
-);
-
-export const PulseIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M3 12h4l2-5 3 10 2.5-7 1.8 4H21" />
-  </Icon>
-);
-
-export const MonitorIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <rect x="3" y="4" width="18" height="14" rx="2" />
-    <path d="M8 21h8M12 18v3M7 9h4M7 13h8" />
-  </Icon>
-);
-
-/* Extensions drawn on the same grid and stroke discipline. */
-
-export const BoxIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M21 8 12 3 3 8v8l9 5 9-5V8Z" />
-    <path d="m3 8 9 5 9-5M12 13v8" />
-  </Icon>
-);
-
-export const ShieldIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M12 3 5 6v6c0 4.4 3 7.9 7 9 4-1.1 7-4.6 7-9V6l-7-3Z" />
-    <path d="m9 12 2 2 4-4" />
-  </Icon>
-);
-
-export const WalletIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M3 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" />
-    <path d="M19 11h2v4h-2a2 2 0 0 1 0-4Z" />
-  </Icon>
-);
-
-export const AcademyIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M12 4 2 9l10 5 10-5-10-5Z" />
-    <path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5" />
-  </Icon>
-);
-
-export const HeadsetIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <path d="M4 14v-2a8 8 0 1 1 16 0v2" />
-    <path d="M4 14a2 2 0 0 1 2-2h1v6H6a2 2 0 0 1-2-2v-2ZM20 14a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2v-2Z" />
-    <path d="M17 18v1a2 2 0 0 1-2 2h-3" />
-  </Icon>
-);
-
 export const ArrowRightIcon = (p: IconProps) => (
-  <Icon {...p}>
+  <StrokeIcon {...p}>
     <path d="M5 12h14M13 6l6 6-6 6" />
-  </Icon>
+  </StrokeIcon>
 );
 
 export const ArrowUpRightIcon = (p: IconProps) => (
-  <Icon {...p}>
+  <StrokeIcon {...p}>
     <path d="M7 17 17 7M8 7h9v9" />
-  </Icon>
+  </StrokeIcon>
 );
 
 export const PlayIcon = (p: IconProps) => (
-  <Icon {...p}>
+  <StrokeIcon {...p}>
     <circle cx="12" cy="12" r="9" />
     <path d="m10 8.5 6 3.5-6 3.5v-7Z" />
-  </Icon>
+  </StrokeIcon>
 );
 
 export const ChevronDownIcon = (p: IconProps) => (
-  <Icon {...p}>
+  <StrokeIcon {...p}>
     <path d="m6 9 6 6 6-6" />
-  </Icon>
+  </StrokeIcon>
 );
 
 export const MenuIcon = (p: IconProps) => (
-  <Icon {...p}>
+  <StrokeIcon {...p}>
     <path d="M4 7h16M4 12h16M4 17h16" />
-  </Icon>
+  </StrokeIcon>
 );
 
 export const CloseIcon = (p: IconProps) => (
-  <Icon {...p}>
+  <StrokeIcon {...p}>
     <path d="M6 6l12 12M18 6 6 18" />
-  </Icon>
+  </StrokeIcon>
 );
 
 /** Icon lookup for the ecosystem / division sets. */
@@ -200,7 +356,7 @@ export const DIVISION_ICONS = {
   distribution: VehicleIcon,
   leasing: WalletIcon,
   energy: BoltIcon,
-  lifecycle: BatteryIcon,
+  lifecycle: RecycleIcon,
   sourcing: BoxIcon,
   vzn: PulseIcon,
 } as const;

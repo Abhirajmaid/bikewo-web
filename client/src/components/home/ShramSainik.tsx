@@ -80,7 +80,7 @@ export function ShramSainik() {
                 const BenefitIcon = ICONS[i];
                 return (
                   <Reveal as="li" key={benefit.title} delay={stagger(i, 0.05)}>
-                    <BenefitIcon size={22} className="text-green-700" />
+                    <BenefitIcon size={56} />
                     <h3 className="mt-3 font-display text-[15px] font-semibold text-indigo-800">
                       {benefit.title}
                     </h3>

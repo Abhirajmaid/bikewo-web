@@ -2,9 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE, SOCIALS } from "@/lib/site";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 
 /* Display face. Poppins carries a Devanagari cut — never substitute a
    different Devanagari face inside a BikeWo layout. */
@@ -139,10 +137,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <SmoothScroll />
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

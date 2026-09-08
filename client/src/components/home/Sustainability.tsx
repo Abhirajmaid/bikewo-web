@@ -1,10 +1,21 @@
 import Image from "next/image";
+import {
+  BoltIcon,
+  LeafIcon,
+  RecycleIcon,
+} from "@/components/brand/Icons";
 import { SUSTAINABILITY } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { stagger } from "@/lib/utils";
+
+const METRIC_ICONS = {
+  leaf: LeafIcon,
+  bolt: BoltIcon,
+  recycle: RecycleIcon,
+} as const;
 
 /** 5.7 — Sustainability & ESG as a global impact band. */
 export function Sustainability() {
@@ -25,22 +36,26 @@ export function Sustainability() {
         </div>
 
         <ul className="mt-14 grid gap-10 md:mt-16 md:grid-cols-3 md:gap-0 lg:mt-20">
-          {SUSTAINABILITY.metrics.map((metric, i) => (
-            <Reveal
-              as="li"
-              key={metric.label}
-              delay={stagger(i, 0.08)}
-              className="md:border-white/15 md:px-10 md:first:pl-0 md:last:pr-0 md:not-first:border-l"
-            >
-              <p className="text-[13px] text-white/60">{metric.label}</p>
-              <p className="mt-4 font-display text-[clamp(2rem,1.5rem+2vw,3.25rem)] font-bold leading-none tracking-tight text-white">
-                {metric.value}
-              </p>
-              <p className="mt-5 text-[14px] leading-relaxed text-white/55">
-                {metric.detail}
-              </p>
-            </Reveal>
-          ))}
+          {SUSTAINABILITY.metrics.map((metric, i) => {
+            const Icon = METRIC_ICONS[metric.icon];
+            return (
+              <Reveal
+                as="li"
+                key={metric.label}
+                delay={stagger(i, 0.08)}
+                className="md:border-white/15 md:px-10 md:first:pl-0 md:last:pr-0 md:not-first:border-l"
+              >
+                <Icon size={56} tone="onDark" />
+                <p className="mt-5 text-[13px] text-white/60">{metric.label}</p>
+                <p className="mt-4 font-display text-[clamp(2rem,1.5rem+2vw,3.25rem)] font-bold leading-none tracking-tight text-white">
+                  {metric.value}
+                </p>
+                <p className="mt-5 text-[14px] leading-relaxed text-white/55">
+                  {metric.detail}
+                </p>
+              </Reveal>
+            );
+          })}
         </ul>
       </Container>
 

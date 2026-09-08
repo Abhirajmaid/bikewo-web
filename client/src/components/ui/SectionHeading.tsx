@@ -31,7 +31,11 @@ export function SectionHeading({
         className,
       )}
     >
-      <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center")}>
+      <div
+        className={cn(
+          align === "center" ? "mx-auto max-w-4xl text-center" : "max-w-2xl",
+        )}
+      >
         {eyebrow && (
           <Reveal>
             <Eyebrow tone={tone === "dark" ? "dark" : "light"}>

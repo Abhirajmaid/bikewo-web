@@ -62,7 +62,7 @@ export function Careers() {
                         {role.title}
                       </h3>
                       <p className="mt-1.5 flex items-center gap-2 text-[14px] text-slate">
-                        <PinIcon size={15} className="text-slate" />
+                        <PinIcon size={30} className="text-slate" />
                         {role.location}
                         <span aria-hidden className="text-indigo-200">
                           ·
