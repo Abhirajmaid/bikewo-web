@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactCTA } from "@/components/home/ContactCTA";
 import { ABOUT_ESG } from "@/lib/about";
-import { ROUTE_INDEX } from "@/lib/site";
+import { ROUTE_INDEX, SITE } from "@/lib/site";
 import { stagger } from "@/lib/utils";
 
 const entry = ROUTE_INDEX["/about/esg"];
@@ -16,8 +16,15 @@ const entry = ROUTE_INDEX["/about/esg"];
 export const metadata: Metadata = {
   title: entry?.title ?? "ESG",
   description:
-    "BikeWo environmental, social and governance reporting — traceable figures, annual disclosure.",
+    "Planet-positive mobility through clean energy and responsible operations. 2027 aspirations: 100M+ kilometres electrified, 10,000+ partners, 2.5 Mn+ tonnes CO₂ avoided p.a.",
   alternates: { canonical: "/about/esg" },
+  openGraph: {
+    title: `${entry?.title ?? "ESG"} — ${SITE.name}`,
+    description:
+      "Planet-positive mobility through clean energy and responsible operations — every published figure is a 2027 aspiration we will report against.",
+    url: "/about/esg",
+    type: "website",
+  },
 };
 
 export default function EsgPage() {

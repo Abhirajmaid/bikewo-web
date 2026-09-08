@@ -269,6 +269,13 @@
   }
 }
 
+/* Seamless dash travel — period matches stroke-dasharray 12 + 188 = 200. */
+@keyframes bw-line-flow {
+  to {
+    stroke-dashoffset: -400;
+  }
+}
+
 /* Honour the user's motion preference everywhere, including GSAP-driven
    transforms which we neutralise by killing the transition, not the layout. */
 @media (prefers-reduced-motion: reduce) {

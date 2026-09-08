@@ -16,15 +16,23 @@ export const metadata: Metadata = {
   title: entry?.title ?? "Businesses",
   description:
     entry?.blurb ??
-    "Six divisions operating as one accountable system — mobility, energy, service, sourcing and intelligence.",
+    "Six businesses operating as one EMI platform — vehicles, energy, financing, service, sourcing and intelligence.",
+  keywords: [...SITE.keywords],
   alternates: { canonical: "/businesses" },
   openGraph: {
     title: `${entry?.title ?? "Businesses"} — ${SITE.name}`,
     description:
       entry?.blurb ??
-      "Six divisions operating as one accountable system — mobility, energy, service, sourcing and intelligence.",
+      "Six businesses operating as one EMI platform — vehicles, energy, financing, service, sourcing and intelligence.",
     url: "/businesses",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${entry?.title ?? "Businesses"} — ${SITE.name}`,
+    description:
+      entry?.blurb ??
+      "Six businesses operating as one EMI platform — vehicles, energy, financing, service, sourcing and intelligence.",
   },
 };
 

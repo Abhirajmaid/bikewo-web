@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EnergyFlowLines } from "@/components/brand/EnergyFlowLines";
 import { DIVISIONS } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
@@ -12,12 +13,13 @@ import { ArrowRightIcon } from "@/components/brand/Icons";
 /** 5.4 — Business Divisions. */
 export function Divisions() {
   return (
-    <Section tone="cloud">
-      <Container>
+    <Section tone="cloud" className="relative overflow-hidden">
+      <EnergyFlowLines />
+      <Container className="relative">
         <SectionHeading
           eyebrow="Businesses"
-          title="Six divisions. One accountable system."
-          lede="Each division runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam."
+          title="Six businesses. One EMI platform."
+          lede="Each business runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam."
           action={
             <Button href="/businesses" variant="ghost" withArrow>
               All businesses
@@ -31,12 +33,6 @@ export function Divisions() {
               key={division.title}
               as="li"
               delay={stagger(i, 0.05)}
-              /* The seventh card fills the trailing gap on 3-up. */
-              className={
-                i === 6
-                  ? "lg:col-span-1 sm:col-span-2 lg:col-start-3"
-                  : undefined
-              }
             >
               <Link
                 href={division.href}
@@ -63,7 +59,7 @@ export function Divisions() {
                     {division.copy}
                   </p>
                   <span className="mt-5 inline-flex items-center gap-2 font-display text-sm font-semibold text-green-700">
-                    Explore
+                    {division.href === "/coming-soon" ? "Coming Soon" : "Explore"}
                     <ArrowRightIcon
                       size={16}
                       className="transition-transform duration-200 group-hover:translate-x-1"

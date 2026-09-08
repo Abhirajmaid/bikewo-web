@@ -1,15 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import {
   CONTACT_PAGE_WIDTH,
-  CONTACT_RESOURCE,
   CONTACT_STAT,
-  CONTACT_TESTIMONIAL,
+  CONTACT_TESTIMONIALS,
   CONTACT_TOPICS,
   type ContactTopic,
 } from "@/lib/contact";
@@ -20,13 +18,14 @@ const inputClass =
 
 export function ContactFormSection() {
   const [topic, setTopic] = useState<ContactTopic>("Fleet Pricing");
+  const [slide, setSlide] = useState(0);
 
   return (
     <section id="form" className="bg-white py-10 md:py-14">
       <Container className={CONTACT_PAGE_WIDTH}>
         <Reveal>
           <div className="overflow-hidden rounded-[20px] bg-[#052016] p-6 md:p-10 lg:p-12">
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+            <div className="grid gap-10 lg:grid-cols-2 lg:items-stretch lg:gap-12">
               {/* Form */}
               <div>
                 <h2 className="font-display text-2xl font-semibold text-white md:text-[1.75rem]">
@@ -106,63 +105,76 @@ export function ContactFormSection() {
                 </form>
               </div>
 
-              {/* Stats & testimonial */}
-              <div className="flex flex-col justify-between gap-10">
+              {/* Stats & testimonial slider */}
+              <div className="grid min-h-full grid-rows-[auto_1fr_auto]">
                 <div>
-                  <p className="font-display text-[clamp(3rem,2rem+4vw,4.5rem)] font-bold leading-none text-[#89FF00]">
-                    {CONTACT_STAT.value}
+                  <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-white">
+                    <span aria-hidden className="size-1.5 rounded-full bg-white" />
+                    {CONTACT_STAT.kicker}
                   </p>
-                  <p className="mt-3 font-display text-xl font-semibold text-white">
+                  <p className="mt-3 font-display text-[clamp(4.25rem,2.4rem+8vw,7.25rem)] font-bold leading-[0.85] tracking-tight text-white">
+                    {CONTACT_STAT.value}
+                    <span className="bg-linear-to-br from-[#89FF00] to-[#e8ff6a] bg-clip-text text-transparent">
+                      {CONTACT_STAT.suffix}
+                    </span>
+                    <span className="align-super text-[0.28em] text-[#89FF00]">*</span>
+                  </p>
+                  <p className="mt-5 font-display text-2xl font-semibold text-white md:text-[1.75rem]">
                     {CONTACT_STAT.label}
                   </p>
-                  <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60">
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-white/65">
                     {CONTACT_STAT.copy}
                   </p>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-stretch">
-                  <div className="rounded-2xl bg-[#c8d4cc]/90 p-5">
-                    <div className="flex flex-col gap-4 sm:flex-row">
-                      <div className="relative mx-auto h-16 w-16 shrink-0 overflow-hidden rounded-full sm:mx-0">
-                        <Image
-                          src={CONTACT_TESTIMONIAL.avatar}
-                          alt=""
-                          fill
-                          sizes="64px"
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="text-center sm:text-left">
-                        <p className="text-sm leading-relaxed text-[#052016]/80">
-                          &ldquo;{CONTACT_TESTIMONIAL.quote}&rdquo;
-                        </p>
-                        <p className="mt-3 text-sm font-semibold text-[#052016]">
-                          {CONTACT_TESTIMONIAL.name}
-                        </p>
-                        <p className="text-xs text-[#052016]/60">{CONTACT_TESTIMONIAL.role}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#0a2e1f] px-5 py-6 sm:min-w-[155px]">
-                    <div>
-                      <p className="font-display text-3xl font-bold text-[#89FF00]">
-                        {CONTACT_RESOURCE.value}
-                      </p>
-                      <p className="mt-1 text-sm text-white/70">{CONTACT_RESOURCE.label}</p>
-                    </div>
-                    <div className="mt-4 space-y-1">
-                      {CONTACT_RESOURCE.links.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className="block text-xs text-[#89FF00] underline-offset-2 hover:underline"
+                <div className="relative mt-5 min-h-72">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div
+                      className="flex h-full gap-3 transition-transform duration-500 ease-out"
+                      style={{ transform: `translateX(calc(${-slide} * 87%))` }}
+                    >
+                      {CONTACT_TESTIMONIALS.map((item) => (
+                        <article
+                          key={item.name}
+                          className="relative h-full w-[82%] shrink-0 overflow-hidden rounded-2xl"
                         >
-                          {link.label}
-                        </Link>
+                          <Image
+                            src={item.image}
+                            alt=""
+                            fill
+                            sizes="(min-width: 1024px) 32vw, 80vw"
+                            className="object-cover object-top saturate-[0.85]"
+                          />
+                          <div className="absolute inset-0 bg-linear-to-t from-[#052016]/90 via-[#052016]/25 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                            <p className="text-sm leading-relaxed text-white md:text-[15px]">
+                              &ldquo;{item.quote}&rdquo;
+                            </p>
+                            <p className="mt-3 text-sm font-semibold text-white">
+                              {item.name}, {item.role}
+                            </p>
+                          </div>
+                        </article>
                       ))}
                     </div>
                   </div>
+                </div>
+
+                <div className="mt-5 flex justify-center gap-2" role="tablist" aria-label="Testimonials">
+                  {CONTACT_TESTIMONIALS.map((item, i) => (
+                    <button
+                      key={item.name}
+                      type="button"
+                      role="tab"
+                      aria-selected={slide === i}
+                      aria-label={`Show testimonial ${i + 1}`}
+                      onClick={() => setSlide(i)}
+                      className={cn(
+                        "size-2 rounded-full transition-colors",
+                        slide === i ? "bg-white" : "bg-white/30 hover:bg-white/50",
+                      )}
+                    />
+                  ))}
                 </div>
               </div>
             </div>

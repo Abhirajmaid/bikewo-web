@@ -11,13 +11,13 @@
  */
 
 export const STATS_FOOTNOTE =
-  "Figures are company estimates for FY25-26 and are pending audit. Range, charge time and savings figures are stated under test conditions.";
+  "These are long-term aspirations based on our growth roadmap and industry potential. They are not current operating results.";
 
 /* -------------------------------------------------------------- 5.1 Hero */
 
 export const HERO = {
-  titleLines: ["Building India's Energy &", "Mobility Infrastructure."],
-  lede: "One company — from the vehicle you buy to the charge you take and the service you rely on.",
+  titleLines: ["Seamless Energy.", "Smarter Mobility."],
+  lede: "Building the energy & mobility infrastructure (EMI) that moves the world.",
   primaryCta: { label: "Explore Ecosystem", href: "#ecosystem" },
   secondaryCta: { label: "About us", href: "/about" },
   marquee: [
@@ -34,8 +34,8 @@ export const HERO = {
 
 export const GLANCE = {
   badge: "About us",
-  lead: "BikeWo delivers energy and mobility infrastructure, helping riders, fleets and cities transition to",
-  rest: "clean, reliable power with an integrated ecosystem and expert support nationwide.",
+  lead: "BikeWo is building Energy & Mobility Infrastructure (EMI) to power the future of",
+  rest: "EV logistics — we own and operate the full-stack infrastructure that enables electric mobility at scale, across vehicles, energy, financing, service and intelligence.",
   cta: { label: "Read more about us", href: "/about" },
   image: {
     src: "/assets/hf_20260806_145122_f7847d04-e4a6-488e-9f6b-3d0507bdc52a.png",
@@ -45,30 +45,30 @@ export const GLANCE = {
     {
       value: 6,
       suffix: "",
-      label: "Business divisions",
+      label: "Business verticals",
       detail:
-        "Operating arms spanning vehicles, leasing, energy, service, sourcing and intelligence.",
+        "Distribution, leasing, energy, lifecycle, sourcing and connected intelligence.",
     },
     {
       value: 100,
       suffix: "M+",
       label: "Kilometres electrified",
       detail:
-        "Clean mobility delivered across fleets, riders and city routes under one ecosystem.",
+        "2027 aspiration — clean kilometres across fleets, riders and city logistics routes.",
     },
     {
       value: 10000,
       suffix: "+",
       label: "Partners & innovators",
       detail:
-        "Dealers, operators and technology partners building the channel together.",
+        "2027 aspiration — dealers, operators, OEMs and technology partners in the channel.",
     },
     {
       value: 2.5,
       suffix: "Mn+",
       label: "Tonnes CO₂ avoided p.a.",
       detail:
-        "Estimated annual emissions avoided through electrified kilometres on Indian roads.",
+        "2027 aspiration — annual emissions avoided through electrified last-mile logistics.",
     },
   ],
 };
@@ -91,7 +91,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     title: "Mobility Distribution",
     short: "Vehicles",
     detail:
-      "Electric two- and three-wheelers through the bikeWo dealer network — stock where riders actually are.",
+      "Through PositiEV — India’s technology-led EV distribution platform with a strong dealer and channel network.",
     href: "/businesses/mobility-distribution",
     angle: 0,
   },
@@ -100,7 +100,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     title: "Mobility Asset Leasing",
     short: "Leasing",
     detail:
-      "Fleet rentals and asset leasing that put cost per kilometre under the operator's control.",
+      "We own and lease 2W, 3W and LCV EVs to gig workers, SMEs and enterprises — mobility capacity, not vehicle ownership.",
     href: "/businesses/mobility-asset-leasing",
     angle: 60,
   },
@@ -109,7 +109,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     title: "Energy Infrastructure",
     short: "Charging",
     detail:
-      "Fast-charging across highways, societies and commercial hubs — monitored around the clock.",
+      "Building and operating pan-India charging and battery swapping infrastructure for today and tomorrow.",
     href: "/businesses/energy-infrastructure",
     angle: 120,
   },
@@ -118,7 +118,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     title: "Lifecycle Services",
     short: "Service",
     detail:
-      "Maintenance, spare parts, roadside assistance and battery health for the life of the vehicle.",
+      "Through Enlite EV Care — end-to-end maintenance, spare parts, roadside assistance and battery care.",
     href: "/businesses/lifecycle-services",
     angle: 180,
   },
@@ -127,17 +127,17 @@ export const ECOSYSTEM: EcosystemNode[] = [
     title: "Global Sourcing",
     short: "Supply",
     detail:
-      "Component sourcing and warehousing that keep the value chain supplied and priced predictably.",
+      "Global partnerships and supply chain excellence that deliver quality, scale and cost leadership.",
     href: "/businesses/global-sourcing-supply-chain",
     angle: 240,
   },
   {
     id: "vzn",
-    title: "BikeWo VZN",
-    short: "Intelligence",
+    title: "Coming Soon",
+    short: "VZN",
     detail:
-      "Telematics and fleet intelligence — what every vehicle and battery is doing, right now.",
-    href: "/businesses/bikewo-vzn",
+      "Our proprietary telematics and data platform that powers safety, efficiency and smarter decisions.",
+    href: "/coming-soon",
     angle: 300,
   },
 ];
@@ -148,44 +148,44 @@ export const DIVISIONS = [
   {
     index: "01",
     title: "Mobility Distribution",
-    copy: "Electric two- and three-wheelers, sold and delivered through a pan-India dealer network.",
+    copy: "Through PositiEV — India's technology-led EV distribution platform with a strong dealer and channel network.",
     image: "/assets/hf_20260806_143951_30c91bb1-6891-40a3-8985-0e68a4501e54.png",
     href: "/businesses/mobility-distribution",
   },
   {
     index: "02",
     title: "Mobility Asset Leasing",
-    copy: "Fleet rentals and asset leasing that put cost per kilometre under the operator's control.",
+    copy: "We own and lease EVs to gig workers, SMEs and enterprises with flexible, affordable solutions.",
     image: "/assets/hf_20260806_145122_f7847d04-e4a6-488e-9f6b-3d0507bdc52a.png",
     href: "/businesses/mobility-asset-leasing",
   },
   {
     index: "03",
     title: "Energy Infrastructure",
-    copy: "Fast-charging networks across highways, societies and commercial hubs.",
+    copy: "Building and operating pan-India charging and battery swapping infrastructure for today and tomorrow.",
     image: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
     href: "/businesses/energy-infrastructure",
   },
   {
     index: "04",
     title: "Lifecycle Services",
-    copy: "Maintenance, spare parts, roadside assistance and battery health, for the life of the vehicle.",
+    copy: "Through Enlite EV Care — end-to-end maintenance, spare parts, roadside assistance and battery care.",
     image: "/assets/hf_20260806_145121_57e54b4f-5e29-4c50-9620-8bbfdc06eac5.png",
     href: "/businesses/lifecycle-services",
   },
   {
     index: "05",
     title: "Global Sourcing & Supply Chain",
-    copy: "Component sourcing, cell procurement and warehousing that keep the chain supplied.",
+    copy: "Global partnerships and supply chain excellence that deliver quality, scale and cost leadership.",
     image: "/assets/div-sourcing.png",
     href: "/businesses/global-sourcing-supply-chain",
   },
   {
     index: "06",
-    title: "BikeWo VZN",
-    copy: "Telematics, wearables and fleet intelligence — the data layer under the whole ecosystem.",
+    title: "Coming Soon",
+    copy: "Our proprietary telematics and data platform that powers safety, efficiency and smarter decisions.",
     image: "/assets/div-vzn.png",
-    href: "/businesses/bikewo-vzn",
+    href: "/coming-soon",
   },
 ];
 
@@ -196,7 +196,7 @@ export const SUBSIDIARIES = [
     index: "01",
     name: "PositiEV Mobility",
     kind: "Subsidiary",
-    copy: "Distribution and leasing platform — dealer network, fleet rentals and channel partners.",
+    copy: "EV asset distribution, financing and leasing solutions for businesses and fleet operators.",
     cta: "Explore",
     href: "https://positievmobility.com/",
     external: true,
@@ -207,7 +207,7 @@ export const SUBSIDIARIES = [
     index: "02",
     name: "Enlite EV Care",
     kind: "Subsidiary",
-    copy: "Service and after-sales network maintenance, spares, roadside assistance and battery health.",
+    copy: "End-to-end EV lifecycle and maintenance services to ensure uptime, performance and safety.",
     cta: "Explore",
     href: "https://enliteev.com/",
     external: true,
@@ -217,11 +217,21 @@ export const SUBSIDIARIES = [
   },
   {
     index: "03",
+    name: "Ignesium Energy",
+    kind: "Subsidiary",
+    copy: "Energy infrastructure and solutions powering clean mobility at scale.",
+    cta: "Explore",
+    href: "/coming-soon",
+    variant: "accent" as const,
+    image: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
+  },
+  {
+    index: "04",
     name: "BikeWo VZN",
     kind: "Subsidiary",
-    copy: "AI, wearables and connected intelligence for fleets that need to know everything, now.",
+    copy: "Connected intelligence platform for IoT, fleet and operational analytics.",
     cta: "Explore",
-    href: "/",
+    href: "/coming-soon",
     logo: "/assets/bikewo_vzn.png",
     variant: "photo" as const,
     image: "/assets/div-vzn.png",
@@ -251,29 +261,29 @@ export const SHRAM_SAINIK = {
 /* -------------------------------------------------- 5.7 Sustainability/ESG */
 
 export const SUSTAINABILITY = {
-  eyebrow: "Global Impact",
+  eyebrow: "Planet positive",
   title:
-    "Net zero is a commitment we measure, not a claim we make — every number we publish is traceable to a source.",
+    "Enabling net-zero mobility through clean energy and responsible operations — every published figure is a 2027 aspiration we will report against.",
   metrics: [
     {
       label: "Tonnes CO₂ avoided p.a.",
       value: "2.5 Mn+",
       detail:
-        "Emissions avoided annually through electrified kilometres across BikeWo’s mobility network.",
+        "2027 aspiration — emissions avoided through electrified last-mile logistics across BikeWo’s network.",
       icon: "leaf" as const,
     },
     {
       label: "Kilometres electrified",
       value: "100 Mn+",
       detail:
-        "Clean kilometres delivered on India’s roads through lease, charge and service.",
+        "2027 aspiration — clean kilometres delivered through lease, charge, service and fleet operations.",
       icon: "bolt" as const,
     },
     {
-      label: "Battery packs into second life",
-      value: "18,400",
+      label: "Partners & innovators",
+      value: "10,000+",
       detail:
-        "Packs recovered into second-life and end-of-life pathways through Enlite.",
+        "2027 aspiration — dealers, fleet operators, OEMs and technology partners in the ecosystem.",
       icon: "recycle" as const,
     },
   ],
@@ -294,14 +304,14 @@ export const SUSTAINABILITY = {
 export const STORIES = [
   {
     quote:
-      "We moved 60 vehicles onto lease and the cost per kilometre finally became something I could forecast.",
+      "We needed mobility capacity, not more vehicles on the books. Leasing from BikeWo made cost per kilometre something I could forecast.",
     name: "Placeholder — fleet operator",
-    role: "Fleet operator, Pune",
+    role: "Last-mile fleet operator, Hyderabad",
     avatar: "/assets/story-1.png",
   },
   {
     quote:
-      "Service used to be the reason customers hesitated. Now Enlite handles it and the conversation is about range, not repairs.",
+      "Service used to be the reason customers hesitated. Now Enlite handles it and the conversation is about utilisation, not repairs.",
     name: "Placeholder — dealer principal",
     role: "Dealer principal, Jaipur",
     avatar: "/assets/story-2.png",
@@ -320,18 +330,7 @@ export const STORIES = [
 export const INVESTORS = {
   eyebrow: "Investors",
   title: "An infrastructure business, reported like one.",
-  lede: "Six divisions, one integrated value chain, and a net-zero pathway we report against every year.",
-  highlights: [
-    { label: "Business divisions", value: "6" },
-    { label: "Subsidiaries", value: "3" },
-    { label: "Channel partners", value: "10,000+" },
-    { label: "ESG reporting", value: "Annual" },
-  ],
-  links: [
-    { label: "Annual reports", href: "/investors" },
-    { label: "Quarterly presentations", href: "/investors" },
-    { label: "ESG reporting", href: "/about/esg" },
-  ],
+  lede: "Six businesses, one EMI platform, and a net-zero pathway we report against every year.",
 };
 
 /* --------------------------------------------------- 5.10 News & Insights */
@@ -365,7 +364,7 @@ export const NEWS = [
 export const CAREERS = {
   eyebrow: "Careers",
   title: "Build the infrastructure India runs on.",
-  lede: "We are honest about the scale of the challenge. Six divisions, pan-India, and a grid that has to work every single day.",
+  lede: "We are honest about the scale of the challenge. Six businesses, last-mile logistics at the core, and an EMI platform that has to work every single day.",
   roles: [
     { title: "Charging Network Engineer", location: "Pune", type: "Full-time" },
     { title: "Fleet Data Scientist — VZN", location: "Bengaluru", type: "Full-time" },

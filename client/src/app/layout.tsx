@@ -98,6 +98,14 @@ const organizationJsonLd = {
   email: SITE.brandEmail,
   sameAs: SOCIALS.map((s) => s.href),
   slogan: SITE.corporateTagline,
+  areaServed: { "@type": "Country", name: "India" },
+  knowsAbout: [
+    "Energy & Mobility Infrastructure",
+    "EV logistics",
+    "Last-mile delivery",
+    "Electric vehicle leasing",
+    "EV charging infrastructure",
+  ],
 };
 
 const websiteJsonLd = {

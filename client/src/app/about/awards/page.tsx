@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactCTA } from "@/components/home/ContactCTA";
 import { ABOUT_AWARDS } from "@/lib/about";
-import { ROUTE_INDEX } from "@/lib/site";
+import { ROUTE_INDEX, SITE } from "@/lib/site";
 import { stagger } from "@/lib/utils";
 
 const entry = ROUTE_INDEX["/about/awards"];
@@ -14,8 +14,15 @@ const entry = ROUTE_INDEX["/about/awards"];
 export const metadata: Metadata = {
   title: entry?.title ?? "Awards & Recognition",
   description:
-    "Industry recognition for BikeWo's integrated energy and mobility infrastructure.",
+    "Industry recognition for BikeWo Green Tech Limited — integrated energy and mobility infrastructure built to last.",
   alternates: { canonical: "/about/awards" },
+  openGraph: {
+    title: `${entry?.title ?? "Awards & Recognition"} — ${SITE.name}`,
+    description:
+      "Industry recognition for BikeWo’s energy and mobility infrastructure.",
+    url: "/about/awards",
+    type: "website",
+  },
 };
 
 export default function AwardsPage() {

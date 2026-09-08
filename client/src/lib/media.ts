@@ -230,7 +230,7 @@ export const MEDIA_POSTS: MediaPost[] = [
 
 export const MEDIA_PAGE = {
   title: "News & insights",
-  lede: "Announcements, milestones and the work behind India's integrated energy and mobility infrastructure.",
+  lede: "Announcements, milestones and the work behind BikeWo’s energy & mobility infrastructure — Electrifying India.",
   latestTitle: "Latest updates",
 } as const;
 

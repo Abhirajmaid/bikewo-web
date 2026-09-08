@@ -21,7 +21,7 @@ function pos(angle: number) {
   };
 }
 
-/** Interactive ecosystem — bikeWo at the centre, six divisions on the orbit. */
+/** Interactive ecosystem — BikeWo at the centre, six businesses on the orbit. */
 export function Ecosystem() {
   const [activeId, setActiveId] = useState(ECOSYSTEM[0].id);
   const reduced = useReducedMotion();
@@ -46,11 +46,11 @@ export function Ecosystem() {
           align="center"
           title={
             <>
-              One company, from vehicle
-              <br className="hidden sm:block" /> to charge to service.
+              Logistics is our core.
+              <br className="hidden sm:block" /> EMI is our differentiator.
             </>
           }
-          lede="We run the full value chain — so the customer never falls between providers."
+          lede="We connect mobility, energy and technology to create smarter, more scalable logistics ecosystems."
         />
 
         <div className="mt-14 grid items-center gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-8 xl:gap-10">
@@ -176,7 +176,7 @@ export function Ecosystem() {
                   href={active.href}
                   className="group mt-7 inline-flex min-h-11 items-center gap-2 font-display text-sm font-semibold text-green-400 transition-colors hover:text-green-300"
                 >
-                  Explore
+                  {active.href === "/coming-soon" ? "Coming Soon" : "Explore"}
                   <ArrowRightIcon
                     size={16}
                     className="transition-transform duration-200 group-hover:translate-x-1"

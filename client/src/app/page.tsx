@@ -4,7 +4,6 @@ import { LovedBy } from "@/components/home/LovedBy";
 import { Glance } from "@/components/home/Glance";
 import { Ecosystem } from "@/components/home/Ecosystem";
 import { Divisions } from "@/components/home/Divisions";
-import { Subsidiaries } from "@/components/home/Subsidiaries";
 import { Sustainability } from "@/components/home/Sustainability";
 import { Stories } from "@/components/home/Stories";
 import { Investors } from "@/components/home/Investors";
@@ -14,11 +13,17 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — ${SITE.tagline}` },
   description: SITE.description,
+  keywords: [...SITE.keywords],
   alternates: { canonical: "/" },
   openGraph: {
-    title: `${SITE.name} — ${SITE.tagline}`,
+    title: `${SITE.name} — ${SITE.corporateTagline}`,
     description: SITE.description,
     url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — ${SITE.corporateTagline}`,
+    description: SITE.description,
   },
 };
 
@@ -30,7 +35,6 @@ export default function HomePage() {
       <Glance />
       <Ecosystem />
       <Divisions />
-      <Subsidiaries />
       {/* <ShramSainik /> */}
       <Sustainability />
       <Stories />

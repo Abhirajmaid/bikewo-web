@@ -1,87 +1,52 @@
-import Image from "next/image";
-import Link from "next/link";
-import { INVESTORS } from "@/lib/content";
+"use client";
+
+import { useState } from "react";
+import { DocumentCard } from "@/components/investors/DocumentCard";
+import { PdfViewer } from "@/components/investors/PdfViewer";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Reveal } from "@/components/ui/Reveal";
-import { stagger } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import { ArrowUpRightIcon } from "@/components/brand/Icons";
+import { Reveal } from "@/components/ui/Reveal";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { INVESTORS } from "@/lib/content";
+import { FEATURED_DOCS, SORTED_DOCS, type InvestorDoc } from "@/lib/investors";
+import { stagger } from "@/lib/utils";
 
-/** 5.9 — Investors. Measured, evidence-led: structure and numbers first. */
+const PREVIEW_DOCS = [
+  ...FEATURED_DOCS,
+  ...SORTED_DOCS.filter((doc) => !doc.featured),
+].slice(0, 3);
+
 export function Investors() {
+  const [active, setActive] = useState<InvestorDoc | null>(null);
+
   return (
-    <Section tone="cloud">
-      <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div>
-            <Reveal>
-              <Eyebrow>{INVESTORS.eyebrow}</Eyebrow>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="mt-5 text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] leading-[1.12]">
-                {INVESTORS.title}
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-5 text-[1.0625rem] leading-relaxed text-slate">
-                {INVESTORS.lede}
-              </p>
-            </Reveal>
+    <>
+      <Section tone="cloud">
+        <Container>
+          <SectionHeading
+            eyebrow={INVESTORS.eyebrow}
+            title={INVESTORS.title}
+            lede={INVESTORS.lede}
+          />
 
-            <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-8">
-              {INVESTORS.highlights.map((item, i) => (
-                <Reveal key={item.label} delay={stagger(i, 0.05)}>
-                  <div className="border-t border-indigo-200 pt-4">
-                    <dd className="font-display text-3xl font-bold tracking-tight text-indigo-800">
-                      {item.value}
-                    </dd>
-                    <dt className="eyebrow mt-2 text-slate">{item.label}</dt>
-                  </div>
-                </Reveal>
-              ))}
-            </dl>
+          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+            {PREVIEW_DOCS.map((doc, i) => (
+              <Reveal as="li" key={doc.id} delay={stagger(i, 0.05)}>
+                <DocumentCard doc={doc} onOpen={setActive} />
+              </Reveal>
+            ))}
+          </ul>
 
-            <Reveal delay={0.2}>
-              <ul className="mt-10 space-y-1">
-                {INVESTORS.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="group flex min-h-11 items-center justify-between gap-4 border-b border-indigo-200/70 py-2 font-display text-[15px] font-medium text-indigo-800"
-                    >
-                      {link.label}
-                      <ArrowUpRightIcon
-                        size={17}
-                        className="text-slate transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-green-700"
-                      />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-
-            <Reveal delay={0.25}>
-              <Button href="/investors" variant="secondary" className="mt-10" withArrow>
-                Investor relations
-              </Button>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.1}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-              <Image
-                src="/assets/investors.png"
-                alt="The BikeWo corporate headquarters at dusk, a contemporary glass and stone facade reflected in a still pool."
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+          <Reveal delay={0.15} className="mt-10 flex justify-center md:mt-12">
+            <Button href="/investors" variant="primary" withArrow>
+              View all documents
+            </Button>
           </Reveal>
-        </div>
-      </Container>
-    </Section>
+        </Container>
+      </Section>
+
+      {active && <PdfViewer doc={active} onClose={() => setActive(null)} />}
+    </>
   );
 }

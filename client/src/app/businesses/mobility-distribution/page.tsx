@@ -1,12 +1,5 @@
-import {
-  PlaceholderPage,
-  placeholderMetadata,
-} from "@/components/page/PlaceholderPage";
-
-const HREF = "/businesses/mobility-distribution";
-
-export const metadata = placeholderMetadata(HREF);
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <PlaceholderPage href={HREF} />;
+  redirect("https://positievmobility.com/");
 }

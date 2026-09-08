@@ -3,7 +3,7 @@ import Link from "next/link";
 import { NAV, ROUTE_INDEX } from "@/lib/site";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/Button";
-import { EnergyArc } from "@/components/brand/EnergyArc";
+import { PageHero } from "@/components/ui/PageHero";
 import { ArrowRightIcon } from "@/components/brand/Icons";
 
 /**
@@ -47,51 +47,22 @@ export function PlaceholderPage({ href }: { href: string }) {
   );
   const siblings = parentNode?.children?.filter((c) => c.href !== href) ?? [];
 
+  const crumbs = [
+    { label: "Home", href: "/" },
+    ...(entry?.parent && parentNode
+      ? [{ label: entry.parent, href: parentNode.href }]
+      : []),
+    { label: title },
+  ];
+
   return (
     <>
-      <section className="relative overflow-hidden bg-indigo-950 pb-20 pt-36 md:pb-28 md:pt-44">
-        <div
-          aria-hidden
-          className="rider-pattern pointer-events-none absolute inset-0 opacity-[0.06] invert"
-        />
-        <EnergyArc
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-44 w-full opacity-40"
-          color="#35D68F"
-        />
-
-        <Container className="relative">
-          <nav aria-label="Breadcrumb" className="eyebrow flex items-center gap-2 text-white/60">
-            <Link href="/" className="transition-colors hover:text-white">
-              Home
-            </Link>
-            {entry?.parent && parentNode && (
-              <>
-                <span aria-hidden>/</span>
-                <Link href={parentNode.href} className="transition-colors hover:text-white">
-                  {entry.parent}
-                </Link>
-              </>
-            )}
-            <span aria-hidden>/</span>
-            <span className="text-green-400">{title}</span>
-          </nav>
-
-          <h1 className="mt-7 max-w-3xl font-display text-[clamp(2rem,1.2rem+3.2vw,3.75rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white">
-            {title}
-          </h1>
-
-          {entry?.blurb && (
-            <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-white/60">
-              {entry.blurb}
-            </p>
-          )}
-
-          <p className="mt-10 inline-flex items-center gap-2.5 rounded-full border border-white/20 px-5 py-2.5">
-            <span aria-hidden className="size-1.5 rounded-full bg-green-400" />
-            <span className="eyebrow text-white/70">This section is in production</span>
-          </p>
-        </Container>
-      </section>
+      <PageHero crumbs={crumbs} title={title} lede={entry?.blurb}>
+        <p className="mt-10 inline-flex items-center gap-2.5 rounded-full border border-white/20 px-5 py-2.5">
+          <span aria-hidden className="size-1.5 rounded-full bg-green-400" />
+          <span className="eyebrow text-white/70">This section is in production</span>
+        </p>
+      </PageHero>
 
       <section className="py-20 md:py-24">
         <Container>

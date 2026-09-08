@@ -454,12 +454,10 @@ function MegaMenuLink({
   parentTitle: string;
   onClose: () => void;
 }) {
-  return (
-    <Link
-      href={child.href}
-      onClick={onClose}
-      className="group flex items-start justify-between gap-4 py-4 transition-colors"
-    >
+  const className =
+    "group flex items-start justify-between gap-4 py-4 transition-colors";
+  const inner = (
+    <>
       <span>
         <span className="block font-display text-[15px] font-semibold text-indigo-800 transition-colors group-hover:text-indigo-700">
           {child.title}
@@ -470,6 +468,26 @@ function MegaMenuLink({
         size={16}
         className="mt-0.5 shrink-0 text-slate-400 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-indigo-800"
       />
+    </>
+  );
+
+  if (child.external) {
+    return (
+      <a
+        href={child.href}
+        target="_blank"
+        rel="noreferrer noopener"
+        onClick={onClose}
+        className={className}
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={child.href} onClick={onClose} className={className}>
+      {inner}
     </Link>
   );
 }

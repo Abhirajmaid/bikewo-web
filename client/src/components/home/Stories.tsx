@@ -35,38 +35,38 @@ export function Stories() {
           {[0, 1].map((copy) => (
             <ul
               key={copy}
-              className="flex gap-6 pr-6"
+              className="flex gap-9 pr-9"
               aria-hidden={copy === 1 || undefined}
               aria-label={copy === 0 ? "Customer success stories" : undefined}
             >
               {half.map((story, i) => (
                 <li
                   key={`${copy}-${story.role}-${i}`}
-                  className="w-[min(85vw,22.5rem)] shrink-0"
+                  className="w-[min(85vw,33.75rem)] shrink-0"
                 >
-                  <figure className="flex h-full flex-col bg-white p-8 shadow-card">
+                  <figure className="flex h-full flex-col bg-white p-12 shadow-card">
                     <span
                       aria-hidden
-                      className="font-display text-[2.75rem] leading-none text-indigo-800"
+                      className="font-display text-[4.125rem] leading-none text-indigo-800"
                     >
                       “
                     </span>
-                    <blockquote className="mt-5 flex-1 text-[1.0625rem] leading-relaxed text-indigo-800">
+                    <blockquote className="mt-8 flex-1 text-[1.59375rem] leading-relaxed text-indigo-800">
                       {story.quote}
                     </blockquote>
-                    <figcaption className="mt-8 flex items-center gap-3">
+                    <figcaption className="mt-12 flex items-center gap-[1.125rem]">
                       <Image
                         src={story.avatar}
                         alt=""
-                        width={48}
-                        height={48}
-                        className="size-12 shrink-0 rounded-full object-cover"
+                        width={72}
+                        height={72}
+                        className="size-[4.5rem] shrink-0 rounded-full object-cover"
                       />
                       <div>
-                        <p className="text-[14px] font-semibold text-indigo-800">
+                        <p className="text-[21px] font-semibold text-indigo-800">
                           {story.name}
                         </p>
-                        <p className="mt-0.5 text-[13px] text-slate">
+                        <p className="mt-[3px] text-[19.5px] text-slate">
                           {story.role}
                         </p>
                       </div>

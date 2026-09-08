@@ -12,29 +12,29 @@ import { DIVISIONS, GLANCE, SUBSIDIARIES } from "@/lib/content";
 
 export const BUSINESSES_HERO = {
   eyebrow: "Our businesses",
-  title: "Powering India's mobility with integrated energy infrastructure.",
+  title: "Powering India's last-mile with integrated energy & mobility infrastructure.",
   lede:
-    "Six divisions operating as one accountable system — from the vehicle you buy to the charge you take and the service you rely on.",
+    "Six businesses operating as one EMI platform — vehicles, energy, financing, service, sourcing and intelligence.",
   image: {
     src: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
     alt: "Electric vehicle charging station at a BikeWo energy hub.",
-    overlay: "Six divisions. One accountable energy system.",
+    overlay: "Logistics is our core. EMI is our differentiator.",
   },
   pillars: [
     {
       icon: VehicleIcon,
       title: "Mobility at scale",
-      copy: "Electric two- and three-wheelers through a pan-India dealer and fleet network.",
+      copy: "2W, 3W and LCV EVs through PositiEV — distribution and leasing, ready when fleets need them.",
     },
     {
       icon: BoltIcon,
       title: "Energy where it matters",
-      copy: "Fast-charging across highways, societies and commercial hubs — monitored around the clock.",
+      copy: "Charging and battery swapping across key logistics locations — the energy behind every movement.",
     },
     {
       icon: BatteryIcon,
       title: "Lifecycle accountability",
-      copy: "Maintenance, spares, roadside assistance and battery health for the life of every asset.",
+      copy: "Maintenance, spare parts, roadside assistance and battery care through Enlite EV Care.",
     },
   ],
   ctas: [
@@ -45,8 +45,8 @@ export const BUSINESSES_HERO = {
 
 /** Subsidiaries shown in the trusted-partners band — mirrors ref layout. */
 export const BUSINESSES_PARTNERS = {
-  eyebrow: "Trusted partners",
-  title: "Endorsed companies carrying the masterbrand forward.",
+  eyebrow: "The BikeWo Mobility Group",
+  title: "Subsidiaries carrying the masterbrand forward.",
   items: SUBSIDIARIES.map((sub) => ({
     name: sub.name,
     kind: sub.kind,
@@ -90,12 +90,12 @@ export const BUSINESSES_INSIGHTS = {
   card: {
     kicker: "For your future",
     lede:
-      "Our integrated mobility and energy solutions are built to deliver lasting environmental benefits, helping fleets, riders and cities transition sustainably. With accountable operations and dependable service, we are driving change across India's energy landscape.",
+      "Our integrated mobility and energy solutions are built to deliver lasting environmental benefits, helping last-mile fleets, riders and cities transition sustainably. We own, finance, power and manage the assets that make logistics possible.",
     bullets: [
-      "Advanced electric mobility and charging infrastructure.",
-      "Affordable lease and distribution options for every sector.",
-      "Exceptional lifecycle support through Enlite EV Care.",
-      "Commitment to measurable carbon reduction at scale.",
+      "Wide range of 2W, 3W and LCV EVs — ready when you need them.",
+      "Asset-light leasing models and competitive financing.",
+      "Charging and swapping access across key logistics locations.",
+      "Lifecycle support through Enlite EV Care to maximise uptime.",
     ],
     actions: [
       { label: "Get started", href: "#divisions", variant: "primary" as const },
@@ -104,27 +104,27 @@ export const BUSINESSES_INSIGHTS = {
   },
   stats: [
     {
-      value: 98,
+      value: 12.7,
       suffix: "%",
       detail:
-        "Delivering energy efficiency and optimal performance in every solution.",
+        "India last-mile delivery market CAGR, 2026–31 (Mordor Intelligence).",
       icon: "bolt" as const,
       size: "lg" as const,
       position: "top-left" as const,
     },
     {
-      value: 65,
+      value: 70,
       suffix: "%",
-      detail: "Delivering reliable green energy solutions.",
+      detail: "B2C share of India’s last-mile market in 2025.",
       icon: "leaf" as const,
       size: "sm" as const,
       position: "bottom-center" as const,
     },
     {
-      value: 1.5,
-      suffix: "MW",
+      value: 14.3,
+      suffix: "%",
       detail:
-        "Powering communities with fast-charging capacity on highway corridors, making a significant environmental impact.",
+        "Same-day delivery CAGR, 2026–31 — demand that needs reliable EV capacity.",
       icon: "battery" as const,
       size: "md" as const,
       position: "top-right" as const,
@@ -135,13 +135,13 @@ export const BUSINESSES_INSIGHTS = {
 export const BUSINESSES_DIVISIONS = {
   eyebrow: "Our divisions",
   title: "Sharing a sustainable future with energy.",
-  lede: "Each division runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam.",
+  lede: "Each business runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam.",
   items: DIVISIONS.map((d, i) => {
     const ids = ["distribution", "leasing", "energy", "lifecycle", "sourcing", "vzn"] as const;
     const imageOverrides: Record<string, string> = {
       "/businesses/global-sourcing-supply-chain":
         "/assets/hf_20260806_143951_b9e268b4-988c-4f03-8c76-7fddced07800.png",
-      "/businesses/bikewo-vzn":
+      "/coming-soon":
         "/assets/hf_20260806_145121_78a71faf-e9a4-4f69-aed6-06b239e1ae81.png",
     };
     return {
@@ -160,11 +160,11 @@ export const BUSINESSES_TESTIMONIALS = {
   items: [
     {
       heroQuote:
-        "Partnering with BikeWo was a key moment for our company. Their integrated mobility model cut costs and boosted impact.",
+        "Partnering with BikeWo was a key moment for our company. Their EMI model cut costs and boosted last-mile impact.",
       detail:
         "They delivered customised lease and charging solutions that made our transition to electric fleets seamless and cost-effective.",
       name: "Placeholder — fleet operator",
-      role: "Operations Manager, Pune",
+      role: "Operations Manager, Hyderabad",
       avatar:
         "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=700&fit=crop&crop=face",
       tags: ["Mobility Leasing", "Energy Infrastructure", "Lifecycle Services"],
@@ -209,37 +209,41 @@ export const BUSINESSES_PLANET = {
 };
 
 export const BUSINESSES_FAQ = {
+  eyebrow: "FAQ",
   title: "Everything you need to know about our businesses.",
+  lede: "How the six businesses work, where to start, and how to partner with us.",
+  cta: { label: "Still have a question?", href: "/contact" },
   items: [
     {
-      question: "How do the six divisions work together?",
+      question: "How do the six businesses work together?",
       answer:
-        "Each division operates independently with its own P&L, but they share infrastructure, data and service standards. A fleet customer might lease from Mobility Asset Leasing, charge through Energy Infrastructure, and service through Lifecycle Services — all under one contract framework.",
+        "Each business operates independently with its own P&L, but they share infrastructure, data and service standards. A fleet customer might lease from Mobility Asset Leasing, charge through Energy Infrastructure, and service through Enlite EV Care — all under one EMI platform.",
     },
     {
       question: "What is the relationship between BikeWo and its subsidiaries?",
       answer:
-        "Subsidiaries like PositiEV Mobility, Enlite EV Care and BikeWo VZN are endorsed companies that carry the masterbrand forward. The parent brand always leads; sub-brands earn distinction only where they serve a genuinely different customer.",
+        "The BikeWo Mobility Group includes PositiEV Mobility, Enlite EV Care, Ignesium Energy and BikeWo VZN. The parent brand always leads; sub-brands earn distinction where they serve a genuinely different customer.",
     },
     {
-      question: "Can I work with just one division?",
+      question: "Can I work with just one business?",
       answer:
-        "Yes. Dealers work with Mobility Distribution. Fleet operators often start with leasing. Property managers engage Energy Infrastructure for charge points. Each division has its own sales and support team.",
+        "Yes. Dealers work with Mobility Distribution through PositiEV. Fleet operators often start with leasing. Property managers engage Energy Infrastructure for charge points. Each business has its own sales and support team.",
     },
     {
       question: "Where is BikeWo VZN used?",
       answer:
-        "VZN is the connected intelligence layer — telematics, wearables and fleet data that feeds predictive maintenance, route optimisation and battery health monitoring across the ecosystem.",
+        "VZN is the connected intelligence layer — a proprietary telematics and data platform for IoT, fleet intelligence and operational analytics that feed safety, efficiency and smarter decisions across the ecosystem.",
     },
     {
-      question: "How does Global Sourcing support the other divisions?",
+      question: "How does BikeWo sit in the logistics value chain?",
       answer:
-        "It procures components, battery cells and spare parts at scale, warehouses inventory predictably, and keeps the value chain supplied so distribution and service never stall for parts.",
+        "We don’t compete in logistics execution. We build the mobility infrastructure that powers every delivery — own the asset, finance the asset, manage the asset, power the asset. The outcome is lower TCO, higher utilisation, scalable fleets and better margins.",
     },
     {
       question: "How do I become a channel partner?",
       answer:
-        "Contact our Mobility Distribution team through the contact page. We onboard dealers, fleet operators and charge-point hosts with training, marketing support and access to the full ecosystem.",
+        "Contact our Mobility Distribution team through the contact page. We onboard dealers, fleet operators and charge-point hosts with training, marketing support and access to the full EMI platform.",
+      cta: { label: "Get in touch", href: "/contact" },
     },
   ],
 };

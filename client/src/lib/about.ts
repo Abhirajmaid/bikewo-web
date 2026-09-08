@@ -14,39 +14,74 @@ import {
 
 /* ------------------------------------------------------------------ Hero */
 
+type AboutStoryCard =
+  | {
+      kind: "solid";
+      logo?: boolean;
+      title: string;
+      body: string[];
+      cta: { label: string; href: string };
+    }
+  | {
+      kind: "photo";
+      title: string;
+      image: { src: string; alt: string };
+      cta: { label: string; href: string };
+    };
+
 export const ABOUT_HERO = {
   eyebrow: "About BikeWo",
   title: "Dedicated to electrifying India.",
-  imageCard: {
-    src: "/assets/hf_20260806_145122_f7847d04-e4a6-488e-9f6b-3d0507bdc52a.png",
-    alt: "Fleet of BikeWo electric three-wheelers at a branded facility with EV charging stations.",
-    overlay: "Empowering every rider through integrated infrastructure.",
-  },
-  stats: [
-    { value: 6, suffix: "", label: "Business divisions" },
-    { value: 100, suffix: "M+", label: "Kilometres electrified" },
-    { value: 10000, suffix: "+", label: "Partners nationwide" },
-  ],
-  pillars: [
+  story: [
     {
-      icon: BuildingIcon,
-      title: "Our mission",
-      copy: "Build the energy and mobility infrastructure India runs on — vehicle, charge and service under one roof.",
+      kind: "solid",
+      logo: true,
+      title: "Energy & mobility infrastructure",
+      body: [
+        "BikeWo is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics.",
+        "We own and operate the full-stack infrastructure that enables electric mobility at scale — across vehicles, energy, financing, service and intelligence.",
+      ],
+      cta: { label: "Learn more", href: "/businesses" },
     },
     {
-      icon: BoltIcon,
-      title: "Integrated ecosystem",
-      copy: "Six divisions hand off without the customer noticing a seam. One company, one accountable chain.",
+      kind: "photo",
+      title: "Logistics is our core. EMI is our differentiator.",
+      image: {
+        src: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
+        alt: "BikeWo charge hub at dusk, with electric scooters and cars at dedicated charging bays.",
+      },
+      cta: { label: "Learn more", href: "/businesses/energy-infrastructure" },
+    },
+    {
+      kind: "solid",
+      title: "We move goods. We move India.",
+      body: [
+        "We create and operate the infrastructure that makes electric mobility seamless, affordable and intelligent.",
+        "By 2027 we aspire to 100 million electrified kilometres, 10,000+ partners, and 2.5 million tonnes of CO₂ avoided each year.",
+      ],
+      cta: { label: "Learn more", href: "/about/esg" },
+    },
+  ] satisfies AboutStoryCard[],
+  pillars: [
+    {
+      icon: PeopleIcon,
+      title: "People centric",
+      copy: "We put drivers, dealers and customers at the heart of everything we build.",
     },
     {
       icon: LeafIcon,
-      title: "Measured impact",
-      copy: "Every emissions figure we publish is traceable to a source. Net zero is a commitment we report against.",
+      title: "Planet positive",
+      copy: "Enabling net-zero mobility through clean energy and responsible operations.",
     },
     {
-      icon: PeopleIcon,
-      title: "People first",
-      copy: "From driver-partners to fleet operators — we design for the person who depends on the vehicle every day.",
+      icon: BuildingIcon,
+      title: "Partner powered",
+      copy: "We grow with our partners and succeed together.",
+    },
+    {
+      icon: BoltIcon,
+      title: "EMI differentiator",
+      copy: "We build the energy & mobility infrastructure behind every movement.",
     },
   ],
 };
@@ -61,22 +96,22 @@ export const ABOUT_TIMELINE = {
     {
       year: "2018",
       title: "BikeWo founded",
-      copy: "Started with a single conviction: going electric should be the easy choice for every rider in India.",
+      copy: "Started with a single conviction: going electric should be the easy choice for every rider and fleet in India.",
     },
     {
-      year: "2020",
-      title: "First charge corridor",
-      copy: "Highway fast-charging went live between three states — the first link in a pan-India energy network.",
+      year: "Core",
+      title: "Last-mile logistics",
+      copy: "3PL is the heart of the business — delivering scale, efficiency and lasting value.",
     },
     {
-      year: "2022",
-      title: "Six divisions integrated",
-      copy: "Distribution, leasing, energy, service, sourcing and intelligence merged under one masterbrand.",
+      year: "EMI",
+      title: "Full-stack infrastructure",
+      copy: "Distribution, leasing, energy, service, sourcing and intelligence integrated as one EMI platform.",
     },
     {
-      year: "2026",
-      title: "100M+ km electrified",
-      copy: "Clean kilometres delivered across fleets, riders and city routes under the integrated ecosystem.",
+      year: "2027",
+      title: "Growth aspirations",
+      copy: "100M+ km electrified, 10,000+ partners and 2.5 Mn+ tonnes of CO₂ avoided p.a. — long-term targets on our roadmap.",
     },
   ],
 };
@@ -85,24 +120,23 @@ export const ABOUT_TIMELINE = {
 
 export const ABOUT_IMPACT = {
   stats: [
-    { value: "2.5 Mn+", label: "Tonnes CO₂ avoided p.a." },
-    { value: "10,000+", label: "Channel partners" },
-    { value: "18,400", label: "Battery packs into second life" },
-    { value: "6", label: "Operating divisions" },
+    { value: "2.5 Mn+", label: "Tonnes CO₂ avoided p.a. (2027)" },
+    { value: "10,000+", label: "Partners & innovators (2027)" },
+    { value: "100 Mn+", label: "Kilometres electrified (2027)" },
+    { value: "6", label: "Business verticals" },
   ],
   heading: "Boosting every rider's future opportunities",
   cta: { label: "Read our ESG report", href: "/about/esg" },
   body: [
-    "BikeWo delivers energy and mobility infrastructure, helping riders, fleets and cities transition to clean, reliable power with an integrated ecosystem and expert support nationwide.",
-    "We run the full value chain — from the vehicle you buy to the charge you take and the service you rely on. That integration is what makes electrification practical at scale.",
+    "BikeWo is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics — helping fleets, riders and cities transition to clean, reliable mobility.",
+    "We run the full value chain: source, distribute, finance, charge, service and connect. That integration is what makes electrification practical at last-mile scale.",
   ],
   partners: [
     "PositiEV Mobility",
     "Enlite EV Care",
+    "Ignesium Energy",
     "BikeWo VZN",
     "PositiEV",
-    "Enlite",
-    "VZN",
   ],
 };
 
@@ -111,19 +145,19 @@ export const ABOUT_IMPACT = {
 export const ABOUT_BELIEF = {
   eyebrow: "We believe sustainable energy",
   title:
-    "At BikeWo, we believe sustainable energy powers a better future. We make clean power accessible and help communities choose greener, smarter solutions.",
+    "At BikeWo, we believe sustainable energy powers a better future. We make clean mobility accessible and help logistics networks choose greener, smarter solutions.",
   cards: [
     {
-      tag: "Shaping a sustainable future",
-      title: "Our Vision for Tomorrow",
+      tag: "Vision",
+      title: "To build the EMI that moves the world",
       cta: "Explore More",
-      href: "/about/esg",
+      href: "/about#mission-vision",
       image: "/assets/hf_20260806_143951_30c91bb1-6891-40a3-8985-0e68a4501e54.png",
       dot: "#2AB77C",
     },
     {
-      tag: "Greener tomorrow",
-      title: "Our Mission in Action",
+      tag: "Mission",
+      title: "Smarter, more scalable logistics ecosystems",
       cta: "Explore More",
       href: "/businesses",
       image: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
@@ -135,13 +169,13 @@ export const ABOUT_BELIEF = {
 /* ------------------------------------------------------- Mission & vision */
 
 export const ABOUT_MISSION_VISION = {
-  title: "Mission & vision",
+  title: "Vision & mission",
   ribbon: "Seamless energy. Smarter mobility.",
-  badge: "One company — from the vehicle you buy to the charge you take and the service you rely on.",
+  badge: "Logistics is our core. EMI is our differentiator.",
   quote:
-    "Going electric should be the easy choice. We build everything it takes to make it easy — vehicle, charge and service under one accountable roof.",
+    "To build the energy & mobility infrastructure (EMI) that moves the world.",
   card: {
-    copy: "Our mission is to build India's integrated energy and mobility infrastructure. Our vision is a country where clean power and reliable mobility are the default, not the exception.",
+    copy: "To connect mobility, energy and technology to create smarter, more scalable logistics ecosystems. We move goods. We move India.",
   },
   cta: { label: "Get in touch", href: "/contact" },
 };
@@ -149,37 +183,43 @@ export const ABOUT_MISSION_VISION = {
 /* ------------------------------------------------------------------- FAQ */
 
 export const ABOUT_FAQ = {
-  title: "General frequently asked questions",
+  eyebrow: "FAQ",
+  title: "Questions we get asked most.",
+  lede: "Who we are, how the EMI platform works, and how to partner with us.",
+  cta: { label: "Still have a question?", href: "/contact" },
   items: [
     {
       question: "What does BikeWo do?",
       answer:
-        "BikeWo Green Tech Limited builds India's integrated energy and mobility infrastructure — electric vehicles, charging networks, fleet leasing, lifecycle services, supply chain and connected intelligence under one masterbrand.",
+        "BikeWo Green Tech Limited builds Energy & Mobility Infrastructure (EMI) to power the future of EV logistics — electric vehicles, charging and swapping, fleet leasing, lifecycle services, global sourcing and connected intelligence under one masterbrand.",
     },
     {
-      question: "How is BikeWo different from a typical EV company?",
+      question: "How is BikeWo different from a typical logistics company?",
       answer:
-        "We run six divisions as one accountable system. A rider or fleet operator gets the vehicle, the charge, the service and the data layer from the same company — no hand-offs between unrelated vendors.",
+        "We operate at the infrastructure layer, not just the logistics execution layer. While others focus on delivery services, BikeWo owns, finances, powers and manages the mobility assets that make last-mile logistics possible. Logistics companies need mobility capacity — not vehicle ownership.",
     },
     {
       question: "Where does BikeWo operate?",
       answer:
-        "We operate pan-India through our dealer network, charge hubs, service centres and driver-partner programme.",
+        "Pan-India — through our dealer network, charge and swap infrastructure, service centres and driver ecosystem, with an initial 3PL focus in Hyderabad and expansion across urban last-mile markets.",
     },
     {
       question: "How can I partner with BikeWo?",
       answer:
-        "Dealers, fleet operators, charge-point hosts and technology partners can reach us through the contact page. We route every enquiry to the division that owns it.",
+        "Dealers, fleet operators, charge-point hosts, OEMs and technology partners can reach us through the contact page. We route every enquiry to the business that owns it.",
+      cta: { label: "Get in touch", href: "/contact" },
     },
     {
       question: "What is the Shram Sainik programme?",
       answer:
         "Shram Sainik is our driver-partner programme — zero joining fee, weekly payouts, insurance, training and 24×7 support. It makes the driver a stakeholder, not a line item.",
+      cta: { label: "Explore the programme", href: "/shram-sainik" },
     },
     {
       question: "How does BikeWo report on sustainability?",
       answer:
-        "We publish annual ESG reporting with traceable figures. Every emissions and impact number on this site links back to a documented source — see our ESG section for the latest report.",
+        "We publish annual ESG reporting with traceable figures. Growth targets on this site — including 2027 aspirations for electrified kilometres and CO₂ avoided — are labelled as such and will be reported against.",
+      cta: { label: "Read the ESG overview", href: "/about/esg" },
     },
   ],
 };
@@ -321,33 +361,33 @@ export const LEADERSHIP = {
 
 export const ABOUT_ESG = {
   eyebrow: "Environmental, social & governance",
-  title: "Net zero is a commitment we measure, not a claim we make.",
-  lede: "Every number we publish is traceable to a source. We report annually against emissions, recovery and governance standards.",
+  title: "Planet-positive mobility through clean energy and responsible operations.",
+  lede: "2027 impact figures on this site are growth aspirations. We will report annually against emissions, partners and electrified kilometres.",
   metrics: [
     {
       label: "Tonnes CO₂ avoided p.a.",
       value: "2.5 Mn+",
-      detail: "Emissions avoided annually through electrified kilometres across BikeWo's mobility network.",
+      detail: "2027 aspiration — emissions avoided through electrified last-mile logistics across BikeWo's network.",
     },
     {
       label: "Kilometres electrified",
       value: "100 Mn+",
-      detail: "Clean kilometres delivered on India's roads through lease, charge and service.",
+      detail: "2027 aspiration — clean kilometres delivered through lease, charge, service and fleet operations.",
     },
     {
-      label: "Battery packs into second life",
-      value: "18,400",
-      detail: "Packs recovered into second-life and end-of-life pathways through Enlite.",
+      label: "Partners & innovators",
+      value: "10,000+",
+      detail: "2027 aspiration — dealers, fleet operators, OEMs and technology partners in the ecosystem.",
     },
   ],
   pillars: [
     {
       title: "Environmental",
-      copy: "Electrified kilometres, charge-hub efficiency and battery recovery — measured and published every year.",
+      copy: "Electrified last-mile kilometres, charging and swapping efficiency, and a pathway to net-zero mobility.",
     },
     {
       title: "Social",
-      copy: "Shram Sainik driver-partners, dealer livelihoods and training academies in regional languages.",
+      copy: "People-centric operations — drivers, dealers and customers at the heart of the ecosystem, including Shram Sainik.",
     },
     {
       title: "Governance",

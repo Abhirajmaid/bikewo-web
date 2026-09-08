@@ -1,121 +1,114 @@
-"use client";
-
-import Image from "next/image";
-import { useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Button } from "@/components/ui/Button";
 import { ClockIcon, MailIcon, PinIcon } from "@/components/brand/Icons";
 import {
   CONTACT_MAP,
+  CONTACT_OFFICE,
+  CONTACT_OFFICE_HEADING,
   CONTACT_OFFICE_NOTE,
-  CONTACT_OFFICES,
   CONTACT_PAGE_WIDTH,
-  type OfficeLocation,
 } from "@/lib/contact";
-import { cn } from "@/lib/utils";
 
-function ChevronRightIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
+const DETAILS = [
+  {
+    icon: PinIcon,
+    label: "Address",
+    value: CONTACT_OFFICE.address,
+  },
+  {
+    icon: MailIcon,
+    label: "Write to us",
+    value: CONTACT_OFFICE.email,
+    href: `mailto:${CONTACT_OFFICE.email}`,
+  },
+  {
+    icon: ClockIcon,
+    label: "Appointments",
+    value: CONTACT_OFFICE.hours,
+  },
+] as const;
 
 export function ContactOffices() {
-  const [selected, setSelected] = useState<OfficeLocation>(CONTACT_OFFICES[0]);
-
   return (
-    <section className="border-t border-[#e8ebe9] bg-white py-16 md:py-24">
+    <section className="border-t border-indigo-100 bg-white py-16 md:py-24">
       <Container className={CONTACT_PAGE_WIDTH}>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
-          {/* Location list */}
-          <Reveal>
-            <h2 className="font-display text-2xl font-semibold text-[#052016] md:text-[1.75rem]">
-              Visit Our Office
-            </h2>
-            <ul className="mt-8 space-y-1">
-              {CONTACT_OFFICES.map((office) => (
-                <li key={office.id}>
-                  <button
-                    type="button"
-                    onClick={() => setSelected(office)}
-                    className={cn(
-                      "flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left text-[15px] font-medium transition-colors",
-                      selected.id === office.id
-                        ? "bg-[#052016] text-white"
-                        : "text-[#052016]/70 hover:bg-[#f3f4f6]",
-                    )}
-                  >
-                    {office.name}
-                    <ChevronRightIcon />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+        <SectionHeading
+          eyebrow={CONTACT_OFFICE_HEADING.eyebrow}
+          title={CONTACT_OFFICE_HEADING.title}
+          lede={CONTACT_OFFICE_HEADING.lede}
+          align="center"
+          className="justify-center"
+        />
 
-          {/* India map */}
-          <Reveal delay={0.05} className="relative mx-auto w-full max-w-md lg:max-w-none">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#f3f4f6]">
-              <Image
-                src={CONTACT_MAP.src}
-                alt={CONTACT_MAP.alt}
-                fill
-                sizes="(min-width: 1024px) 35vw, 100vw"
-                className="object-contain p-4"
+        <Reveal delay={0.12} className="mt-12 md:mt-16">
+          <div className="overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-card lg:relative">
+            <div className="relative h-72 sm:h-96 lg:h-128">
+              <iframe
+                title={CONTACT_MAP.title}
+                src={CONTACT_MAP.embedSrc}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+                className="absolute inset-0 size-full border-0"
               />
             </div>
-          </Reveal>
 
-          {/* Address card */}
-          <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-[#e5e7eb] bg-white p-6 shadow-[0_2px_16px_rgb(5_32_22/0.06)] md:p-8">
-              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-[#9ca3af]">
-                {selected.label === "Headquarters" ? "Headquarter" : selected.label}
-              </p>
+            <div className="lg:absolute lg:left-8 lg:top-1/2 lg:z-10 lg:w-96 lg:-translate-y-1/2">
+              <div className="flex flex-col gap-6 border-t border-indigo-100 bg-white p-6 lg:rounded-2xl lg:border lg:p-7 lg:shadow-lift">
+                <div>
+                  <p className="font-display text-[11px] font-semibold uppercase tracking-[0.14em] text-green-700">
+                    {CONTACT_OFFICE.label}
+                  </p>
+                  <h3 className="mt-2 font-display text-xl font-semibold leading-snug text-indigo-800">
+                    {CONTACT_OFFICE.city}
+                  </h3>
+                </div>
 
-              <ul className="mt-6 space-y-5">
-                <li>
-                  <p className="mb-1.5 text-xs font-medium text-[#052016]/50">Headquarter</p>
-                  <div className="flex gap-3">
-                  <span className="mt-0.5 shrink-0 text-[#052016]/60">
-                    <PinIcon size={48} />
-                  </span>
-                  <span className="text-sm leading-relaxed text-[#052016]/80">{selected.address}</span>
-                  </div>
-                </li>
-                <li>
-                  <p className="mb-1.5 text-xs font-medium text-[#052016]/50">Write us</p>
-                  <div className="flex gap-3">
-                  <span className="mt-0.5 shrink-0 text-[#052016]/60">
-                    <MailIcon size={48} />
-                  </span>
-                  <a
-                    href={`mailto:${selected.email}`}
-                    className="text-sm text-[#052016]/80 transition-colors hover:text-[#14603f]"
-                  >
-                    {selected.email}
-                  </a>
-                  </div>
-                </li>
-                <li>
-                  <p className="mb-1.5 text-xs font-medium text-[#052016]/50">Appointment</p>
-                  <div className="flex gap-3">
-                  <span className="mt-0.5 shrink-0 text-[#052016]/60">
-                    <ClockIcon size={48} />
-                  </span>
-                  <span className="text-sm text-[#052016]/80">{selected.hours}</span>
-                  </div>
-                </li>
-              </ul>
+                <ul className="space-y-4">
+                  {DETAILS.map((item) => (
+                    <li key={item.label} className="flex items-start gap-3.5">
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-green-50">
+                        <item.icon size={22} />
+                      </span>
+                      <div className="min-w-0 pt-0.5">
+                        <p className="text-xs font-medium text-slate-400">{item.label}</p>
+                        {"href" in item ? (
+                          <a
+                            href={item.href}
+                            className="mt-0.5 block truncate text-[15px] font-medium text-indigo-800 transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:text-green-700"
+                          >
+                            {item.value}
+                          </a>
+                        ) : (
+                          <p className="mt-0.5 text-[15px] font-medium leading-snug text-indigo-800">
+                            {item.value}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
 
-              <p className="mt-8 border-t border-[#e5e7eb] pt-6 text-xs leading-relaxed text-[#9ca3af]">
-                {CONTACT_OFFICE_NOTE}
-              </p>
+                <Button
+                  href={CONTACT_MAP.directionsHref}
+                  variant="primary"
+                  withArrow
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="w-full"
+                >
+                  Get directions
+                </Button>
+
+                <p className="text-xs leading-relaxed text-slate-400">
+                  {CONTACT_OFFICE_NOTE}
+                </p>
+              </div>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

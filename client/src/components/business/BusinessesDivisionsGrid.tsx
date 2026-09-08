@@ -69,7 +69,7 @@ export function BusinessesDivisionsGrid() {
                       {division.copy}
                     </p>
                     <span className="mt-4 inline-flex items-center gap-2 font-display text-sm font-semibold text-green-300">
-                      Explore
+                      {division.href === "/coming-soon" ? "Coming Soon" : "Explore"}
                       <ArrowRightIcon
                         size={16}
                         className="transition-transform duration-200 group-hover:translate-x-1"

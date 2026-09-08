@@ -1,15 +1,31 @@
 import Link from "next/link";
-import { NAV, SITE, SOCIALS } from "@/lib/site";
+import { NAV, SITE, SOCIALS, type NavNode } from "@/lib/site";
 import { Logo } from "@/components/brand/Logo";
 import { Mark } from "@/components/brand/Mark";
 import { ArrowUpRightIcon } from "@/components/brand/Icons";
 import { Container } from "@/components/layout/Container";
 import { STATS_FOOTNOTE } from "@/lib/content";
+import { INVESTOR_TOPICS } from "@/lib/investors";
 
-/** 5.13 — Premium footer. Carries the full sitemap so nothing is orphaned. */
+/** Titles removed from the header stay out of the footer too. */
+const HIDDEN = new Set(["Subsidiaries", "Shram Sainik", "Sustainability"]);
+
+const FOOTER_NAV: NavNode[] = NAV.map((n) =>
+  n.title === "Investors"
+    ? {
+        ...n,
+        children: INVESTOR_TOPICS.filter((t) => t.slug !== "all").map((t) => ({
+          title: t.label,
+          href: `/investors?topic=${t.slug}#library`,
+        })),
+      }
+    : n,
+);
+
+/** 5.13 — Premium footer. Header sitemap plus Careers / Contact. */
 export function Footer() {
-  const columns = NAV.filter((n) => n.children?.length);
-  const singles = NAV.filter((n) => !n.children?.length);
+  const columns = FOOTER_NAV.filter((n) => n.children?.length && !HIDDEN.has(n.title));
+  const singles = FOOTER_NAV.filter((n) => !n.children?.length && !HIDDEN.has(n.title));
 
   return (
     <footer className="relative overflow-hidden bg-indigo-950 text-white">
@@ -24,12 +40,12 @@ export function Footer() {
           <div className="max-w-xl">
             <Logo variant="reversed" height={40} />
             <p className="mt-6 font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] font-semibold leading-[1.2] tracking-tight text-white">
-              Going electric should be the{" "}
-              <span className="text-green-400">easy</span> choice.
+              We move goods. We move{" "}
+              <span className="text-green-400">India</span>.
             </p>
             <p className="mt-4 max-w-md leading-relaxed text-white/60">
-              So we build everything it takes to make it easy — from the vehicle
-              you buy to the charge you take and the service you rely on.
+              Logistics is our core. EMI is our differentiator — we build the
+              energy and mobility infrastructure behind every movement.
             </p>
           </div>
 
@@ -52,20 +68,16 @@ export function Footer() {
         {/* Sitemap */}
         <nav
           aria-label="Footer"
-          className="grid grid-cols-2 gap-x-8 gap-y-10 py-14 md:grid-cols-3 lg:grid-cols-5"
+          className="grid grid-cols-2 gap-x-8 gap-y-10 py-14 lg:grid-cols-4"
         >
           {columns.map((col) => (
             <div key={col.href}>
-              {col.href === "/subsidiaries" ? (
-                <span className="eyebrow inline-block text-green-400">{col.title}</span>
-              ) : (
-                <Link
-                  href={col.href}
-                  className="eyebrow inline-block text-green-400 transition-opacity hover:opacity-80"
-                >
-                  {col.title}
-                </Link>
-              )}
+              <Link
+                href={col.href}
+                className="eyebrow inline-block text-green-400 transition-opacity hover:opacity-80"
+              >
+                {col.title}
+              </Link>
               <ul className="mt-5 space-y-3">
                 {col.children!.map((child) => (
                   <li key={child.href}>

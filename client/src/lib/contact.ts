@@ -4,7 +4,7 @@
  */
 
 export const CONTACT_HERO = {
-  title: "Connect with Us for Sustainable Solutions",
+  title: "Connect with us for energy & mobility solutions",
   breadcrumb: "Contact",
 };
 
@@ -19,34 +19,38 @@ export const CONTACT_TOPICS = [
 export type ContactTopic = (typeof CONTACT_TOPICS)[number];
 
 export const CONTACT_STAT = {
-  value: "891K",
+  kicker: "Queries Answered",
+  value: "891",
+  suffix: "K",
   label: "Quick Query Solutions",
-  copy: "Our support team resolves most enquiries within one business day — from fleet pricing to charge-point installation.",
+  copy: "We are dedicated to addressing your inquiries efficiently. Our team provides clear, effective solutions that meet your needs, ensuring a smooth experience.",
 };
 
-export const CONTACT_TESTIMONIAL = {
-  quote:
-    "BikeWo routed us to the right division on the first call. No hand-offs, no runaround — just the team that could actually help.",
-  name: "Rajesh Kumar",
-  role: "Fleet Operator, Hyderabad",
-  avatar: "/assets/hf_20260806_145121_78a71faf-e9a4-4f69-aed6-06b239e1ae81.png",
-};
-
-export const CONTACT_RESOURCE = {
-  value: "100+",
-  label: "Energy saving tips",
-  links: [
-    { label: "Study more", href: "/sustainability" },
-    { label: "Resources center", href: "/media" },
-  ],
-};
+export const CONTACT_TESTIMONIALS = [
+  {
+    quote:
+      "This service exceeded all my expectations. The team was professional, prompt, and incredibly skilled. Highly recommended!",
+    name: "Rajesh Kumar",
+    role: "Fleet Operator, Hyderabad",
+    image:
+      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&h=1100&fit=crop&crop=face",
+  },
+  {
+    quote:
+      "BikeWo routed us to the right division on the first call. No hand-offs, no runaround — just the team that could actually help.",
+    name: "Priya Nair",
+    role: "Operations Lead, Pune",
+    image:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&h=1100&fit=crop&crop=face",
+  },
+] as const;
 
 export const CONTACT_MISSION = {
   eyebrow: "We believe in a sustainable future.",
-  textBefore: "At BikeWo, we truly believe clean power ",
-  highlight: "powers a better future. Sustainable energy is",
+  textBefore: "At BikeWo, we truly believe clean mobility ",
+  highlight: "powers a better future. Energy & mobility infrastructure is",
   textAfter:
-    " accessible and helps communities choose smarter, greener solutions.",
+    " what connects mobility, energy and technology into smarter, more scalable logistics ecosystems.",
 };
 
 export const CONTACT_QUICK = [
@@ -88,7 +92,7 @@ export const CONTACT_HELP = [
   {
     id: "technology",
     title: "Technology",
-    href: "/businesses/bikewo-vzn",
+    href: "/coming-soon",
     area: "technology",
     variant: "darkTile" as const,
     icon: "monitor" as const,
@@ -134,62 +138,27 @@ export const CONTACT_HELP = [
 /** Shared width for every Contact page section (~90% of the viewport). */
 export const CONTACT_PAGE_WIDTH = "w-[90%] !max-w-none px-0";
 
-export type OfficeLocation = {
-  id: string;
-  name: string;
-  label: string;
-  address: string;
-  email: string;
-  hours: string;
-};
+export const CONTACT_OFFICE_HEADING = {
+  eyebrow: "Location",
+  title: "Visit our office",
+  lede: "Headquarters in Gachibowli, Hyderabad — drop in, or write ahead and we’ll have the right team ready.",
+} as const;
 
-export const CONTACT_OFFICES: OfficeLocation[] = [
-  {
-    id: "telangana",
-    name: "Telangana",
-    label: "Headquarters",
-    address: "Hyderabad, Gachibowli, Telangana 500032",
-    email: "brand@bikewo.in",
-    hours: "Available 24/7",
-  },
-  {
-    id: "karnataka",
-    name: "Karnataka",
-    label: "Regional Office",
-    address: "Bengaluru, Koramangala, Karnataka 560034",
-    email: "brand@bikewo.in",
-    hours: "Mon–Sat, 9 AM – 6 PM",
-  },
-  {
-    id: "maharashtra",
-    name: "Maharashtra",
-    label: "Regional Office",
-    address: "Mumbai, Andheri East, Maharashtra 400069",
-    email: "brand@bikewo.in",
-    hours: "Mon–Sat, 9 AM – 6 PM",
-  },
-  {
-    id: "delhi",
-    name: "Delhi NCR",
-    label: "Regional Office",
-    address: "New Delhi, Connaught Place, Delhi 110001",
-    email: "brand@bikewo.in",
-    hours: "Mon–Sat, 9 AM – 6 PM",
-  },
-  {
-    id: "tamil-nadu",
-    name: "Tamil Nadu",
-    label: "Regional Office",
-    address: "Chennai, T Nagar, Tamil Nadu 600017",
-    email: "brand@bikewo.in",
-    hours: "Mon–Sat, 9 AM – 6 PM",
-  },
-];
+export const CONTACT_OFFICE = {
+  label: "Headquarters",
+  city: "Gachibowli",
+  address: "Hyderabad, Telangana 500032",
+  email: "brand@bikewo.in",
+  hours: "Available 24/7",
+} as const;
+
+const OFFICE_MAP_QUERY = "Gachibowli, Hyderabad, Telangana 500032";
 
 export const CONTACT_MAP = {
-  src: "/assets/india_map.png",
-  alt: "Map of India showing BikeWo office locations, with Telangana highlighted.",
+  embedSrc: `https://www.google.com/maps?q=${encodeURIComponent(OFFICE_MAP_QUERY)}&z=15&hl=en&output=embed`,
+  directionsHref: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_MAP_QUERY)}`,
+  title: "Map of BikeWo headquarters in Gachibowli, Hyderabad",
 };
 
 export const CONTACT_OFFICE_NOTE =
-  "Our office remains closed on all major national holidays and weekends.";
+  "Closed on major national holidays and weekends.";

@@ -10,13 +10,20 @@ const entry = ROUTE_INDEX["/contact"];
 
 export const metadata: Metadata = {
   title: entry?.title ?? "Contact",
-  description: entry?.blurb ?? SITE.description,
+  description:
+    entry?.blurb ??
+    "Connect with BikeWo for energy & mobility solutions — distribution, leasing, charging, lifecycle services and intelligence.",
   alternates: { canonical: "/contact" },
   openGraph: {
     title: `${entry?.title ?? "Contact"} — ${SITE.name}`,
     description: entry?.blurb ?? SITE.description,
     url: "/contact",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${entry?.title ?? "Contact"} — ${SITE.name}`,
+    description: entry?.blurb ?? SITE.description,
   },
 };
 

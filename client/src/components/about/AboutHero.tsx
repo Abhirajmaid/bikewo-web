@@ -1,100 +1,134 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ABOUT_HERO } from "@/lib/about";
+import { ArrowUpRightIcon } from "@/components/brand/Icons";
+import { Mark } from "@/components/brand/Mark";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
-import { Counter } from "@/components/ui/Counter";
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
-import { stagger } from "@/lib/utils";
+import { cn, stagger } from "@/lib/utils";
 
-/** About hero — headline, image card, stats and four pillars. */
+/** About hero — dark page header, then story cards and four pillars. */
 export function AboutHero() {
   return (
-    <Section className="border-b border-indigo-100 pt-32 pb-20 md:pt-40 md:pb-28 lg:pb-32">
-      <Container>
-        <nav aria-label="Breadcrumb">
-          <ol className="eyebrow flex flex-wrap items-center gap-2 text-slate">
-            <li>
-              <Link href="/" className="transition-colors hover:text-indigo-800">
-                Home
-              </Link>
-            </li>
-            <li aria-hidden>/</li>
-            <li className="text-indigo-800">About BikeWo</li>
-          </ol>
-        </nav>
+    <>
+      <PageHero
+        crumbs={[
+          { label: "Home", href: "/" },
+          { label: "About BikeWo" },
+        ]}
+        title="About BikeWo"
+        lede={ABOUT_HERO.title}
+      />
 
-        <Reveal className="mt-8 text-center md:mt-10">
-          <Eyebrow>{ABOUT_HERO.eyebrow}</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.05}>
-          <h1 className="mx-auto mt-6 max-w-3xl text-center font-display text-[clamp(2rem,1.2rem+3.2vw,3.75rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-indigo-800">
-            {ABOUT_HERO.title}
-          </h1>
-        </Reveal>
+      <Section className="border-b border-indigo-100">
+        <Container>
+          <ul className="grid gap-4 sm:gap-5 lg:grid-cols-3">
+            {ABOUT_HERO.story.map((card, i) => (
+              <Reveal as="li" key={card.title} delay={stagger(i, 0.08)} className="h-full">
+                <Link
+                  href={card.cta.href}
+                  aria-label={`${card.title}. ${card.cta.label}`}
+                  className={cn(
+                    "group relative flex h-full min-h-88 flex-col overflow-hidden rounded-lg p-8 md:min-h-104 md:p-9 lg:min-h-112 lg:p-10",
+                    "transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]",
+                    "active:scale-[0.985]",
+                    card.kind === "solid" && "bg-indigo-950",
+                  )}
+                >
+                  {card.kind === "photo" && (
+                    <>
+                      <Image
+                        src={card.image.src}
+                        alt={card.image.alt}
+                        fill
+                        priority
+                        sizes="(min-width: 1024px) 33vw, 100vw"
+                        className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.03]"
+                      />
+                      <span
+                        aria-hidden
+                        className="absolute inset-0 bg-linear-to-t from-indigo-950/85 via-indigo-950/25 to-transparent"
+                      />
+                    </>
+                  )}
 
-        <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:gap-8">
-          <Reveal className="lg:col-span-7">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg lg:aspect-auto lg:min-h-[22rem]">
-              <Image
-                src={ABOUT_HERO.imageCard.src}
-                alt={ABOUT_HERO.imageCard.alt}
-                fill
-                priority
-                sizes="(min-width: 1024px) 55vw, 100vw"
-                className="object-cover"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-linear-to-t from-indigo-950/80 via-indigo-950/20 to-transparent"
-              />
-              <p className="absolute bottom-0 left-0 max-w-md p-6 font-display text-[clamp(1.25rem,1rem+1vw,1.75rem)] font-semibold leading-snug text-white md:p-8">
-                {ABOUT_HERO.imageCard.overlay}
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08} className="lg:col-span-5">
-            <div className="flex h-full flex-col justify-center rounded-lg bg-green-50 p-8 md:p-10">
-              <dl className="space-y-8">
-                {ABOUT_HERO.stats.map((stat, i) => (
-                  <div key={stat.label}>
-                    <dd className="font-display text-[clamp(2rem,1.4rem+2.2vw,3rem)] font-bold leading-none tracking-tight text-indigo-800">
-                      <Counter value={stat.value} suffix={stat.suffix} />
-                    </dd>
-                    <dt className="mt-3 font-display text-[15px] font-semibold text-indigo-800">
-                      {stat.label}
-                    </dt>
-                    {i < ABOUT_HERO.stats.length - 1 && (
-                      <div aria-hidden className="mt-8 border-b border-indigo-100" />
+                  <div className="relative flex h-full min-h-0 flex-col">
+                    {card.kind === "solid" && card.logo && (
+                      <div aria-hidden className="mb-10 flex items-center gap-2">
+                        <Mark className="size-6 text-green-500" />
+                        <span className="font-display text-[15px] font-semibold tracking-tight text-white">
+                          BikeWo
+                        </span>
+                      </div>
                     )}
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </Reveal>
-        </div>
 
-        <ul className="mt-16 grid gap-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-8">
-          {ABOUT_HERO.pillars.map((pillar, i) => {
-            const Icon = pillar.icon;
-            return (
-              <Reveal as="li" key={pillar.title} delay={stagger(i)}>
-                <div className="flex size-16 items-center justify-center rounded-full bg-indigo-100 text-indigo-800">
-                  <Icon size={44} />
-                </div>
-                <h2 className="mt-5 font-display text-lg font-semibold text-indigo-800">
-                  {pillar.title}
-                </h2>
-                <p className="mt-2.5 text-[15px] leading-relaxed text-slate">
-                  {pillar.copy}
-                </p>
+                    <div className={cn(card.kind === "photo" && "mt-auto")}>
+                      <h2
+                        className={cn(
+                          "font-display font-semibold leading-snug tracking-tight text-white",
+                          card.kind === "photo"
+                            ? "text-[clamp(1.25rem,1rem+0.9vw,1.625rem)]"
+                            : "text-[clamp(1.375rem,1.1rem+0.8vw,1.75rem)]",
+                        )}
+                      >
+                        {card.title}
+                      </h2>
+
+                      {card.kind === "solid" && (
+                        <div className="mt-5 space-y-4">
+                          {card.body.map((paragraph) => (
+                            <p
+                              key={paragraph.slice(0, 40)}
+                              className="text-[15px] leading-relaxed text-white/75"
+                            >
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-1.5 pt-8 font-display text-[15px] font-semibold",
+                        card.kind === "solid" && "mt-auto",
+                        card.kind === "photo" ? "text-white" : "text-green-400",
+                      )}
+                    >
+                      {card.cta.label}
+                      <ArrowUpRightIcon
+                        size={16}
+                        className="transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </span>
+                  </div>
+                </Link>
               </Reveal>
-            );
-          })}
-        </ul>
-      </Container>
-    </Section>
+            ))}
+          </ul>
+
+          <ul className="mt-16 grid gap-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-8">
+            {ABOUT_HERO.pillars.map((pillar, i) => {
+              const Icon = pillar.icon;
+              return (
+                <Reveal as="li" key={pillar.title} delay={stagger(i)}>
+                  <div className="flex size-16 items-center justify-center rounded-full bg-indigo-100 text-indigo-800">
+                    <Icon size={44} />
+                  </div>
+                  <h2 className="mt-5 font-display text-lg font-semibold text-indigo-800">
+                    {pillar.title}
+                  </h2>
+                  <p className="mt-2.5 text-[15px] leading-relaxed text-slate">
+                    {pillar.copy}
+                  </p>
+                </Reveal>
+              );
+            })}
+          </ul>
+        </Container>
+      </Section>
+    </>
   );
 }

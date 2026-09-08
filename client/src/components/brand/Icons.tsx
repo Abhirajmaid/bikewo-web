@@ -351,12 +351,38 @@ export const CloseIcon = (p: IconProps) => (
   </StrokeIcon>
 );
 
+export const SearchIcon = (p: IconProps) => (
+  <StrokeIcon {...p}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+  </StrokeIcon>
+);
+
+export const DownloadIcon = (p: IconProps) => (
+  <StrokeIcon {...p}>
+    <path d="M12 4v12M7 11l5 5 5-5M5 20h14" />
+  </StrokeIcon>
+);
+
+export const PlaneIcon = (p: IconProps) => (
+  <StrokeIcon {...p}>
+    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+  </StrokeIcon>
+);
+
+export const FileTextIcon = (p: IconProps) => (
+  <StrokeIcon {...p}>
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+    <path d="M14 3v5h5M9 13h6M9 17h6" />
+  </StrokeIcon>
+);
+
 /** Icon lookup for the ecosystem / division sets. */
 export const DIVISION_ICONS = {
-  distribution: VehicleIcon,
-  leasing: WalletIcon,
+  distribution: BuildingIcon,
+  leasing: PeopleIcon,
   energy: BoltIcon,
-  lifecycle: RecycleIcon,
-  sourcing: BoxIcon,
+  lifecycle: LeafIcon,
+  sourcing: CityIcon,
   vzn: PulseIcon,
 } as const;

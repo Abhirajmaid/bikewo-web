@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { BUSINESSES_HERO } from "@/lib/businesses";
+import { EnergyFlowLines } from "@/components/brand/EnergyFlowLines";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/Button";
@@ -9,8 +10,9 @@ import { Reveal } from "@/components/ui/Reveal";
 /** Businesses page header — shared intro + image, pillars and CTAs. */
 export function BusinessesHero() {
   return (
-    <Section className="border-b border-indigo-100 pt-32 pb-20 md:pt-40 md:pb-28 lg:pb-32">
-      <Container>
+    <Section className="relative overflow-hidden border-b border-indigo-100 pt-32 pb-20 md:pt-40 md:pb-28 lg:pb-32">
+      <EnergyFlowLines className="bottom-auto h-112 md:h-136 lg:h-144 mask-[linear-gradient(to_bottom,black_62%,transparent)]" />
+      <Container className="relative">
         <PageHeader
           crumbs={[
             { label: "Home", href: "/" },

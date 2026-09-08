@@ -31,9 +31,9 @@ export function ContactCTA() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-white/65">
-                Buying a vehicle, leasing a fleet, hosting a charge point or joining
-                the channel — tell us which, and we will route you to the team that
-                owns it.
+                Leasing a last-mile fleet, distributing EVs, hosting a charge
+                point or joining the channel — tell us which, and we will route
+                you to the team that owns it.
               </p>
             </Reveal>
           </div>

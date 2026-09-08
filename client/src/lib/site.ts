@@ -23,23 +23,35 @@ export const SITE = {
   legalName: "BikeWo Green Tech Limited",
   tagline: "Electrifying India",
   corporateTagline: "Seamless Energy. Smarter Mobility.",
-  campaignTagline: "The Mobility India Deserves.",
+  campaignTagline: "We move goods. We move India.",
   url: "https://www.bikewo.in",
   brandEmail: "brand@bikewo.in",
   locale: "en_IN",
   description:
-    "BikeWo Green Tech Limited is building India's integrated energy & mobility infrastructure — from the vehicle you buy to the charge you take and the service you rely on.",
+    "Seamless Energy. Smarter Mobility. BikeWo Green Tech Limited is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics — owning and operating the full stack across vehicles, energy, financing, service and intelligence.",
   keywords: [
     "BikeWo",
-    "BikeWo Green Tech",
+    "BikeWo Green Tech Limited",
+    "Electrifying India",
+    "Seamless Energy. Smarter Mobility.",
+    "Energy & Mobility Infrastructure",
+    "EMI",
+    "EV logistics India",
+    "last-mile logistics",
+    "last-mile delivery India",
     "electric mobility India",
-    "EV infrastructure",
-    "energy and mobility",
-    "EV charging",
-    "mobility distribution",
-    "Shram Sainik",
+    "3PL EV fleet",
+    "EV asset leasing",
+    "EV distribution India",
+    "EV charging infrastructure",
+    "battery swapping India",
+    "fleet management",
+    "telematics",
     "PositiEV",
     "Enlite EV Care",
+    "Ignesium Energy",
+    "BikeWo VZN",
+    "connected intelligence",
   ],
 } as const;
 
@@ -47,36 +59,70 @@ export const NAV: NavNode[] = [
   {
     title: "About BikeWo",
     href: "/about",
-    blurb: "Who we are, what we stand for and how we govern ourselves.",
+    blurb:
+      "BikeWo is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics.",
     children: [
-      { title: "About us", href: "/about", blurb: "Who we are and what we stand for." },
+      {
+        title: "About us",
+        href: "/about",
+        blurb:
+          "Logistics is our core. EMI is our differentiator — we move goods, we move India.",
+      },
       { title: "Leadership Team", href: "/about/leadership-team" },
-      { title: "Vision, Mission & Values", href: "/about#mission-vision" },
-      { title: "ESG", href: "/about/esg" },
+      {
+        title: "Vision, Mission & Values",
+        href: "/about#mission-vision",
+        blurb:
+          "To build the energy & mobility infrastructure (EMI) that moves the world.",
+      },
+      // { title: "ESG", href: "/about/esg" },
       { title: "Awards & Recognition", href: "/about/awards" },
-      { title: "News & media", href: "/media", blurb: "Newsroom, announcements and press resources." },
+      // { title: "News & media", href: "/media", blurb: "Newsroom, announcements and press resources." },
     ],
   },
   {
     title: "Businesses",
     href: "/businesses",
-    blurb: "Six divisions operating as one accountable system.",
+    blurb:
+      "SiX businesses operating as one EMI platform : vehicles, energy, financing, service and sourcing.",
     children: [
-      { title: "Mobility Distribution", href: "/businesses/mobility-distribution" },
-      { title: "Mobility Asset Leasing", href: "/businesses/mobility-asset-leasing" },
-      { title: "Energy Infrastructure", href: "/businesses/energy-infrastructure" },
-      { title: "Lifecycle Services", href: "/businesses/lifecycle-services" },
+      {
+        title: "Mobility Distribution",
+        href: "https://positievmobility.com/",
+        external: true,
+        blurb:
+          "Through PositiEV — India’s technology-led EV distribution platform with a strong dealer and channel network.",
+      },
+      {
+        title: "Mobility Asset Leasing",
+        href: "/businesses/mobility-asset-leasing",
+        blurb:
+          "We own and lease EVs to gig workers, SMEs and enterprises with flexible, affordable solutions.",
+      },
+      {
+        title: "Energy Infrastructure",
+        href: "/businesses/energy-infrastructure",
+        blurb:
+          "Building and operating pan-India charging and battery swapping infrastructure for today and tomorrow.",
+      },
+      {
+        title: "Lifecycle Services",
+        href: "/businesses/lifecycle-services",
+        blurb:
+          "Through Enlite EV Care — end-to-end maintenance, spare parts, roadside assistance and battery care.",
+      },
       {
         title: "Global Sourcing & Supply Chain",
         href: "/businesses/global-sourcing-supply-chain",
+        blurb:
+          "Global partnerships and supply chain excellence that deliver quality, scale and cost leadership.",
       },
-      { title: "BikeWo VZN — Connected Intelligence", href: "/businesses/bikewo-vzn" },
     ],
   },
   {
     title: "Subsidiaries",
     href: "/subsidiaries",
-    blurb: "Endorsed companies that carry the masterbrand forward.",
+    blurb: "The BikeWo Mobility Group — companies that carry the masterbrand forward.",
     children: [
       {
         title: "PositiEV Mobility",
@@ -84,7 +130,7 @@ export const NAV: NavNode[] = [
         external: true,
         logo: "/assets/positievlogo.webp",
         blurb:
-          "Distribution and leasing platform — dealer network, fleet rentals and channel partners across India.",
+          "EV asset distribution, financing and leasing solutions for businesses and fleet operators.",
       },
       {
         title: "Enlite EV Care",
@@ -92,14 +138,20 @@ export const NAV: NavNode[] = [
         external: true,
         logo: "/assets/enliteev_logo-removebg-preview.png",
         blurb:
-          "Service and after-sales network — maintenance, spares, roadside assistance and battery health.",
+          "End-to-end EV lifecycle and maintenance services to ensure uptime, performance and safety.",
+      },
+      {
+        title: "Ignesium Energy",
+        href: "/coming-soon",
+        blurb:
+          "Energy infrastructure and solutions powering clean mobility at scale.",
       },
       {
         title: "BikeWo VZN",
-        href: "/",
+        href: "/coming-soon",
         logo: "/assets/bikewo_vzn.png",
         blurb:
-          "AI, wearables and connected intelligence for fleets that need to know everything, now.",
+          "Connected intelligence platform for IoT, fleet and operational analytics.",
       },
     ],
   },
@@ -119,16 +171,29 @@ export const NAV: NavNode[] = [
   {
     title: "Sustainability",
     href: "/sustainability",
-    blurb: "Net-zero is a commitment we measure, not a claim we make.",
+    blurb: "Planet-positive mobility through clean energy and responsible operations.",
   },
   {
     title: "Investors",
     href: "/investors",
     blurb: "Financial highlights, reports, governance and growth milestones.",
   },
-  { title: "Media", href: "/media", blurb: "Newsroom, announcements and press resources." },
-  { title: "Careers", href: "/careers", blurb: "Build the infrastructure India runs on." },
-  { title: "Contact", href: "/contact", blurb: "Talk to the right team, first time." },
+  {
+    title: "News & media",
+    href: "/media",
+    blurb: "Newsroom, announcements and press resources from BikeWo Green Tech Limited.",
+  },
+  {
+    title: "Careers",
+    href: "/careers",
+    blurb: "Build the energy and mobility infrastructure that moves India.",
+  },
+  {
+    title: "Contact",
+    href: "/contact",
+    blurb:
+      "Talk to the team that owns distribution, leasing, energy, service, sourcing or intelligence.",
+  },
 ];
 
 /** Primary nav shown in the header — the rest live in the footer. */
@@ -138,10 +203,11 @@ export const PRIMARY_NAV: NavNode[] = [
     [
       "About BikeWo",
       "Businesses",
-      "Subsidiaries",
-      "Shram Sainik",
-      "Sustainability",
+      // "Subsidiaries",
+      // "Shram Sainik",
+      // "Sustainability",
       "Investors",
+      "News & media",
     ].includes(n.title),
   ),
 ];

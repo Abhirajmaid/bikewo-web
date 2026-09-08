@@ -7,8 +7,9 @@ import { Header } from "@/components/layout/Header";
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
+  const isComingSoon = pathname === "/coming-soon";
 
-  if (isAdmin) {
+  if (isAdmin || isComingSoon) {
     return <>{children}</>;
   }
 

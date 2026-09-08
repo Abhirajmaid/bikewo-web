@@ -12,10 +12,15 @@ export const metadata: Metadata = {
   description: MEDIA_PAGE.lede,
   alternates: { canonical: "/media" },
   openGraph: {
-    title: `News & insights | ${SITE.name}`,
+    title: `News & insights — ${SITE.name}`,
     description: MEDIA_PAGE.lede,
     url: "/media",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `News & insights — ${SITE.name}`,
+    description: MEDIA_PAGE.lede,
   },
 };
 
