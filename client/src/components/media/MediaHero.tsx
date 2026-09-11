@@ -17,7 +17,7 @@ export function MediaHero() {
               Home
             </Link>
             <span aria-hidden>/</span>
-            <span className="text-green-700">News & insights</span>
+            <span className="text-green-700">News and Media</span>
           </nav>
         </Reveal>
 

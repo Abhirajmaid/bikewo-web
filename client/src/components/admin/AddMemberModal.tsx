@@ -9,6 +9,7 @@ export type NewMemberForm = {
   email: string;
   cmsRole: CmsRole;
   department: string;
+  password: string;
 };
 
 type AddMemberModalProps = {
@@ -25,6 +26,7 @@ export function AddMemberModal({ open, onClose, onSubmit }: AddMemberModalProps)
     email: "",
     cmsRole: "editor",
     department: "",
+    password: "",
   });
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export function AddMemberModal({ open, onClose, onSubmit }: AddMemberModalProps)
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSubmit(form);
-    setForm({ name: "", email: "", cmsRole: "editor", department: "" });
+    setForm({ name: "", email: "", cmsRole: "editor", department: "", password: "" });
     onClose();
   }
 
@@ -91,6 +93,18 @@ export function AddMemberModal({ open, onClose, onSubmit }: AddMemberModalProps)
               value={form.email}
               onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
               placeholder="name@bikewo.com"
+              className={inputClass}
+            />
+          </Field>
+
+          <Field label="Temporary password" required>
+            <input
+              required
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+              placeholder="Min. 8 characters"
+              minLength={8}
               className={inputClass}
             />
           </Field>

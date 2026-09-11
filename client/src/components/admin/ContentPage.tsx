@@ -10,6 +10,7 @@ type ContentPageProps = {
   title: string;
   description?: string;
   addLabel: string;
+  onAdd?: () => void;
   stats?: Array<{
     label: string;
     value: string | number;
@@ -24,6 +25,7 @@ export function ContentPage({
   title,
   description,
   addLabel,
+  onAdd,
   stats,
   toolbarExtra,
   children,
@@ -38,6 +40,7 @@ export function ContentPage({
         actions={
           <button
             type="button"
+            onClick={onAdd}
             className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
           >
             <span aria-hidden>+</span> {addLabel}

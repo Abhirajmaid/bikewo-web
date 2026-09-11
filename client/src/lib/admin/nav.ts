@@ -18,17 +18,16 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     heading: "Content",
     items: [
       { label: "Team", href: "/admin/team" },
-      { label: "Blogs", href: "/admin/blogs" },
+      { label: "News and Media", href: "/admin/news" },
       { label: "Careers", href: "/admin/careers" },
       { label: "Testimonials", href: "/admin/testimonials" },
-      { label: "Partners", href: "/admin/partners" },
     ],
   },
   {
     heading: "Submissions",
     items: [
-      { label: "Contact", href: "/admin/contact", badge: 2 },
-      { label: "Applications", href: "/admin/applications", badge: 4 },
+      { label: "Contact", href: "/admin/contact" },
+      { label: "Applications", href: "/admin/applications" },
     ],
   },
   {

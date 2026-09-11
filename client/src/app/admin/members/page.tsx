@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddMemberModal } from "@/components/admin/AddMemberModal";
 import { DataTable } from "@/components/admin/DataTable";
 import { PageHeader } from "@/components/admin/PageHeader";
@@ -9,12 +9,26 @@ import { RoleBadge } from "@/components/admin/RoleBadge";
 import { StatCards } from "@/components/admin/StatCards";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
-import { INTERNAL_MEMBERS } from "@/lib/admin/data";
 import type { InternalMember } from "@/lib/admin/types";
 
 export default function MembersPage() {
-  const [members, setMembers] = useState(INTERNAL_MEMBERS);
+  const [members, setMembers] = useState<InternalMember[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  async function load() {
+    setLoading(true);
+    const res = await fetch("/api/cms/members");
+    if (res.ok) {
+      const data = (await res.json()) as { items: InternalMember[] };
+      setMembers(data.items);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    void load();
+  }, []);
 
   const active = members.filter((m) => m.status === "active").length;
   const invited = members.filter((m) => m.status === "invited").length;
@@ -49,54 +63,52 @@ export default function MembersPage() {
         />
 
         <div className="flex flex-wrap gap-2">
-          <ToolbarButton>Filter</ToolbarButton>
-          <ToolbarButton>Sort</ToolbarButton>
+          <ToolbarButton onClick={() => void load()}>Refresh</ToolbarButton>
         </div>
 
-        <DataTable<InternalMember>
-          data={members}
-          selectionActions={[
-            { label: "Change role" },
-            { label: "Resend invite" },
-            { label: "Suspend", variant: "danger" },
-          ]}
-          columns={[
-            {
-              key: "name",
-              header: "Member",
-              cell: (row) => (
-                <div>
-                  <p className="font-medium text-ink">{row.name}</p>
-                  <p className="text-xs text-slate-400">{row.email}</p>
-                </div>
-              ),
-            },
-            {
-              key: "role",
-              header: "CMS role",
-              cell: (row) => <RoleBadge role={row.cmsRole} />,
-            },
-            { key: "department", header: "Department", cell: (row) => row.department },
-            {
-              key: "invited",
-              header: "Invited",
-              cell: (row) => formatDate(row.invitedAt),
-            },
-            {
-              key: "lastActive",
-              header: "Last active",
-              cell: (row) =>
-                row.lastActiveAt ? formatDateTime(row.lastActiveAt) : "—",
-            },
-            {
-              key: "status",
-              header: "Status",
-              cell: (row) => (
-                <StatusBadge label={row.status} variant={publishVariant(row.status)} />
-              ),
-            },
-          ]}
-        />
+        {loading ? (
+          <p className="text-sm text-slate">Loading…</p>
+        ) : (
+          <DataTable<InternalMember>
+            data={members}
+            columns={[
+              {
+                key: "name",
+                header: "Member",
+                cell: (row) => (
+                  <div>
+                    <p className="font-medium text-ink">{row.name}</p>
+                    <p className="text-xs text-slate-400">{row.email}</p>
+                  </div>
+                ),
+              },
+              {
+                key: "role",
+                header: "CMS role",
+                cell: (row) => <RoleBadge role={row.cmsRole} />,
+              },
+              { key: "department", header: "Department", cell: (row) => row.department },
+              {
+                key: "invited",
+                header: "Invited",
+                cell: (row) => formatDate(row.invitedAt),
+              },
+              {
+                key: "lastActive",
+                header: "Last active",
+                cell: (row) =>
+                  row.lastActiveAt ? formatDateTime(row.lastActiveAt) : "—",
+              },
+              {
+                key: "status",
+                header: "Status",
+                cell: (row) => (
+                  <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                ),
+              },
+            ]}
+          />
+        )}
 
         <PermissionsMatrix />
       </div>
@@ -105,19 +117,20 @@ export default function MembersPage() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={(form) => {
-          setMembers((prev) => [
-            {
-              id: `im${Date.now()}`,
-              name: form.name,
-              email: form.email,
-              cmsRole: form.cmsRole,
-              department: form.department || "—",
-              invitedAt: new Date().toISOString().slice(0, 10),
-              lastActiveAt: null,
-              status: "invited",
-            },
-            ...prev,
-          ]);
+          void (async () => {
+            await fetch("/api/cms/members", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: form.name,
+                email: form.email,
+                cmsRole: form.cmsRole,
+                department: form.department || "—",
+                password: form.password,
+              }),
+            });
+            await load();
+          })();
         }}
       />
     </>

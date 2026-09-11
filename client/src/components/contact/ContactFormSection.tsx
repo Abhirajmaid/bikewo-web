@@ -19,6 +19,8 @@ const inputClass =
 export function ContactFormSection() {
   const [topic, setTopic] = useState<ContactTopic>("Fleet Pricing");
   const [slide, setSlide] = useState(0);
+  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <section id="form" className="bg-white py-10 md:py-14">
@@ -36,6 +38,36 @@ export function ContactFormSection() {
                   className="mt-8 space-y-5"
                   onSubmit={(e) => {
                     e.preventDefault();
+                    const form = e.currentTarget;
+                    const data = new FormData(form);
+                    setStatus("sending");
+                    setError(null);
+                    void fetch("/api/contact", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        firstName: String(data.get("firstName") || ""),
+                        lastName: String(data.get("lastName") || ""),
+                        email: String(data.get("email") || ""),
+                        phone: String(data.get("phone") || ""),
+                        topic,
+                        message: String(data.get("message") || ""),
+                      }),
+                    })
+                      .then(async (res) => {
+                        const body = (await res.json()) as { error?: string };
+                        if (!res.ok) {
+                          setStatus("error");
+                          setError(body.error || "Something went wrong.");
+                          return;
+                        }
+                        setStatus("ok");
+                        form.reset();
+                      })
+                      .catch(() => {
+                        setStatus("error");
+                        setError("Unable to submit right now.");
+                      });
                   }}
                 >
                   <div className="grid gap-5 sm:grid-cols-2">
@@ -98,10 +130,17 @@ export function ContactFormSection() {
 
                   <button
                     type="submit"
-                    className="mt-2 w-full rounded-xl bg-white py-4 font-display text-[15px] font-semibold text-[#052016] transition-opacity hover:opacity-90"
+                    disabled={status === "sending"}
+                    className="mt-2 w-full rounded-xl bg-white py-4 font-display text-[15px] font-semibold text-[#052016] transition-opacity hover:opacity-90 disabled:opacity-60"
                   >
-                    Submit
+                    {status === "sending" ? "Submitting…" : "Submit"}
                   </button>
+                  {status === "ok" ? (
+                    <p className="text-sm text-[#89FF00]">Thanks — we received your message.</p>
+                  ) : null}
+                  {status === "error" && error ? (
+                    <p className="text-sm text-red-300">{error}</p>
+                  ) : null}
                 </form>
               </div>
 

@@ -249,13 +249,6 @@ export const ABOUT_NEWS = [
 
 /* -------------------------------------------------------- Leadership team */
 
-const LEADERSHIP_SOCIAL = {
-  linkedin: "https://linkedin.com",
-  twitter: "https://x.com",
-  facebook: "https://facebook.com",
-  instagram: "https://instagram.com",
-} as const;
-
 export const LEADERSHIP_DIVISION_FILTERS = [
   { slug: "all", label: "All" },
   { slug: "mobility-distribution", label: "Mobility distribution" },
@@ -273,88 +266,6 @@ export const LEADERSHIP = {
   eyebrow: "Our team",
   title: "Meet our expert team",
   lede: "Six divisions, one integrated value chain — each led by operators who report against measurable outcomes, not slogans.",
-  members: [
-    {
-      name: "Rajesh Mehta",
-      role: "Chief Executive Officer",
-      department: "Executive",
-      division: "executive",
-      bio: "Sets company direction across all six divisions and holds the masterbrand to a single net-zero pathway.",
-      image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Priya Sharma",
-      role: "Chief Operating Officer",
-      department: "Operations",
-      division: "operations",
-      bio: "Runs pan-India operations — dealer network, charge hubs and service centres as one accountable system.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Sneha Reddy",
-      role: "VP, Shram Sainik",
-      department: "Mobility",
-      division: "mobility-distribution",
-      bio: "Owns the driver-partner programme — recruitment, training, payouts and welfare across five regions.",
-      image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Vikram Joshi",
-      role: "Head of Asset Leasing",
-      department: "Leasing",
-      division: "mobility-asset-leasing",
-      bio: "Runs fleet rentals and lease programmes — cost per kilometre under the operator's control.",
-      image:
-        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Arun Patel",
-      role: "Head of Energy Infrastructure",
-      department: "Energy",
-      division: "energy-infrastructure",
-      bio: "Leads the charge network build-out — corridor planning, uptime standards and grid integration.",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Meera Nair",
-      role: "Head of Lifecycle Services",
-      department: "Lifecycle",
-      division: "lifecycle-services",
-      bio: "Owns maintenance, spares, roadside assistance and battery health across the service network.",
-      image:
-        "https://images.unsplash.com/photo-1594744803329-e58b31de8db5?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Karan Singh",
-      role: "Head of Global Sourcing",
-      department: "Sourcing",
-      division: "global-sourcing-supply-chain",
-      bio: "Leads component sourcing, cell procurement and warehousing across the supply chain.",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-    {
-      name: "Ananya Iyer",
-      role: "Head of BikeWo VZN",
-      department: "Intelligence",
-      division: "bikewo-vzn",
-      bio: "Runs telematics, wearables and fleet intelligence — the data layer under the ecosystem.",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=700&fit=crop&crop=face",
-      social: LEADERSHIP_SOCIAL,
-    },
-  ],
 };
 
 /* ------------------------------------------------------------------- ESG */

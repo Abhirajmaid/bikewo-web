@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# CMS local database (seeded on first run)
+/data/cms-db.json
 
 # vercel
 .vercel

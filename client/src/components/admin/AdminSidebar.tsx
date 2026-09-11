@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { Mark } from "@/components/brand/Mark";
 import { ADMIN_NAV } from "@/lib/admin/nav";
@@ -9,6 +9,13 @@ import { cn } from "@/lib/utils";
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.replace("/admin/login");
+    router.refresh();
+  }
 
   return (
     <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-mist/60 bg-white lg:w-60">
@@ -79,10 +86,17 @@ export function AdminSidebar() {
         ))}
       </nav>
 
-      <div className="shrink-0 border-t border-mist/60 px-5 py-4">
+      <div className="shrink-0 space-y-2 border-t border-mist/60 px-5 py-4">
+        <button
+          type="button"
+          onClick={logout}
+          className="block w-full text-left text-xs font-medium text-slate transition-colors hover:text-ink"
+        >
+          Sign out
+        </button>
         <Link
           href="/"
-          className="text-xs text-slate-400 transition-colors hover:text-slate"
+          className="block text-xs text-slate-400 transition-colors hover:text-slate"
         >
           ← Back to website
         </Link>

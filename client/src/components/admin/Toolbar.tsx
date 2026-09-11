@@ -49,13 +49,16 @@ export function Toolbar({
 export function ToolbarButton({
   children,
   active,
+  onClick,
 }: {
   children: ReactNode;
   active?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-colors",
         active

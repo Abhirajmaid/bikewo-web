@@ -179,7 +179,7 @@ export const NAV: NavNode[] = [
     blurb: "Financial highlights, reports, governance and growth milestones.",
   },
   {
-    title: "News & media",
+    title: "News and Media",
     href: "/media",
     blurb: "Newsroom, announcements and press resources from BikeWo Green Tech Limited.",
   },
@@ -207,7 +207,7 @@ export const PRIMARY_NAV: NavNode[] = [
       // "Shram Sainik",
       // "Sustainability",
       "Investors",
-      "News & media",
+      "News and Media",
     ].includes(n.title),
   ),
 ];
