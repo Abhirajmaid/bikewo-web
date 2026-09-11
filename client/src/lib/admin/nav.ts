@@ -18,6 +18,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     heading: "Content",
     items: [
       { label: "Team", href: "/admin/team" },
+      { label: "Investors", href: "/admin/investors" },
       { label: "News and Media", href: "/admin/news" },
       { label: "Careers", href: "/admin/careers" },
       { label: "Testimonials", href: "/admin/testimonials" },

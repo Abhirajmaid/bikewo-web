@@ -1,34 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { NewsMediaCard } from "@/components/media/NewsMediaCard";
-import { PdfViewer } from "@/components/investors/PdfViewer";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { NewsMediaItem } from "@/lib/cms/types";
 import { MEDIA_PAGE } from "@/lib/media";
 import { stagger } from "@/lib/utils";
-import type { InvestorDoc } from "@/lib/investors";
 
-function toViewerDoc(item: NewsMediaItem): InvestorDoc {
-  return {
-    id: item.id,
-    title: item.title,
-    excerpt: item.excerpt,
-    type: "notice",
-    typeLabel: item.typeLabel,
-    topic: "shareholders",
-    topicLabel: "Media",
-    date: item.date,
-    href: item.href,
-    featured: item.featured,
-  };
+function openPdf(href: string) {
+  window.open(href, "_blank", "noopener,noreferrer");
 }
 
 export function MediaDocsLibrary({ items }: { items: NewsMediaItem[] }) {
-  const [active, setActive] = useState<InvestorDoc | null>(null);
   const featured = items.filter((i) => i.featured);
   const rest = items.filter((i) => !i.featured);
   const grid = featured.length ? rest : items;
@@ -50,7 +35,7 @@ export function MediaDocsLibrary({ items }: { items: NewsMediaItem[] }) {
                 <NewsMediaCard
                   item={item}
                   variant="featured"
-                  onOpen={() => setActive(toViewerDoc(item))}
+                  onOpen={() => openPdf(item.href)}
                 />
               </Reveal>
             ))}
@@ -69,7 +54,7 @@ export function MediaDocsLibrary({ items }: { items: NewsMediaItem[] }) {
               <Reveal as="li" key={item.id} delay={stagger(i, 0.04)}>
                 <NewsMediaCard
                   item={item}
-                  onOpen={() => setActive(toViewerDoc(item))}
+                  onOpen={() => openPdf(item.href)}
                 />
               </Reveal>
             ))}
@@ -82,8 +67,6 @@ export function MediaDocsLibrary({ items }: { items: NewsMediaItem[] }) {
           </p>
         ) : null}
       </Container>
-
-      {active ? <PdfViewer doc={active} onClose={() => setActive(null)} /> : null}
     </Section>
   );
 }

@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "investor_documents",
+  "info": {
+    "singularName": "investor-document",
+    "pluralName": "investor-documents",
+    "displayName": "Investor Document",
+    "description": "IR library documents shown on /investors"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text",
+      "required": true
+    },
+    "docType": {
+      "type": "enumeration",
+      "enum": [
+        "policy",
+        "offer",
+        "annual-report",
+        "annual-return",
+        "egm",
+        "notice"
+      ],
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "href": {
+      "type": "string",
+      "required": false
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["files"]
+    }
+  }
+}

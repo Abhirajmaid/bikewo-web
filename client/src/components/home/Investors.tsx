@@ -9,16 +9,21 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { INVESTORS } from "@/lib/content";
-import { FEATURED_DOCS, SORTED_DOCS, type InvestorDoc } from "@/lib/investors";
+import {
+  featuredInvestorDocs,
+  sortInvestorDocs,
+  type InvestorDoc,
+} from "@/lib/investors";
 import { stagger } from "@/lib/utils";
 
-const PREVIEW_DOCS = [
-  ...FEATURED_DOCS,
-  ...SORTED_DOCS.filter((doc) => !doc.featured),
-].slice(0, 3);
-
-export function Investors() {
+export function Investors({ docs }: { docs: InvestorDoc[] }) {
   const [active, setActive] = useState<InvestorDoc | null>(null);
+  const preview = [
+    ...featuredInvestorDocs(docs),
+    ...sortInvestorDocs(docs).filter((doc) => !doc.featured),
+  ].slice(0, 3);
+
+  if (preview.length === 0) return null;
 
   return (
     <>
@@ -31,7 +36,7 @@ export function Investors() {
           />
 
           <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-            {PREVIEW_DOCS.map((doc, i) => (
+            {preview.map((doc, i) => (
               <Reveal as="li" key={doc.id} delay={stagger(i, 0.05)}>
                 <DocumentCard doc={doc} onOpen={setActive} />
               </Reveal>

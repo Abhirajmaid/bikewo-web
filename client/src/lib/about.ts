@@ -251,12 +251,27 @@ export const ABOUT_NEWS = [
 
 export const LEADERSHIP_DIVISION_FILTERS = [
   { slug: "all", label: "All" },
+  { slug: "executive", label: "Executive" },
   { slug: "mobility-distribution", label: "Mobility distribution" },
   { slug: "mobility-asset-leasing", label: "Mobility asset leasing" },
   { slug: "energy-infrastructure", label: "Energy infrastructure" },
   { slug: "lifecycle-services", label: "Lifecycle services" },
   { slug: "global-sourcing-supply-chain", label: "Global sourcing" },
   { slug: "bikewo-vzn", label: "BikeWo VZN" },
+] as const;
+
+/** Department options for CMS team members (admin form dropdown). */
+export const TEAM_DEPARTMENTS = [
+  "Executive",
+  "Mobility distribution",
+  "Mobility asset leasing",
+  "Energy infrastructure",
+  "Lifecycle services",
+  "Global sourcing",
+  "BikeWo VZN",
+  "Technology",
+  "Operations",
+  "People & culture",
 ] as const;
 
 export type LeadershipDivisionFilter =

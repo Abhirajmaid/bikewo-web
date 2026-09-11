@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "team_members",
+  "info": {
+    "singularName": "team-member",
+    "pluralName": "team-members",
+    "displayName": "Team Member",
+    "description": "Leadership and team profiles shown on the website"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    },
+    "department": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "division": {
+      "type": "enumeration",
+      "enum": ["leadership", "board", "management", "advisory"],
+      "default": "leadership"
+    },
+    "bio": {
+      "type": "text"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "joinedAt": {
+      "type": "date"
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "facebook": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    }
+  }
+}

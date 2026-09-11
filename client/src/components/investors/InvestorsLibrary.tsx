@@ -11,11 +11,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
   DOCS_PER_PAGE,
+  featuredInvestorDocs,
   INVESTOR_PAGE,
   INVESTOR_TOPICS,
   INVESTOR_TYPES,
-  FEATURED_DOCS,
-  SORTED_DOCS,
+  sortInvestorDocs,
   type InvestorDoc,
   type InvestorTopic,
   type InvestorType,
@@ -25,7 +25,7 @@ import { cn, stagger } from "@/lib/utils";
 const fieldClass =
   "h-12 w-full rounded-full border border-indigo-200 bg-white px-4 font-display text-[13px] font-semibold text-indigo-800 outline-none transition-[border-color] duration-200 focus:border-indigo-800";
 
-export function InvestorsLibrary() {
+export function InvestorsLibrary({ docs }: { docs: InvestorDoc[] }) {
   const [query, setQuery] = useState("");
   const [type, setType] = useState<InvestorType | "all">("all");
   const [topic, setTopic] = useState<InvestorTopic | "all">("all");
@@ -34,13 +34,16 @@ export function InvestorsLibrary() {
 
   useEffect(() => {
     const slug = new URLSearchParams(window.location.search).get("topic");
-    if (slug && INVESTOR_TOPICS.some((t) => t.slug === slug && t.slug !== "all")) {
+    if (
+      slug &&
+      INVESTOR_TOPICS.some((t) => t.slug === slug && t.slug !== "all")
+    ) {
       setTopic(slug as InvestorTopic);
     }
   }, []);
 
-  const featured = FEATURED_DOCS;
-  const all = SORTED_DOCS;
+  const featured = featuredInvestorDocs(docs);
+  const all = sortInvestorDocs(docs);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -75,25 +78,27 @@ export function InvestorsLibrary() {
 
   return (
     <>
-      <Section>
-        <Container>
-          <SectionHeading title={INVESTOR_PAGE.featuredTitle} />
+      {featured.length > 0 ? (
+        <Section>
+          <Container>
+            <SectionHeading title={INVESTOR_PAGE.featuredTitle} />
 
-          <ul className="mt-10 grid gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
-            {featured.map((doc, i) => (
-              <Reveal as="li" key={doc.id} delay={stagger(i, 0.06)}>
-                <DocumentCard doc={doc} variant="featured" onOpen={setActive} />
-              </Reveal>
-            ))}
-          </ul>
+            <ul className="mt-10 grid gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
+              {featured.map((doc, i) => (
+                <Reveal as="li" key={doc.id} delay={stagger(i, 0.06)}>
+                  <DocumentCard doc={doc} variant="featured" onOpen={setActive} />
+                </Reveal>
+              ))}
+            </ul>
 
-          <Reveal delay={0.1} className="mt-10 flex justify-center md:mt-12">
-            <Button href="#library" variant="primary" withArrow>
-              {INVESTOR_PAGE.libraryCta}
-            </Button>
-          </Reveal>
-        </Container>
-      </Section>
+            <Reveal delay={0.1} className="mt-10 flex justify-center md:mt-12">
+              <Button href="#library" variant="primary" withArrow>
+                {INVESTOR_PAGE.libraryCta}
+              </Button>
+            </Reveal>
+          </Container>
+        </Section>
+      ) : null}
 
       <Section id="library" tone="cloud">
         <Container>
@@ -123,7 +128,9 @@ export function InvestorsLibrary() {
                 <span className="sr-only">Select type</span>
                 <select
                   value={type}
-                  onChange={(e) => applyType(e.target.value as InvestorType | "all")}
+                  onChange={(e) =>
+                    applyType(e.target.value as InvestorType | "all")
+                  }
                   className={fieldClass}
                 >
                   {INVESTOR_TYPES.map((option) => (
@@ -138,7 +145,9 @@ export function InvestorsLibrary() {
                 <span className="sr-only">Select topic</span>
                 <select
                   value={topic}
-                  onChange={(e) => applyTopic(e.target.value as InvestorTopic | "all")}
+                  onChange={(e) =>
+                    applyTopic(e.target.value as InvestorTopic | "all")
+                  }
                   className={fieldClass}
                 >
                   {INVESTOR_TOPICS.map((option) => (

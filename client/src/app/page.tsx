@@ -9,6 +9,7 @@ import { Stories } from "@/components/home/Stories";
 import { Investors } from "@/components/home/Investors";
 import { ContactCTA } from "@/components/home/ContactCTA";
 import { SITE } from "@/lib/site";
+import { listInvestorDocuments } from "@/lib/strapi";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — ${SITE.tagline}` },
@@ -27,7 +28,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+async function loadInvestorDocs() {
+  try {
+    return await listInvestorDocuments();
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const investorDocs = await loadInvestorDocs();
+
   return (
     <>
       <Hero />
@@ -38,7 +49,7 @@ export default function HomePage() {
       {/* <ShramSainik /> */}
       <Sustainability />
       <Stories />
-      <Investors />
+      <Investors docs={investorDocs} />
       {/* <News /> */}
       {/* <Careers /> */}
       <ContactCTA />

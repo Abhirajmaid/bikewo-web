@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
 import { DataTable } from "@/components/admin/DataTable";
+import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import { NewsMediaCard } from "@/components/media/NewsMediaCard";
@@ -243,22 +244,26 @@ export default function NewsMediaAdminPage() {
                     />
                   </Field>
                 </div>
-                <Field label="Document URL (PDF)">
-                  <input
-                    value={form.href}
-                    onChange={(e) => setForm((f) => ({ ...f, href: e.target.value }))}
-                    className={inputClass}
-                    placeholder="https://…"
-                  />
-                </Field>
-                <Field label="Card image URL (optional — leave blank for default PDF preview)">
-                  <input
-                    value={form.image}
-                    onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
-                    className={inputClass}
-                    placeholder="https://… or /assets/…"
-                  />
-                </Field>
+                <MediaUploadField
+                  label="Document PDF"
+                  folder="media"
+                  accept="application/pdf"
+                  value={form.href}
+                  onChange={(url) => setForm((f) => ({ ...f, href: url }))}
+                  allowUrl
+                  urlPlaceholder="Paste PDF URL (e.g. NSE) or upload below"
+                  hint="Use an external link or upload a PDF to the Railway bucket."
+                />
+                <MediaUploadField
+                  label="Card preview image (optional)"
+                  folder="media/covers"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  value={form.image}
+                  onChange={(url) => setForm((f) => ({ ...f, image: url }))}
+                  allowUrl
+                  urlPlaceholder="Paste image URL or upload below"
+                  hint="Leave empty for the default indigo PDF preview."
+                />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Status">
                     <select

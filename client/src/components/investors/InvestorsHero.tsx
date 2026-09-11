@@ -10,7 +10,7 @@ import { Container } from "@/components/layout/Container";
 import { Counter } from "@/components/ui/Counter";
 import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
-import { INVESTOR_PAGE, INVESTOR_STATS } from "@/lib/investors";
+import { INVESTOR_PAGE, investorStats, type InvestorDoc } from "@/lib/investors";
 import { stagger } from "@/lib/utils";
 
 const STAT_ICONS = {
@@ -22,7 +22,9 @@ const STAT_ICONS = {
   mail: MailIcon,
 } as const;
 
-export function InvestorsHero() {
+export function InvestorsHero({ docs }: { docs: InvestorDoc[] }) {
+  const stats = investorStats(docs);
+
   return (
     <>
       <PageHero
@@ -37,7 +39,7 @@ export function InvestorsHero() {
       <section className="border-b border-indigo-100 bg-white py-12 md:py-16">
         <Container>
           <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
-            {INVESTOR_STATS.map((stat, i) => {
+            {stats.map((stat, i) => {
               const Icon = STAT_ICONS[stat.icon];
               return (
                 <Reveal as="li" key={stat.slug} delay={stagger(i, 0.04)}>

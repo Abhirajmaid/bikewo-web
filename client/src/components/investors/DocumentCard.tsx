@@ -14,12 +14,17 @@ export function DocumentCard({
   onOpen: (doc: InvestorDoc) => void;
 }) {
   const featured = variant === "featured";
+  const hasPdf = Boolean(doc.href);
 
   return (
     <button
       type="button"
-      onClick={() => onOpen(doc)}
-      className="group flex h-full w-full flex-col overflow-hidden rounded-lg border border-indigo-100 bg-white text-left transition-shadow duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:shadow-lift"
+      onClick={() => hasPdf && onOpen(doc)}
+      disabled={!hasPdf}
+      className={cn(
+        "group flex h-full w-full flex-col overflow-hidden rounded-lg border border-indigo-100 bg-white text-left transition-shadow duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+        hasPdf ? "hover:shadow-lift" : "cursor-not-allowed opacity-80",
+      )}
     >
       <div
         className={cn(
@@ -62,11 +67,13 @@ export function DocumentCard({
             {formatInvestorDate(doc.date)}
           </time>
           <span className="inline-flex h-10 items-center gap-2 rounded-full bg-green-500 px-4 font-display text-[13px] font-semibold text-indigo-800">
-            View PDF
-            <ArrowRightIcon
-              size={16}
-              className="transition-transform duration-200 group-hover:translate-x-1"
-            />
+            {hasPdf ? "View PDF" : "PDF soon"}
+            {hasPdf ? (
+              <ArrowRightIcon
+                size={16}
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              />
+            ) : null}
           </span>
         </div>
       </div>
