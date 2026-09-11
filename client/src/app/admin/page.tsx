@@ -1,20 +1,25 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatCards } from "@/components/admin/StatCards";
-import { listContact, listMembers, listNews, listTeam } from "@/lib/cms/db";
-import { CAREERS, DRIVER_APPLICATIONS, JOB_APPLICATIONS } from "@/lib/admin/data";
+import { listContact, listMembers } from "@/lib/cms/db";
+import { DRIVER_APPLICATIONS, JOB_APPLICATIONS } from "@/lib/admin/data";
+import { listCareers, listNewsMedia, listTeamMembers } from "@/lib/strapi";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminDashboardPage() {
-  const team = listTeam();
-  const news = listNews();
+export default async function AdminDashboardPage() {
   const contact = listContact();
   const members = listMembers();
   const newContacts = contact.filter((c) => c.status === "new").length;
   const pendingApps =
     DRIVER_APPLICATIONS.filter((a) => a.status === "pending").length +
     JOB_APPLICATIONS.filter((a) => a.status === "pending").length;
+
+  const [team, news, careers] = await Promise.all([
+    listTeamMembers().catch(() => []),
+    listNewsMedia().catch(() => []),
+    listCareers({ openOnly: true }).catch(() => []),
+  ]);
 
   return (
     <>
@@ -27,11 +32,8 @@ export default function AdminDashboardPage() {
         <StatCards
           stats={[
             { label: "Team members", value: team.length },
-            {
-              label: "Published news",
-              value: news.filter((b) => b.status === "published").length,
-            },
-            { label: "Open positions", value: CAREERS.filter((c) => c.status === "open").length },
+            { label: "Published news", value: news.length },
+            { label: "Open positions", value: careers.length },
             {
               label: "Pending submissions",
               value: newContacts + pendingApps,
@@ -47,7 +49,7 @@ export default function AdminDashboardPage() {
               {[
                 { label: "Team", href: "/admin/team", count: team.length },
                 { label: "News and Media", href: "/admin/news", count: news.length },
-                { label: "Careers", href: "/admin/careers", count: CAREERS.length },
+                { label: "Careers", href: "/admin/careers", count: careers.length },
                 { label: "CMS Members", href: "/admin/members", count: members.length },
               ].map((item) => (
                 <li key={item.href}>

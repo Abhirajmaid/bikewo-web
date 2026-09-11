@@ -26,12 +26,14 @@
       "type": "email"
     },
     "division": {
-      "type": "enumeration",
-      "enum": ["leadership", "board", "management", "advisory"],
-      "default": "leadership"
+      "type": "string",
+      "default": "executive"
     },
     "bio": {
       "type": "text"
+    },
+    "imageUrl": {
+      "type": "string"
     },
     "photo": {
       "type": "media",
@@ -41,6 +43,11 @@
     },
     "joinedAt": {
       "type": "date"
+    },
+    "memberStatus": {
+      "type": "enumeration",
+      "enum": ["active", "inactive"],
+      "default": "active"
     },
     "linkedin": {
       "type": "string"

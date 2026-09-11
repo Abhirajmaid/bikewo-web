@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionMember } from "@/lib/cms/auth";
-import { deleteNewsMedia, updateNewsMedia } from "@/lib/strapi";
+import { deleteCareer, updateCareer } from "@/lib/strapi";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -12,13 +12,12 @@ export async function PATCH(request: Request, { params }: Params) {
   const { id } = await params;
   const body = (await request.json().catch(() => null)) as {
     title?: string;
-    excerpt?: string;
-    typeLabel?: string;
-    date?: string;
-    href?: string;
-    image?: string | null;
-    featured?: boolean;
-    slug?: string;
+    location?: string;
+    type?: "Full-time" | "Part-time" | "Contract";
+    department?: string;
+    postedAt?: string;
+    status?: "open" | "closed";
+    jdUrl?: string;
   } | null;
 
   if (!body) {
@@ -26,15 +25,14 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   try {
-    const updated = await updateNewsMedia(id, {
+    const updated = await updateCareer(id, {
       title: body.title,
-      excerpt: body.excerpt,
-      typeLabel: body.typeLabel,
-      date: body.date,
-      href: body.href,
-      imageUrl: body.image,
-      featured: body.featured,
-      slug: body.slug,
+      location: body.location,
+      jobType: body.type,
+      department: body.department,
+      postedAt: body.postedAt,
+      jobStatus: body.status,
+      jdUrl: body.jdUrl,
     });
     return NextResponse.json({ item: updated.data });
   } catch (err) {
@@ -50,7 +48,7 @@ export async function DELETE(_request: Request, { params }: Params) {
   }
   const { id } = await params;
   try {
-    await deleteNewsMedia(id);
+    await deleteCareer(id);
     return NextResponse.json({ ok: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Delete failed";

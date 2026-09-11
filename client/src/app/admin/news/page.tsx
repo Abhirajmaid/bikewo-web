@@ -7,8 +7,8 @@ import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import { NewsMediaCard } from "@/components/media/NewsMediaCard";
-import type { NewsMediaItem } from "@/lib/cms/types";
 import type { PublishStatus } from "@/lib/admin/types";
+import type { NewsMediaDoc } from "@/lib/strapi";
 
 const emptyForm = {
   title: "",
@@ -22,10 +22,10 @@ const emptyForm = {
 };
 
 export default function NewsMediaAdminPage() {
-  const [items, setItems] = useState<NewsMediaItem[]>([]);
+  const [items, setItems] = useState<NewsMediaDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<NewsMediaItem | null>(null);
+  const [editing, setEditing] = useState<NewsMediaDoc | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function NewsMediaAdminPage() {
     setLoading(true);
     const res = await fetch("/api/cms/news");
     if (res.ok) {
-      const data = (await res.json()) as { items: NewsMediaItem[] };
+      const data = (await res.json()) as { items: NewsMediaDoc[] };
       setItems(data.items);
     }
     setLoading(false);
@@ -51,7 +51,7 @@ export default function NewsMediaAdminPage() {
     setModalOpen(true);
   }
 
-  function openEdit(item: NewsMediaItem) {
+  function openEdit(item: NewsMediaDoc) {
     setEditing(item);
     setForm({
       title: item.title,
@@ -74,24 +74,27 @@ export default function NewsMediaAdminPage() {
       ...form,
       image: form.image.trim() || null,
     };
-    const res = await fetch(editing ? `/api/cms/news/${editing.id}` : "/api/cms/news", {
-      method: editing ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const res = await fetch(
+      editing?.documentId ? `/api/cms/news/${editing.documentId}` : "/api/cms/news",
+      {
+        method: editing?.documentId ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+    );
     const data = (await res.json()) as { error?: string };
     setSaving(false);
     if (!res.ok) {
-      setError(data.error || "Save failed.");
+      setError(data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.");
       return;
     }
     setModalOpen(false);
     await load();
   }
 
-  async function remove(id: string) {
+  async function remove(item: NewsMediaDoc) {
     if (!confirm("Delete this News & Media item?")) return;
-    await fetch(`/api/cms/news/${id}`, { method: "DELETE" });
+    await fetch(`/api/cms/news/${item.documentId}`, { method: "DELETE" });
     await load();
   }
 
@@ -99,7 +102,7 @@ export default function NewsMediaAdminPage() {
   const drafts = items.filter((b) => b.status === "draft").length;
 
   const previewItem: Pick<
-    NewsMediaItem,
+    NewsMediaDoc,
     "title" | "excerpt" | "typeLabel" | "date" | "image"
   > = {
     title: form.title || "Document title",
@@ -113,7 +116,7 @@ export default function NewsMediaAdminPage() {
     <>
       <ContentPage
         title="News and Media"
-        description="NSE press releases and media documents shown on the public News & Media page"
+        description="Press releases in Strapi (Railway Postgres). Upload PDFs/covers to the Railway bucket, or paste an external link."
         addLabel="Add document"
         onAdd={openCreate}
         stats={[
@@ -132,7 +135,7 @@ export default function NewsMediaAdminPage() {
         {loading ? (
           <p className="text-sm text-slate">Loading…</p>
         ) : (
-          <DataTable<NewsMediaItem>
+          <DataTable<NewsMediaDoc>
             data={items}
             columns={[
               {
@@ -180,7 +183,7 @@ export default function NewsMediaAdminPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => void remove(row.id)}
+                      onClick={() => void remove(row)}
                       className="text-xs font-medium text-red-600 hover:underline"
                     >
                       Delete
@@ -251,8 +254,7 @@ export default function NewsMediaAdminPage() {
                   value={form.href}
                   onChange={(url) => setForm((f) => ({ ...f, href: url }))}
                   allowUrl
-                  urlPlaceholder="Paste PDF URL (e.g. NSE) or upload below"
-                  hint="Use an external link or upload a PDF to the Railway bucket."
+                  hint="Upload to the Railway bucket. External NSE links are available under “Or paste an external link”."
                 />
                 <MediaUploadField
                   label="Card preview image (optional)"
@@ -261,8 +263,7 @@ export default function NewsMediaAdminPage() {
                   value={form.image}
                   onChange={(url) => setForm((f) => ({ ...f, image: url }))}
                   allowUrl
-                  urlPlaceholder="Paste image URL or upload below"
-                  hint="Leave empty for the default indigo PDF preview."
+                  hint="Upload a cover image, or leave empty for the default PDF preview."
                 />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Status">

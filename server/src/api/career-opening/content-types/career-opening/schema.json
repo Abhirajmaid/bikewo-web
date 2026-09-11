@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "career_openings",
+  "info": {
+    "singularName": "career-opening",
+    "pluralName": "career-openings",
+    "displayName": "Career Opening",
+    "description": "Job openings listed on careers"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "jobType": {
+      "type": "enumeration",
+      "enum": ["Full-time", "Part-time", "Contract"],
+      "default": "Full-time"
+    },
+    "department": {
+      "type": "string"
+    },
+    "postedAt": {
+      "type": "date"
+    },
+    "jobStatus": {
+      "type": "enumeration",
+      "enum": ["open", "closed"],
+      "default": "open"
+    },
+    "jdUrl": {
+      "type": "string"
+    }
+  }
+}

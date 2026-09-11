@@ -1,11 +1,18 @@
 import type { Core } from '@strapi/strapi';
 import { INVESTOR_SEED } from './api/investor-document/seed-data';
+import { CAREER_SEED, NEWS_SEED, TESTIMONIAL_SEED } from './api/content-seed';
 
 const PUBLIC_ACTIONS = [
   'api::investor-document.investor-document.find',
   'api::investor-document.investor-document.findOne',
   'api::team-member.team-member.find',
   'api::team-member.team-member.findOne',
+  'api::news-media-item.news-media-item.find',
+  'api::news-media-item.news-media-item.findOne',
+  'api::testimonial.testimonial.find',
+  'api::testimonial.testimonial.findOne',
+  'api::career-opening.career-opening.find',
+  'api::career-opening.career-opening.findOne',
 ];
 
 async function enablePublicFind(strapi: Core.Strapi) {
@@ -25,29 +32,25 @@ async function enablePublicFind(strapi: Core.Strapi) {
   }
 }
 
-async function seedInvestorDocuments(strapi: Core.Strapi) {
-  const existing = await strapi.db.query('api::investor-document.investor-document').count();
+async function seedIfEmpty(
+  strapi: Core.Strapi,
+  uid: Parameters<Core.Strapi['documents']>[0],
+  countUid: string,
+  label: string,
+  rows: Record<string, unknown>[],
+) {
+  const existing = await strapi.db.query(countUid).count();
   if (existing > 0) {
-    strapi.log.info(`Investor seed skipped (${existing} documents already present).`);
+    strapi.log.info(`${label} seed skipped (${existing} already present).`);
     return;
   }
-
-  for (const item of INVESTOR_SEED) {
-    await strapi.documents('api::investor-document.investor-document').create({
-      data: {
-        slug: item.slug,
-        title: item.title,
-        excerpt: item.excerpt,
-        docType: item.docType,
-        date: item.date,
-        featured: Boolean(item.featured),
-        href: '',
-      },
+  for (const data of rows) {
+    await strapi.documents(uid).create({
+      data,
       status: 'published',
     });
   }
-
-  strapi.log.info(`Seeded ${INVESTOR_SEED.length} investor documents (PDFs empty — upload manually).`);
+  strapi.log.info(`Seeded ${rows.length} ${label}.`);
 }
 
 export default {
@@ -55,6 +58,49 @@ export default {
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     await enablePublicFind(strapi);
-    await seedInvestorDocuments(strapi);
+
+    await seedIfEmpty(
+      strapi,
+      'api::investor-document.investor-document',
+      'api::investor-document.investor-document',
+      'investor documents',
+      INVESTOR_SEED.map((item) => ({
+        slug: item.slug,
+        title: item.title,
+        excerpt: item.excerpt,
+        docType: item.docType,
+        date: item.date,
+        featured: Boolean(item.featured),
+        href: '',
+      })),
+    );
+
+    await seedIfEmpty(
+      strapi,
+      'api::news-media-item.news-media-item',
+      'api::news-media-item.news-media-item',
+      'news media items',
+      NEWS_SEED.map((item) => ({
+        ...item,
+        featured: Boolean(item.featured),
+        imageUrl: '',
+      })),
+    );
+
+    await seedIfEmpty(
+      strapi,
+      'api::testimonial.testimonial',
+      'api::testimonial.testimonial',
+      'testimonials',
+      TESTIMONIAL_SEED,
+    );
+
+    await seedIfEmpty(
+      strapi,
+      'api::career-opening.career-opening',
+      'api::career-opening.career-opening',
+      'career openings',
+      CAREER_SEED,
+    );
   },
 };

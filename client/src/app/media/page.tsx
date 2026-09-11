@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { MediaHero } from "@/components/media/MediaHero";
 import { MediaDocsLibrary } from "@/components/media/MediaDocsLibrary";
 import { ContactCTA } from "@/components/home/ContactCTA";
-import { listPublishedNews } from "@/lib/cms/db";
 import { MEDIA_PAGE } from "@/lib/media";
 import { SITE } from "@/lib/site";
+import { listNewsMedia } from "@/lib/strapi";
 
 export const metadata: Metadata = {
   title: "News and Media",
@@ -25,8 +25,16 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function MediaPage() {
-  const items = listPublishedNews();
+async function loadNews() {
+  try {
+    return await listNewsMedia();
+  } catch {
+    return [];
+  }
+}
+
+export default async function MediaPage() {
+  const items = await loadNews();
 
   return (
     <>

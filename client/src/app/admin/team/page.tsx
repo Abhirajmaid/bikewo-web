@@ -10,8 +10,8 @@ import {
   LEADERSHIP_DIVISION_FILTERS,
   TEAM_DEPARTMENTS,
 } from "@/lib/about";
-import type { CmsTeamMember } from "@/lib/cms/types";
 import type { ActiveStatus } from "@/lib/admin/types";
+import type { CmsTeamMemberDoc } from "@/lib/strapi";
 
 const DIVISION_OPTIONS = LEADERSHIP_DIVISION_FILTERS.filter((f) => f.slug !== "all");
 
@@ -31,18 +31,19 @@ const emptyForm = {
 };
 
 export default function TeamPage() {
-  const [items, setItems] = useState<CmsTeamMember[]>([]);
+  const [items, setItems] = useState<CmsTeamMemberDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<CmsTeamMember | null>(null);
+  const [editing, setEditing] = useState<CmsTeamMemberDoc | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
     const res = await fetch("/api/cms/team");
     if (res.ok) {
-      const data = (await res.json()) as { items: CmsTeamMember[] };
+      const data = (await res.json()) as { items: CmsTeamMemberDoc[] };
       setItems(data.items);
     }
     setLoading(false);
@@ -55,10 +56,11 @@ export default function TeamPage() {
   function openCreate() {
     setEditing(null);
     setForm(emptyForm);
+    setError(null);
     setModalOpen(true);
   }
 
-  function openEdit(item: CmsTeamMember) {
+  function openEdit(item: CmsTeamMemberDoc) {
     setEditing(item);
     setForm({
       name: item.name,
@@ -74,24 +76,34 @@ export default function TeamPage() {
       facebook: item.facebook ?? "",
       instagram: item.instagram ?? "",
     });
+    setError(null);
     setModalOpen(true);
   }
 
   async function save() {
     setSaving(true);
-    await fetch(editing ? `/api/cms/team/${editing.id}` : "/api/cms/team", {
-      method: editing ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, bio: "" }),
-    });
+    setError(null);
+    const res = await fetch(
+      editing?.documentId ? `/api/cms/team/${editing.documentId}` : "/api/cms/team",
+      {
+        method: editing?.documentId ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, bio: "" }),
+      },
+    );
+    const data = (await res.json()) as { error?: string };
     setSaving(false);
+    if (!res.ok) {
+      setError(data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.");
+      return;
+    }
     setModalOpen(false);
     await load();
   }
 
-  async function remove(id: string) {
+  async function remove(item: CmsTeamMemberDoc) {
     if (!confirm("Delete this team member?")) return;
-    await fetch(`/api/cms/team/${id}`, { method: "DELETE" });
+    await fetch(`/api/cms/team/${item.documentId}`, { method: "DELETE" });
     await load();
   }
 
@@ -104,7 +116,7 @@ export default function TeamPage() {
     <>
       <ContentPage
         title="Team"
-        description="Leadership and team members shown on the website"
+        description="Leadership and team members in Strapi (Railway Postgres). Photos upload to the Railway bucket."
         addLabel="Add member"
         onAdd={openCreate}
         stats={[
@@ -118,7 +130,7 @@ export default function TeamPage() {
         {loading ? (
           <p className="text-sm text-slate">Loading…</p>
         ) : (
-          <DataTable<CmsTeamMember>
+          <DataTable<CmsTeamMemberDoc>
             data={items}
             columns={[
               {
@@ -159,7 +171,7 @@ export default function TeamPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => void remove(row.id)}
+                      onClick={() => void remove(row)}
                       className="text-xs font-medium text-red-600 hover:underline"
                     >
                       Delete
@@ -241,7 +253,7 @@ export default function TeamPage() {
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 value={form.image}
                 onChange={(url) => setForm((f) => ({ ...f, image: url }))}
-                hint="Uploaded to the Railway bucket. Leave empty to use no photo."
+                hint="Upload a photo to the Railway bucket."
               />
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-ink">Joined (YYYY-MM-DD)</span>
@@ -290,6 +302,7 @@ export default function TeamPage() {
                   <option value="inactive">inactive</option>
                 </select>
               </label>
+              {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </div>
             <div className="mt-5 flex justify-end gap-2">
               <button

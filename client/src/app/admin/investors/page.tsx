@@ -244,8 +244,7 @@ export default function InvestorsAdminPage() {
                 value={form.href}
                 onChange={(url) => setForm((f) => ({ ...f, href: url }))}
                 allowUrl
-                urlPlaceholder="Or paste a PDF URL"
-                hint="Upload to the Railway bucket, or paste an external link. Metadata can be saved without a PDF."
+                hint="Upload to the Railway bucket. You can save without a PDF and add it later."
               />
               <label className="flex items-center gap-2 text-sm text-ink">
                 <input

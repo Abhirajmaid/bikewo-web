@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionMember } from "@/lib/cms/auth";
-import { deleteNewsMedia, updateNewsMedia } from "@/lib/strapi";
+import { deleteTestimonial, updateTestimonial } from "@/lib/strapi";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -10,32 +10,12 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
-  const body = (await request.json().catch(() => null)) as {
-    title?: string;
-    excerpt?: string;
-    typeLabel?: string;
-    date?: string;
-    href?: string;
-    image?: string | null;
-    featured?: boolean;
-    slug?: string;
-  } | null;
-
+  const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
   if (!body) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
-
   try {
-    const updated = await updateNewsMedia(id, {
-      title: body.title,
-      excerpt: body.excerpt,
-      typeLabel: body.typeLabel,
-      date: body.date,
-      href: body.href,
-      imageUrl: body.image,
-      featured: body.featured,
-      slug: body.slug,
-    });
+    const updated = await updateTestimonial(id, body);
     return NextResponse.json({ item: updated.data });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Update failed";
@@ -50,7 +30,7 @@ export async function DELETE(_request: Request, { params }: Params) {
   }
   const { id } = await params;
   try {
-    await deleteNewsMedia(id);
+    await deleteTestimonial(id);
     return NextResponse.json({ ok: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Delete failed";

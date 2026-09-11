@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news_media_items",
+  "info": {
+    "singularName": "news-media-item",
+    "pluralName": "news-media-items",
+    "displayName": "News & Media",
+    "description": "Press releases and media documents on /media"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text"
+    },
+    "typeLabel": {
+      "type": "string",
+      "default": "Press release"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "href": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

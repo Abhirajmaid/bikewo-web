@@ -1,21 +1,53 @@
+"use client";
+
 import Image from "next/image";
-import { STORIES } from "@/lib/content";
+import { useEffect, useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
+import { STORIES } from "@/lib/content";
+import type { TestimonialDoc } from "@/lib/strapi";
+
+type Story = { quote: string; name: string; role: string; avatar: string };
 
 /**
- * 5.8 — Customer success stories.
- *
- * PLACEHOLDER CONTENT. The portraits are AI-generated and the attributions are
- * illustrative. Brand policy: AI-generated people must never be presented as
- * real individuals. Swap in real, consenting subjects with signed model
- * releases before launch.
+ * Customer success stories — prefers Strapi testimonials, falls back to static placeholders.
  */
-export function Stories() {
-  // One half must be wider than the viewport or the loop leaves a blank gap.
-  const half = [...STORIES, ...STORIES, ...STORIES];
+export function Stories({ initial }: { initial?: Story[] }) {
+  const [stories, setStories] = useState<Story[]>(
+    initial?.length
+      ? initial
+      : STORIES.map((s) => ({
+          quote: s.quote,
+          name: s.name,
+          role: s.role,
+          avatar: s.avatar,
+        })),
+  );
+
+  useEffect(() => {
+    if (initial?.length) return;
+    void fetch("/api/public/cms?resource=testimonials")
+      .then((r) => r.json())
+      .then((data: { items?: TestimonialDoc[] }) => {
+        const items = data.items ?? [];
+        if (!items.length) return;
+        setStories(
+          items.map((t) => ({
+            quote: t.quote,
+            name: t.name,
+            role: t.role,
+            avatar: t.avatarUrl || "/assets/story-1.png",
+          })),
+        );
+      })
+      .catch(() => undefined);
+  }, [initial]);
+
+  if (!stories.length) return null;
+
+  const half = [...stories, ...stories, ...stories];
 
   return (
     <Section tone="cloud">
@@ -55,13 +87,22 @@ export function Stories() {
                       {story.quote}
                     </blockquote>
                     <figcaption className="mt-12 flex items-center gap-[1.125rem]">
-                      <Image
-                        src={story.avatar}
-                        alt=""
-                        width={72}
-                        height={72}
-                        className="size-[4.5rem] shrink-0 rounded-full object-cover"
-                      />
+                      {story.avatar.startsWith("/api/media/") ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={story.avatar}
+                          alt=""
+                          className="size-[4.5rem] shrink-0 rounded-full object-cover"
+                        />
+                      ) : (
+                        <Image
+                          src={story.avatar}
+                          alt=""
+                          width={72}
+                          height={72}
+                          className="size-[4.5rem] shrink-0 rounded-full object-cover"
+                        />
+                      )}
                       <div>
                         <p className="text-[21px] font-semibold text-indigo-800">
                           {story.name}

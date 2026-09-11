@@ -9,7 +9,7 @@ import { Stories } from "@/components/home/Stories";
 import { Investors } from "@/components/home/Investors";
 import { ContactCTA } from "@/components/home/ContactCTA";
 import { SITE } from "@/lib/site";
-import { listInvestorDocuments } from "@/lib/strapi";
+import { listInvestorDocuments, listTestimonials } from "@/lib/strapi";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — ${SITE.tagline}` },
@@ -36,8 +36,25 @@ async function loadInvestorDocs() {
   }
 }
 
+async function loadStories() {
+  try {
+    const items = await listTestimonials();
+    return items.map((t) => ({
+      quote: t.quote,
+      name: t.name,
+      role: t.role,
+      avatar: t.avatarUrl || "/assets/story-1.png",
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const investorDocs = await loadInvestorDocs();
+  const [investorDocs, stories] = await Promise.all([
+    loadInvestorDocs(),
+    loadStories(),
+  ]);
 
   return (
     <>
@@ -48,7 +65,7 @@ export default async function HomePage() {
       <Divisions />
       {/* <ShramSainik /> */}
       <Sustainability />
-      <Stories />
+      <Stories initial={stories} />
       <Investors docs={investorDocs} />
       {/* <News /> */}
       {/* <Careers /> */}
