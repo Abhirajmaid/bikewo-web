@@ -9,7 +9,11 @@ import type {
   NewsMediaItem,
 } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+// ponytail: /tmp on Vercel (read-only FS); ephemeral across instances — use Postgres/Blob if CMS must persist
+const DATA_DIR =
+  process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+    ? "/tmp"
+    : path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "cms-db.json");
 
 function ensureDbFile() {
