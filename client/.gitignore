@@ -34,8 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
-# CMS local database (seeded on first run)
+# Local CMS auth/contact store only (content is Strapi)
 /data/cms-db.json
+/data/
 
 # vercel
 .vercel

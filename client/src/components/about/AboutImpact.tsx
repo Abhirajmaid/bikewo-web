@@ -56,6 +56,11 @@ export function AboutImpact() {
               </li>
             ))}
           </ul>
+          {"source" in ABOUT_IMPACT && ABOUT_IMPACT.source ? (
+            <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-slate-400">
+              {ABOUT_IMPACT.source}
+            </p>
+          ) : null}
         </Reveal>
       </Container>
     </Section>

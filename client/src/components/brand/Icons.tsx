@@ -66,8 +66,26 @@ export const BoltIcon = (p: AssetProps) => (
 /** EV / mobility */
 export const VehicleIcon = (p: AssetProps) => (
   <AssetIcon
-    onLight={`${DARK}-21.svg`}
-    onDark={`${LIGHT}-11.svg`}
+    onLight="/icons/bikewo-vehicles-dark.svg"
+    onDark="/icons/bikewo-vehicles-light.svg"
+    {...p}
+  />
+);
+
+/** Asset leasing / keys & contract */
+export const LeasingIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight="/icons/bikewo-leasing-dark.svg"
+    onDark="/icons/bikewo-leasing-light.svg"
+    {...p}
+  />
+);
+
+/** Lifecycle / workshop service */
+export const ServiceIcon = (p: AssetProps) => (
+  <AssetIcon
+    onLight="/icons/bikewo-service-dark.svg"
+    onDark="/icons/bikewo-service-light.svg"
     {...p}
   />
 );
@@ -379,10 +397,10 @@ export const FileTextIcon = (p: IconProps) => (
 
 /** Icon lookup for the ecosystem / division sets. */
 export const DIVISION_ICONS = {
-  distribution: BuildingIcon,
-  leasing: PeopleIcon,
+  distribution: VehicleIcon,
+  leasing: LeasingIcon,
   energy: BoltIcon,
-  lifecycle: LeafIcon,
+  lifecycle: ServiceIcon,
   sourcing: CityIcon,
   vzn: PulseIcon,
 } as const;

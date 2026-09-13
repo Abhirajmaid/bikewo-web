@@ -96,9 +96,19 @@ const organizationJsonLd = {
   logo: `${SITE.url}/brand/logo-primary.png`,
   description: SITE.description,
   email: SITE.brandEmail,
+  telephone: SITE.phone,
   sameAs: SOCIALS.map((s) => s.href),
   slogan: SITE.corporateTagline,
   areaServed: { "@type": "Country", name: "India" },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress:
+      "H.No. 1-90/7/B/38, Flat No. 201, 2nd Floor, Lakshmi Sai Damam, Road No. 5, Patrika Nagar",
+    addressLocality: "Hyderabad",
+    addressRegion: "Telangana",
+    postalCode: "500081",
+    addressCountry: "IN",
+  },
   knowsAbout: [
     "Energy & Mobility Infrastructure",
     "EV logistics",

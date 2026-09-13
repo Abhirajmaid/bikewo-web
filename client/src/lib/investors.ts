@@ -30,7 +30,7 @@ export type InvestorDoc = {
 
 export const INVESTOR_PAGE = {
   title: "Investors",
-  lede: "Financial reports, governance policies and offer documents — the same archive we file, in a form you can search.",
+  lede: "NSE Symbol BIKEWO — financial reports, governance policies and offer documents filed by BikeWo Green Tech Limited.",
   featuredTitle: "Featured documents",
   libraryTitle: "All documents",
   libraryCta: "Browse the full document library",

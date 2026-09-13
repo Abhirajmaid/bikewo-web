@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
-import { DataTable } from "@/components/admin/DataTable";
+import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
+import { RowActions } from "@/components/admin/RowActions";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import type { JobStatus } from "@/lib/admin/types";
 import type { CareerDoc } from "@/lib/strapi";
@@ -118,6 +119,50 @@ export default function CareersPage() {
         ) : (
           <DataTable<CareerDoc>
             data={items}
+            searchPlaceholder="Search openings…"
+            getSearchText={(row) =>
+              `${row.title} ${row.department} ${row.location} ${row.type}`
+            }
+            filters={[
+              {
+                key: "status",
+                label: "All statuses",
+                getValue: (row) => row.status,
+                options: [
+                  { value: "open", label: "Open" },
+                  { value: "closed", label: "Closed" },
+                ],
+              },
+              {
+                key: "type",
+                label: "All types",
+                getValue: (row) => row.type,
+                options: [
+                  { value: "Full-time", label: "Full-time" },
+                  { value: "Part-time", label: "Part-time" },
+                  { value: "Contract", label: "Contract" },
+                ],
+              },
+              { key: "department", label: "All departments", getValue: (row) => row.department },
+            ]}
+            sorts={[
+              {
+                key: "posted-desc",
+                label: "Newest first",
+                compare: (a, b) => cmpDate(b.postedAt, a.postedAt),
+              },
+              {
+                key: "posted-asc",
+                label: "Oldest first",
+                compare: (a, b) => cmpDate(a.postedAt, b.postedAt),
+              },
+              {
+                key: "title",
+                label: "Title A–Z",
+                compare: (a, b) => cmpStr(a.title, b.title),
+              },
+            ]}
+            defaultSortKey="posted-desc"
             columns={[
               {
                 key: "title",
@@ -152,22 +197,12 @@ export default function CareersPage() {
                 key: "actions",
                 header: "",
                 cell: (row) => (
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(row)}
-                      className="text-xs font-medium text-green-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(row)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <RowActions
+                    actions={[
+                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
+                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                    ]}
+                  />
                 ),
               },
             ]}
@@ -177,11 +212,11 @@ export default function CareersPage() {
 
       {modalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-lift">
-            <h2 className="font-display text-lg font-semibold text-ink">
+          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-lift">
+            <h2 className="shrink-0 px-6 pt-6 font-display text-lg font-semibold text-ink">
               {editing ? "Edit opening" : "Add opening"}
             </h2>
-            <div className="mt-4 space-y-3">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-ink">Title</span>
                 <input
@@ -256,7 +291,7 @@ export default function CareersPage() {
               />
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </div>
-            <div className="mt-5 flex justify-end gap-2">
+            <div className="flex shrink-0 justify-end gap-2 border-t border-mist/60 px-6 py-4">
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}

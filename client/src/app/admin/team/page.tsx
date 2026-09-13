@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
-import { DataTable } from "@/components/admin/DataTable";
+import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
+import { RowActions } from "@/components/admin/RowActions";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import {
   LEADERSHIP_DIVISION_FILTERS,
@@ -132,6 +133,44 @@ export default function TeamPage() {
         ) : (
           <DataTable<CmsTeamMemberDoc>
             data={items}
+            searchPlaceholder="Search team…"
+            getSearchText={(row) => `${row.name} ${row.email} ${row.role} ${row.department}`}
+            filters={[
+              {
+                key: "status",
+                label: "All statuses",
+                getValue: (row) => row.status,
+                options: [
+                  { value: "active", label: "Active" },
+                  { value: "inactive", label: "Inactive" },
+                ],
+              },
+              { key: "department", label: "All departments", getValue: (row) => row.department },
+              {
+                key: "division",
+                label: "All divisions",
+                getValue: (row) => row.division || "executive",
+                options: DIVISION_OPTIONS.map((d) => ({ value: d.slug, label: d.label })),
+              },
+            ]}
+            sorts={[
+              {
+                key: "joined-desc",
+                label: "Newest joined",
+                compare: (a, b) => cmpDate(b.joinedAt, a.joinedAt),
+              },
+              {
+                key: "joined-asc",
+                label: "Oldest joined",
+                compare: (a, b) => cmpDate(a.joinedAt, b.joinedAt),
+              },
+              {
+                key: "name",
+                label: "Name A–Z",
+                compare: (a, b) => cmpStr(a.name, b.name),
+              },
+            ]}
+            defaultSortKey="name"
             columns={[
               {
                 key: "name",
@@ -161,22 +200,12 @@ export default function TeamPage() {
                 key: "actions",
                 header: "",
                 cell: (row) => (
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(row)}
-                      className="text-xs font-medium text-green-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(row)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <RowActions
+                    actions={[
+                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
+                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                    ]}
+                  />
                 ),
               },
             ]}
@@ -186,11 +215,11 @@ export default function TeamPage() {
 
       {modalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-lift">
-            <h2 className="font-display text-lg font-semibold text-ink">
+          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-lift">
+            <h2 className="shrink-0 px-6 pt-6 font-display text-lg font-semibold text-ink">
               {editing ? "Edit team member" : "Add team member"}
             </h2>
-            <div className="mt-4 space-y-3">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-ink">Name</span>
                 <input
@@ -304,7 +333,7 @@ export default function TeamPage() {
               </label>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </div>
-            <div className="mt-5 flex justify-end gap-2">
+            <div className="flex shrink-0 justify-end gap-2 border-t border-mist/60 px-6 py-4">
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}

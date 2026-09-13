@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
-import { DataTable } from "@/components/admin/DataTable";
+import { cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
+import { RowActions } from "@/components/admin/RowActions";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import type { TestimonialDoc } from "@/lib/strapi";
 
@@ -112,6 +113,38 @@ export default function TestimonialsPage() {
         ) : (
           <DataTable<TestimonialDoc>
             data={items}
+            searchPlaceholder="Search testimonials…"
+            getSearchText={(row) => `${row.quote} ${row.name} ${row.role}`}
+            filters={[
+              {
+                key: "status",
+                label: "All statuses",
+                getValue: (row) => row.status,
+                options: [
+                  { value: "published", label: "Published" },
+                  { value: "draft", label: "Draft" },
+                  { value: "archived", label: "Archived" },
+                ],
+              },
+            ]}
+            sorts={[
+              {
+                key: "order-asc",
+                label: "Order ↑",
+                compare: (a, b) => a.sortOrder - b.sortOrder,
+              },
+              {
+                key: "order-desc",
+                label: "Order ↓",
+                compare: (a, b) => b.sortOrder - a.sortOrder,
+              },
+              {
+                key: "name",
+                label: "Name A–Z",
+                compare: (a, b) => cmpStr(a.name, b.name),
+              },
+            ]}
+            defaultSortKey="order-asc"
             columns={[
               {
                 key: "quote",
@@ -142,22 +175,12 @@ export default function TestimonialsPage() {
                 key: "actions",
                 header: "",
                 cell: (row) => (
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(row)}
-                      className="text-xs font-medium text-green-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(row)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <RowActions
+                    actions={[
+                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
+                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                    ]}
+                  />
                 ),
               },
             ]}
@@ -167,11 +190,11 @@ export default function TestimonialsPage() {
 
       {modalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-lift">
-            <h2 className="font-display text-lg font-semibold text-ink">
+          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-lift">
+            <h2 className="shrink-0 px-6 pt-6 font-display text-lg font-semibold text-ink">
               {editing ? "Edit testimonial" : "Add testimonial"}
             </h2>
-            <div className="mt-4 space-y-3">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-ink">Quote</span>
                 <textarea
@@ -219,7 +242,7 @@ export default function TestimonialsPage() {
               </label>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </div>
-            <div className="mt-5 flex justify-end gap-2">
+            <div className="flex shrink-0 justify-end gap-2 border-t border-mist/60 px-6 py-4">
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}

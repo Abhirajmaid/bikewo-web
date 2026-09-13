@@ -60,9 +60,8 @@ export type CmsMember = {
   status: MemberStatus;
 };
 
+/** Local JSON store — members auth + contact inbox only. Content lives in Strapi. */
 export type CmsDatabase = {
-  news: NewsMediaItem[];
-  team: CmsTeamMember[];
   contact: CmsContactInquiry[];
   members: CmsMember[];
 };

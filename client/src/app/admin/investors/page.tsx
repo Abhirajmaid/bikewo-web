@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
-import { DataTable } from "@/components/admin/DataTable";
+import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
+import { RowActions } from "@/components/admin/RowActions";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import {
   INVESTOR_TYPES,
@@ -133,6 +134,55 @@ export default function InvestorsAdminPage() {
         ) : (
           <DataTable<InvestorDoc>
             data={items}
+            searchPlaceholder="Search documents…"
+            getSearchText={(row) => `${row.title} ${row.excerpt} ${row.typeLabel}`}
+            filters={[
+              {
+                key: "type",
+                label: "All types",
+                getValue: (row) => row.type,
+                options: INVESTOR_TYPES.filter((t) => t.slug !== "all").map((t) => ({
+                  value: t.slug,
+                  label: t.label,
+                })),
+              },
+              {
+                key: "featured",
+                label: "Featured",
+                getValue: (row) => (row.featured ? "yes" : "no"),
+                options: [
+                  { value: "yes", label: "Featured" },
+                  { value: "no", label: "Not featured" },
+                ],
+              },
+              {
+                key: "pdf",
+                label: "PDF status",
+                getValue: (row) => (row.href ? "ready" : "missing"),
+                options: [
+                  { value: "ready", label: "With PDF" },
+                  { value: "missing", label: "Missing PDF" },
+                ],
+              },
+            ]}
+            sorts={[
+              {
+                key: "date-desc",
+                label: "Newest first",
+                compare: (a, b) => cmpDate(b.date, a.date),
+              },
+              {
+                key: "date-asc",
+                label: "Oldest first",
+                compare: (a, b) => cmpDate(a.date, b.date),
+              },
+              {
+                key: "title",
+                label: "Title A–Z",
+                compare: (a, b) => cmpStr(a.title, b.title),
+              },
+            ]}
+            defaultSortKey="date-desc"
             columns={[
               {
                 key: "title",
@@ -165,22 +215,12 @@ export default function InvestorsAdminPage() {
                 key: "actions",
                 header: "",
                 cell: (row) => (
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(row)}
-                      className="text-xs font-medium text-green-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(row)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <RowActions
+                    actions={[
+                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
+                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                    ]}
+                  />
                 ),
               },
             ]}
@@ -190,11 +230,11 @@ export default function InvestorsAdminPage() {
 
       {modalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-lift">
-            <h2 className="font-display text-lg font-semibold text-ink">
+          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-lift">
+            <h2 className="shrink-0 px-6 pt-6 font-display text-lg font-semibold text-ink">
               {editing ? "Edit document" : "Add document"}
             </h2>
-            <div className="mt-4 space-y-3">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-ink">Title</span>
                 <input
@@ -256,7 +296,7 @@ export default function InvestorsAdminPage() {
               </label>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </div>
-            <div className="mt-5 flex justify-end gap-2">
+            <div className="flex shrink-0 justify-end gap-2 border-t border-mist/60 px-6 py-4">
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}

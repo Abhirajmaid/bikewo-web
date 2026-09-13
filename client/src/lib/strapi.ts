@@ -3,7 +3,7 @@ import type { NewsMediaItem, CmsTeamMember } from "@/lib/cms/types";
 import type { InvestorDoc, InvestorType } from "@/lib/investors";
 import { TYPE_META } from "@/lib/investors";
 
-const STRAPI_URL = (process.env.STRAPI_URL || "http://localhost:1337").replace(/\/$/, "");
+const STRAPI_URL = (process.env.STRAPI_URL || "http://localhost:1337").trim().replace(/\/$/, "");
 
 type StrapiEntity = { id: number; documentId: string };
 

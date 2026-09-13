@@ -2,7 +2,7 @@ import { Container } from "@/components/layout/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { ClockIcon, MailIcon, PinIcon } from "@/components/brand/Icons";
+import { ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/brand/Icons";
 import {
   CONTACT_MAP,
   CONTACT_OFFICE,
@@ -10,12 +10,19 @@ import {
   CONTACT_OFFICE_NOTE,
   CONTACT_PAGE_WIDTH,
 } from "@/lib/contact";
+import { SITE } from "@/lib/site";
 
 const DETAILS = [
   {
     icon: PinIcon,
     label: "Address",
     value: CONTACT_OFFICE.address,
+  },
+  {
+    icon: PhoneIcon,
+    label: "Call us",
+    value: CONTACT_OFFICE.phone,
+    href: `tel:${SITE.phoneTel}`,
   },
   {
     icon: MailIcon,

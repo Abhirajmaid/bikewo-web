@@ -1,204 +1,115 @@
-import Image from "next/image";
+"use client";
+
 import { ABOUT_MISSION_VISION } from "@/lib/about";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/Button";
-import { Logo } from "@/components/brand/Logo";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
+import { Mark } from "@/components/brand/Mark";
+import { stagger } from "@/lib/utils";
 
-const RIBBON_TEXT = `${ABOUT_MISSION_VISION.ribbon} · ${ABOUT_MISSION_VISION.ribbon} · `;
-
-/** Decorative eight-point asterisk frame with logo at centre. */
-function AsteriskLogo() {
-  const arms = [0, 45, 90, 135, 180, 225, 270, 315];
-
-  return (
-    <div className="relative size-48 sm:size-56 md:size-64 lg:size-72">
-      {arms.map((deg) => (
-        <div
-          key={deg}
-          aria-hidden
-          className="absolute left-1/2 top-1/2 h-[130%] w-[30%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-sm bg-indigo-900/50"
-          style={{ transform: `translate(-50%, -50%) rotate(${deg}deg)` }}
-        >
-          <div className="size-full bg-linear-to-b from-white/10 to-transparent" />
-        </div>
-      ))}
-
-      <div className="absolute inset-[22%] flex items-center justify-center rounded-full bg-white shadow-[0_16px_48px_rgb(0_0_0/0.35)]">
-        <Logo variant="primary" height={32} className="sm:h-9! md:h-10! lg:h-11!" priority />
-      </div>
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-[18%] rounded-full border border-green-400/30"
-      />
-    </div>
-  );
-}
-
-/** Mission & vision — editorial composition with asterisk logo focal point. */
+/** Mission & vision — modern split composition (Investor Presentation Aug 2026). */
 export function AboutMissionVision() {
+  const { vision, mission, pillars, cta, title, eyebrow, ribbon } =
+    ABOUT_MISSION_VISION;
+
   return (
-    <Section id="mission-vision" className="relative overflow-hidden bg-[#063024] py-20 md:py-28 lg:py-32">
-      <Container>
-        <Reveal className="text-center">
-          <h2 className="font-display text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] font-semibold leading-[1.12] text-white">
-            {ABOUT_MISSION_VISION.title}
-          </h2>
-        </Reveal>
-
-        {/* Mobile / tablet — stacked layout */}
-        <div className="mt-12 space-y-8 lg:hidden">
-          <Reveal delay={0.05}>
-            <div className="flex max-w-md items-stretch overflow-hidden rounded-full">
-              <span
-                aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center bg-green-400 font-mono text-lg text-indigo-950"
-              >
-                *
-              </span>
-              <p className="flex items-center bg-indigo-950/70 px-4 py-2.5 text-[13px] leading-snug text-white/75">
-                {ABOUT_MISSION_VISION.badge}
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08} className="flex justify-center py-4">
-            <AsteriskLogo />
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="-mx-5 overflow-hidden bg-green-400 py-3.5 sm:-mx-0 sm:rounded-lg">
-              <div className="flex overflow-hidden">
-                <div className="flex shrink-0 [animation:bw-marquee_28s_linear_infinite] motion-reduce:[animation:none]">
-                  {[RIBBON_TEXT, RIBBON_TEXT].map((text, i) => (
-                    <span
-                      key={i}
-                      className="whitespace-nowrap px-4 font-display text-sm font-semibold text-indigo-950"
-                    >
-                      {text}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.12}>
-            <p className="text-[15px] leading-relaxed text-white/60">{ABOUT_MISSION_VISION.quote}</p>
-          </Reveal>
-
-          <Reveal delay={0.14}>
-            <div className="bg-white p-5 sm:p-6">
-              <span
-                aria-hidden
-                className="inline-flex size-7 items-center justify-center font-mono text-sm text-green-600"
-              >
-                *
-              </span>
-              <p className="mt-3 text-[14px] leading-relaxed text-ink sm:text-[15px]">
-                {ABOUT_MISSION_VISION.card.copy}
-              </p>
-              <Button
-                href={ABOUT_MISSION_VISION.cta.href}
-                variant="ghost"
-                withArrow
-                className="mt-5 h-10 px-5 text-sm"
-              >
-                {ABOUT_MISSION_VISION.cta.label}
-              </Button>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Desktop — editorial absolute composition */}
-        <div className="relative mt-14 hidden min-h-[34rem] lg:block xl:min-h-[38rem]">
-          <Reveal delay={0.05} className="absolute left-0 top-4 z-20">
-            <div className="flex max-w-sm items-stretch overflow-hidden rounded-full">
-              <span
-                aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center bg-green-400 font-mono text-lg text-indigo-950"
-              >
-                *
-              </span>
-              <p className="flex items-center bg-indigo-950/70 px-5 py-2.5 text-sm leading-snug text-white/75">
-                {ABOUT_MISSION_VISION.badge}
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal
-            delay={0.08}
-            className="pointer-events-none absolute left-6 top-[38%] z-10 select-none"
-            aria-hidden
-          >
-            <span className="bg-linear-to-b from-green-400 to-green-600 bg-clip-text font-serif text-[9rem] leading-none text-transparent">
-              &ldquo;
-            </span>
-          </Reveal>
-
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-[-8%] top-[46%] z-0 -translate-y-1/2 overflow-hidden"
-          >
-            <div className="relative -rotate-[4deg] bg-green-400 py-4 shadow-[0_8px_32px_rgb(42_183_124/0.25)]">
-              <div className="flex overflow-hidden">
-                <div className="flex shrink-0 [animation:bw-marquee_28s_linear_infinite] motion-reduce:[animation:none]">
-                  {[RIBBON_TEXT, RIBBON_TEXT].map((text, i) => (
-                    <span
-                      key={i}
-                      className="whitespace-nowrap px-4 font-display text-base font-semibold text-indigo-950"
-                    >
-                      {text}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <Reveal
-            delay={0.1}
-            className="absolute left-1/2 top-[50%] z-10 -translate-x-1/2 -translate-y-1/2"
-          >
-            <AsteriskLogo />
-          </Reveal>
-
-          <Reveal delay={0.14} className="absolute bottom-0 right-0 z-20 max-w-sm bg-white p-6 shadow-[0_12px_40px_rgb(0_0_0/0.2)]">
-            <span
-              aria-hidden
-              className="inline-flex size-7 items-center justify-center font-mono text-sm text-green-600"
-            >
-              *
-            </span>
-            <p className="mt-3 text-[15px] leading-relaxed text-ink">
-              {ABOUT_MISSION_VISION.card.copy}
-            </p>
-            <Button
-              href={ABOUT_MISSION_VISION.cta.href}
-              variant="ghost"
-              withArrow
-              className="mt-5 h-10 px-5 text-sm"
-            >
-              {ABOUT_MISSION_VISION.cta.label}
-            </Button>
-          </Reveal>
-
-          <Reveal delay={0.12} className="absolute bottom-4 left-0 z-10 max-w-sm">
-            <p className="text-[15px] leading-relaxed text-white/60">
-              {ABOUT_MISSION_VISION.quote}
-            </p>
-          </Reveal>
-        </div>
-      </Container>
-
+    <Section
+      id="mission-vision"
+      className="relative overflow-hidden bg-indigo-950 py-20 md:py-28 lg:py-32"
+    >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.03]"
-      >
-        <Image src="/brand/mark.svg" alt="" width={480} height={450} className="text-white" />
-      </div>
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgb(42_183_124/0.18),transparent_55%),radial-gradient(ellipse_at_90%_80%,rgb(123_92_214/0.14),transparent_50%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 top-1/2 size-[28rem] -translate-y-1/2 rounded-full border border-white/5"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-8 top-1/2 size-[20rem] -translate-y-1/2 rounded-full border border-green-400/15"
+      />
+
+      <Container className="relative">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <Reveal className="max-w-2xl">
+            <Eyebrow tone="dark">{eyebrow}</Eyebrow>
+            <h2 className="mt-6 font-display text-[clamp(1.75rem,1.1rem+2.4vw,3rem)] font-semibold leading-[1.12] text-white">
+              {title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08} className="flex items-center gap-3 text-white/50">
+            <Mark className="size-8 text-green-400" />
+            <span className="font-display text-sm font-medium tracking-wide">
+              {ribbon}
+            </span>
+          </Reveal>
+        </div>
+
+        <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-2 lg:gap-8">
+          <Reveal delay={0.1}>
+            <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-sm transition-colors duration-300 hover:border-green-400/30 hover:bg-white/[0.06] sm:p-9">
+              <div
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-green-400/60 to-transparent"
+              />
+              <p className="font-display text-[11px] font-semibold uppercase tracking-[0.16em] text-green-400">
+                {vision.label}
+              </p>
+              <p className="mt-6 font-display text-[clamp(1.35rem,1.1rem+1.2vw,1.85rem)] font-semibold leading-[1.25] tracking-tight text-white">
+                {vision.copy}
+              </p>
+              <p className="mt-auto pt-10 text-sm text-white/45">{vision.tag}</p>
+            </article>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white p-7 sm:p-9">
+              <p className="font-display text-[11px] font-semibold uppercase tracking-[0.16em] text-indigo-800">
+                {mission.label}
+              </p>
+              <p className="mt-6 font-display text-[clamp(1.35rem,1.1rem+1.2vw,1.85rem)] font-semibold leading-[1.25] tracking-tight text-indigo-800">
+                {mission.copy}
+              </p>
+              <p className="mt-auto pt-10 text-sm text-slate">{mission.tag}</p>
+            </article>
+          </Reveal>
+        </div>
+
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:mt-10 lg:gap-6">
+          {pillars.map((pillar, i) => (
+            <Reveal as="li" key={pillar.label} delay={0.2 + stagger(i, 0.08)}>
+              <div className="flex h-full gap-5 rounded-xl border border-white/10 bg-indigo-900/40 px-6 py-5">
+                <span className="font-mono text-sm font-medium text-green-400">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <p className="font-display text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">
+                    {pillar.label}
+                  </p>
+                  <h3 className="mt-1 font-display text-lg font-semibold text-white">
+                    {pillar.title}
+                  </h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-white/60">
+                    {pillar.copy}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </ul>
+
+        <Reveal delay={0.28} className="mt-12 flex flex-wrap items-center gap-4 lg:mt-14">
+          <Button href={cta.href} variant="onDark" withArrow>
+            {cta.label}
+          </Button>
+          <p className="text-sm text-white/45">
+            Logistics is our core. EMI is our differentiator.
+          </p>
+        </Reveal>
+      </Container>
     </Section>
   );
 }

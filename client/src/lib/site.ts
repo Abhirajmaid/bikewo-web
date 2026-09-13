@@ -21,14 +21,19 @@ export type NavNode = {
 export const SITE = {
   name: "BikeWo",
   legalName: "BikeWo Green Tech Limited",
+  cin: "L74999TG2016PLC113345",
+  nseSymbol: "BIKEWO",
   tagline: "Electrifying India",
   corporateTagline: "Seamless Energy. Smarter Mobility.",
-  campaignTagline: "We move goods. We move India.",
+  campaignTagline: "Moving goods. Moving India forward.",
   url: "https://www.bikewo.in",
   brandEmail: "brand@bikewo.in",
+  accountsEmail: "accounts@bikewo.in",
+  phone: "+91 76720 07000",
+  phoneTel: "+917672007000",
   locale: "en_IN",
   description:
-    "Seamless Energy. Smarter Mobility. BikeWo Green Tech Limited is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics — owning and operating the full stack across vehicles, energy, financing, service and intelligence.",
+    "Seamless Energy. Smarter Mobility. BikeWo Green Tech Limited builds Energy & Mobility Infrastructure (EMI) — vehicles, energy, financing support, lifecycle services and intelligence — for electric last-mile logistics in India.",
   keywords: [
     "BikeWo",
     "BikeWo Green Tech Limited",
@@ -47,6 +52,7 @@ export const SITE = {
     "battery swapping India",
     "fleet management",
     "telematics",
+    "NSE BIKEWO",
     "PositiEV",
     "Enlite EV Care",
     "Ignesium Energy",
@@ -60,20 +66,20 @@ export const NAV: NavNode[] = [
     title: "About BikeWo",
     href: "/about",
     blurb:
-      "BikeWo is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics.",
+      "BikeWo builds Energy & Mobility Infrastructure (EMI) for electric last-mile logistics at scale.",
     children: [
       {
         title: "About us",
         href: "/about",
         blurb:
-          "Logistics is our core. EMI is our differentiator — we move goods, we move India.",
+          "Logistics is our core. EMI is our differentiator — moving goods, moving India forward.",
       },
       { title: "Leadership Team", href: "/about/leadership-team" },
       {
         title: "Vision, Mission & Values",
         href: "/about#mission-vision",
         blurb:
-          "To build the energy & mobility infrastructure (EMI) that moves the world.",
+          "Build the energy and mobility infrastructure that moves India — and scales globally.",
       },
       // { title: "ESG", href: "/about/esg" },
       { title: "Awards & Recognition", href: "/about/awards" },
@@ -84,38 +90,38 @@ export const NAV: NavNode[] = [
     title: "Businesses",
     href: "/businesses",
     blurb:
-      "SiX businesses operating as one EMI platform : vehicles, energy, financing, service and sourcing.",
+      "One EMI operating model — source, distribute, enable, charge, service and connect.",
     children: [
       {
         title: "Mobility Distribution",
         href: "https://positievmobility.com/",
         external: true,
         blurb:
-          "Through PositiEV — India’s technology-led EV distribution platform with a strong dealer and channel network.",
+          "Vehicle sourcing and distribution through PositiEV — India’s technology-led EV channel.",
       },
       {
         title: "Mobility Asset Leasing",
         href: "/businesses/mobility-asset-leasing",
         blurb:
-          "We own and lease EVs to gig workers, SMEs and enterprises with flexible, affordable solutions.",
+          "Flexible leasing that turns ownership into managed, on-demand fleet capacity.",
       },
       {
         title: "Energy Infrastructure",
         href: "/businesses/energy-infrastructure",
         blurb:
-          "Building and operating pan-India charging and battery swapping infrastructure for today and tomorrow.",
+          "Charging and battery swapping that keep electric fleets energised and available.",
       },
       {
         title: "Lifecycle Services",
         href: "/businesses/lifecycle-services",
         blurb:
-          "Through Enlite EV Care — end-to-end maintenance, spare parts, roadside assistance and battery care.",
+          "Through Enlite EV Care — maintenance, spare parts, roadside assistance and battery care.",
       },
       {
         title: "Global Sourcing & Supply Chain",
         href: "/businesses/global-sourcing-supply-chain",
         blurb:
-          "Global partnerships and supply chain excellence that deliver quality, scale and cost leadership.",
+          "Global partnerships and supply-chain capability for quality, scale and cost leadership.",
       },
     ],
   },
@@ -186,13 +192,13 @@ export const NAV: NavNode[] = [
   {
     title: "Careers",
     href: "/careers",
-    blurb: "Build the energy and mobility infrastructure that moves India.",
+    blurb: "Build the energy and mobility infrastructure that moves India — and scales globally.",
   },
   {
     title: "Contact",
     href: "/contact",
     blurb:
-      "Talk to the team that owns distribution, leasing, energy, service, sourcing or intelligence.",
+      "Talk to the team behind distribution, leasing, energy, service, sourcing or intelligence.",
   },
 ];
 

@@ -1,5 +1,6 @@
 /**
  * Businesses landing page — content for /businesses.
+ * Aligned to BikeWo Investor Presentation (Aug 2026).
  */
 
 import {
@@ -12,9 +13,9 @@ import { DIVISIONS, GLANCE, SUBSIDIARIES } from "@/lib/content";
 
 export const BUSINESSES_HERO = {
   eyebrow: "Our businesses",
-  title: "Powering India's last-mile with integrated energy & mobility infrastructure.",
+  title: "Building an integrated mobility and logistics platform.",
   lede:
-    "Six businesses operating as one EMI platform — vehicles, energy, financing, service, sourcing and intelligence.",
+    "Source, distribute, enable, charge, service and connect — one EMI operating model for electric last-mile capacity.",
   image: {
     src: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
     alt: "Electric vehicle charging station at a BikeWo energy hub.",
@@ -24,40 +25,150 @@ export const BUSINESSES_HERO = {
     {
       icon: VehicleIcon,
       title: "Mobility at scale",
-      copy: "2W, 3W and LCV EVs through PositiEV — distribution and leasing, ready when fleets need them.",
+      copy: "Distribution and leasing through PositiEV — capacity when fleets need it, without ownership lock-in.",
     },
     {
       icon: BoltIcon,
       title: "Energy where it matters",
-      copy: "Charging and battery swapping across key logistics locations — the energy behind every movement.",
+      copy: "Charging and battery swapping that keep electric fleets energised and available.",
     },
     {
       icon: BatteryIcon,
       title: "Lifecycle accountability",
-      copy: "Maintenance, spare parts, roadside assistance and battery care through Enlite EV Care.",
+      copy: "Maintenance, spares and battery care through Enlite EV Care — uptime as the product.",
     },
   ],
   ctas: [
-    { label: "Explore our divisions", href: "#divisions" },
-    { label: "Discover our impact", href: "#impact" },
+    { label: "Explore divisions", href: "#divisions" },
+    { label: "See how it works", href: "#model" },
   ],
 };
 
-/** Subsidiaries shown in the trusted-partners band — mirrors ref layout. */
+/* ------------------------------------------------------- Operating model */
+
+export const BUSINESSES_MODEL = {
+  eyebrow: "Target operating model",
+  title: "One chain. Six handoffs. Zero seams.",
+  lede: "The EMI stack is designed so every step feeds the next — from global partners to connected fleet data.",
+  steps: [
+    { label: "Source", detail: "Global partners" },
+    { label: "Distribute", detail: "PositiEV network" },
+    { label: "Enable", detail: "Flexible leasing" },
+    { label: "Charge", detail: "Energy network" },
+    { label: "Service", detail: "EV Care" },
+    { label: "Connect", detail: "Data · VZN" },
+  ],
+};
+
+/* ------------------------------------------------ Problem → solution */
+
+export const BUSINESSES_SOLUTION = {
+  eyebrow: "How BikeWo plans to solve it",
+  title: "Turn vehicle ownership into managed, on-demand fleet capacity",
+  lede: "Source vehicles, enable financing, electrify and manage operations — so logistics companies scale without owning their fleets.",
+  steps: [
+    {
+      index: "01",
+      title: "Access & financing support",
+      copy: "Vehicle sourcing and asset leasing that make fleet capacity affordable to open.",
+      tag: "Access · Affordable",
+    },
+    {
+      index: "02",
+      title: "Manage & energise",
+      copy: "Maintenance with charging and swapping so assets stay ready on demand.",
+      tag: "Managed · Energised",
+    },
+    {
+      index: "03",
+      title: "Deploy & optimise",
+      copy: "Reliable capacity backed by lifecycle intelligence across the network.",
+      tag: "Reliable · Intelligent",
+    },
+  ],
+  outcomes: [
+    "Lower TCO",
+    "Higher utilisation",
+    "Scalable fleets",
+    "Better margins",
+  ],
+  gap: "Traditional models primarily sell vehicles. Logistics operators increasingly need reliable mobility capacity as a service.",
+};
+
+/* ------------------------------------------------ Market opportunity */
+
+export const BUSINESSES_MARKET = {
+  eyebrow: "Market opportunity",
+  title: "A ₹2,500–3,000 crore addressable market in a scaling sector",
+  lede: "India’s last-mile market is expanding as e-commerce, faster delivery and urban density reshape fleet demand.",
+  sizing: [
+    {
+      label: "TAM",
+      value: "₹65,000+ Cr",
+      detail: "India last-mile delivery",
+    },
+    {
+      label: "SAM",
+      value: "₹25,000–30,000 Cr",
+      detail: "Tech-enabled urban & peri-urban last mile",
+    },
+    {
+      label: "SOM",
+      value: "₹2,500–3,000 Cr",
+      detail: "BikeWo serviceable obtainable estimate",
+    },
+  ],
+  signals: [
+    {
+      value: 12.7,
+      suffix: "%",
+      label: "Market CAGR",
+      detail: "India last-mile delivery, 2026–31",
+    },
+    {
+      value: 69.9,
+      suffix: "%",
+      label: "B2C share",
+      detail: "Of India’s last-mile market in 2025",
+    },
+    {
+      value: 54.3,
+      suffix: "%",
+      label: "E-commerce share",
+      detail: "Of last-mile demand in 2025",
+    },
+    {
+      value: 14.3,
+      suffix: "%",
+      label: "Same-day CAGR",
+      detail: "Through 2031 — capacity must flex with peaks",
+    },
+  ],
+  takeaway:
+    "As delivery demand becomes faster and more variable, asset-light fleet capacity becomes essential infrastructure.",
+  source:
+    "Mordor Intelligence, India Last Mile Delivery Market (Aug 2026). SAM and SOM are BikeWo strategic estimates.",
+};
+
+/* ---------------------------------------------------------- Partners */
+
 export const BUSINESSES_PARTNERS = {
   eyebrow: "The BikeWo Mobility Group",
   title: "Subsidiaries carrying the masterbrand forward.",
+  lede: "Each company owns a layer of the stack — distribution, service, energy or intelligence — under one EMI platform.",
   items: SUBSIDIARIES.map((sub) => ({
     name: sub.name,
     kind: sub.kind,
     copy: sub.copy,
     href: sub.href,
+    logo: "logo" in sub ? sub.logo : undefined,
   })),
 };
 
 export const BUSINESSES_IMPACT = {
   eyebrow: "One ecosystem",
-  title: "One goal, one grid.",
+  title: "Capacity as infrastructure — not another vehicle sale.",
+  lede: "Own the asset path, finance it, power it and keep it running. That is how last-mile fleets scale.",
   image: {
     src: "/assets/hf_20260806_145122_f7847d04-e4a6-488e-9f6b-3d0507bdc52a.png",
     alt: "Fleet of BikeWo electric three-wheelers at a branded facility.",
@@ -72,70 +183,43 @@ export const BUSINESSES_IMPACT = {
       type: "highlight" as const,
       title: "PositiEV Mobility",
       subtitle: "Distribution & leasing",
-      copy: "Dealer network, fleet rentals and channel partners across India.",
+      copy: "Vehicle sourcing, channel partners and flexible fleet leasing across India.",
       href: "https://positievmobility.com/",
     },
     {
       type: "highlight" as const,
       title: "Enlite EV Care",
       subtitle: "Lifecycle services",
-      copy: "Maintenance, spares and battery health — the service layer riders trust.",
+      copy: "Maintenance, spares and battery health — the service layer fleets trust.",
       href: "https://enliteev.com/",
     },
   ],
 };
 
 export const BUSINESSES_INSIGHTS = {
-  title: "Impactful insights for a sustainable tomorrow.",
+  eyebrow: "Why this matters",
+  title: "Delivery is getting faster. Fleets need capacity that flexes.",
   card: {
-    kicker: "For your future",
+    kicker: "The operating model",
     lede:
-      "Our integrated mobility and energy solutions are built to deliver lasting environmental benefits, helping last-mile fleets, riders and cities transition sustainably. We own, finance, power and manage the assets that make logistics possible.",
+      "BikeWo aims to source vehicles, enable financing, electrify and manage operations — helping logistics companies scale without owning their fleets.",
     bullets: [
-      "Wide range of 2W, 3W and LCV EVs — ready when you need them.",
-      "Asset-light leasing models and competitive financing.",
-      "Charging and swapping access across key logistics locations.",
-      "Lifecycle support through Enlite EV Care to maximise uptime.",
+      "Access & financing support — vehicle sourcing and asset leasing.",
+      "Manage & energise — maintenance with charging and swapping.",
+      "Deploy & optimise — reliable capacity with lifecycle intelligence.",
+      "Intended impact — lower TCO, higher utilisation, scalable fleets, better margins.",
     ],
     actions: [
-      { label: "Get started", href: "#divisions", variant: "primary" as const },
+      { label: "Explore divisions", href: "#divisions", variant: "primary" as const },
       { label: "Contact us", href: "/contact", variant: "ghost" as const },
     ],
   },
-  stats: [
-    {
-      value: 12.7,
-      suffix: "%",
-      detail:
-        "India last-mile delivery market CAGR, 2026–31 (Mordor Intelligence).",
-      icon: "bolt" as const,
-      size: "lg" as const,
-      position: "top-left" as const,
-    },
-    {
-      value: 70,
-      suffix: "%",
-      detail: "B2C share of India’s last-mile market in 2025.",
-      icon: "leaf" as const,
-      size: "sm" as const,
-      position: "bottom-center" as const,
-    },
-    {
-      value: 14.3,
-      suffix: "%",
-      detail:
-        "Same-day delivery CAGR, 2026–31 — demand that needs reliable EV capacity.",
-      icon: "battery" as const,
-      size: "md" as const,
-      position: "top-right" as const,
-    },
-  ],
 };
 
 export const BUSINESSES_DIVISIONS = {
-  eyebrow: "Our divisions",
-  title: "Sharing a sustainable future with energy.",
-  lede: "Each business runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam.",
+  eyebrow: "What we do",
+  title: "Businesses across the EMI stack.",
+  lede: "Distribution, leasing, energy, lifecycle, sourcing and connected intelligence — with adjacent opportunities like aviation logistics as the 3PL core deepens.",
   items: DIVISIONS.map((d, i) => {
     const ids = ["distribution", "leasing", "energy", "lifecycle", "sourcing", "vzn"] as const;
     const imageOverrides: Record<string, string> = {
@@ -152,17 +236,40 @@ export const BUSINESSES_DIVISIONS = {
   }),
 };
 
+export const BUSINESSES_ADJACENT = {
+  eyebrow: "Downstream diversification",
+  title: "Expand with discipline from the 3PL core.",
+  lede: "Use the capabilities, customers and infrastructure of the core to build adjacent businesses.",
+  items: [
+    {
+      title: "Open energy infrastructure",
+      copy: "Charge and swap capacity opened to third parties beyond own fleets.",
+    },
+    {
+      title: "Aviation logistics",
+      copy: "Adjacent logistics opportunity built from core operating muscle.",
+    },
+    {
+      title: "Global sourcing",
+      copy: "Supply-chain partnerships that support quality, scale and cost leadership.",
+    },
+    {
+      title: "Connected intelligence / VZN",
+      copy: "Telematics and optimisation layered across the asset network.",
+    },
+  ],
+};
+
 export const BUSINESSES_TESTIMONIALS = {
-  kicker: "Testimonials — Trustpilot",
-  title: "Client testimonials on green energy solutions.",
-  lede:
-    "Discover efficient and sustainable mobility solutions that help reduce costs and benefit the environment.",
+  kicker: "Customer voices",
+  title: "Built for operators who need capacity, not capex.",
+  lede: "Fleet operators, dealers and driver-partners — the people the EMI stack is designed to serve.",
   items: [
     {
       heroQuote:
-        "Partnering with BikeWo was a key moment for our company. Their EMI model cut costs and boosted last-mile impact.",
+        "We needed mobility capacity, not more vehicles on the books. Leasing made cost per kilometre something we could forecast.",
       detail:
-        "They delivered customised lease and charging solutions that made our transition to electric fleets seamless and cost-effective.",
+        "Custom lease and charging solutions made the electric fleet transition measurable — utilisation first, ownership second.",
       name: "Placeholder — fleet operator",
       role: "Operations Manager, Hyderabad",
       avatar:
@@ -171,9 +278,9 @@ export const BUSINESSES_TESTIMONIALS = {
     },
     {
       heroQuote:
-        "Service used to be the reason customers hesitated. Now Enlite handles it and the conversation is about range, not repairs.",
+        "Service used to be the reason customers hesitated. Now Enlite handles it and the conversation is about utilisation.",
       detail:
-        "The after-sales network gave our dealer channel the confidence to sell electric without worrying about what happens after delivery.",
+        "The after-sales network gave the dealer channel confidence to sell electric without worrying about what happens after delivery.",
       name: "Placeholder — dealer principal",
       role: "Dealer Principal, Jaipur",
       avatar:
@@ -184,7 +291,7 @@ export const BUSINESSES_TESTIMONIALS = {
       heroQuote:
         "Zero joining fee meant I could start the same week. The weekly payout is what keeps my household running.",
       detail:
-        "Shram Sainik gave me training, a uniform built for Indian roads, and a support line that answers in my language.",
+        "Shram Sainik gave training, a uniform built for Indian roads, and a support line that answers in regional languages.",
       name: "Placeholder — driver-partner",
       role: "Driver-Partner, Lucknow",
       avatar:
@@ -193,56 +300,57 @@ export const BUSINESSES_TESTIMONIALS = {
     },
   ],
   cta: {
-    label: "Join the green energy movement and start saving now.",
+    label: "Talk to the team that owns your use case",
     href: "/contact",
   },
 };
 
 export const BUSINESSES_PLANET = {
-  title: "One planet.",
-  accent: "One chance.",
+  title: "Cleaner capacity.",
+  accent: "Smarter fleets.",
+  lede: "Electrified last-mile infrastructure — charging, leasing and lifecycle — built to move goods with less waste.",
   image: {
     src: "/assets/hf_20260806_143951_c22f30b8-a28d-42e6-b1e8-774b0a19ba7b.png",
     alt: "Wind turbine and clean energy landscape at dusk.",
   },
-  cta: { label: "Read our ESG report", href: "/about/esg" },
+  cta: { label: "Read our ESG overview", href: "/about/esg" },
 };
 
 export const BUSINESSES_FAQ = {
   eyebrow: "FAQ",
   title: "Everything you need to know about our businesses.",
-  lede: "How the six businesses work, where to start, and how to partner with us.",
+  lede: "How the EMI businesses work, where to start, and how to partner with us.",
   cta: { label: "Still have a question?", href: "/contact" },
   items: [
     {
-      question: "How do the six businesses work together?",
+      question: "How do the businesses work together?",
       answer:
-        "Each business operates independently with its own P&L, but they share infrastructure, data and service standards. A fleet customer might lease from Mobility Asset Leasing, charge through Energy Infrastructure, and service through Enlite EV Care — all under one EMI platform.",
+        "They share one operating model — source, distribute, enable, charge, service and connect. A fleet customer might lease through Mobility Asset Leasing, charge through Energy Infrastructure, and service through Enlite EV Care under one EMI platform.",
     },
     {
       question: "What is the relationship between BikeWo and its subsidiaries?",
       answer:
-        "The BikeWo Mobility Group includes PositiEV Mobility, Enlite EV Care, Ignesium Energy and BikeWo VZN. The parent brand always leads; sub-brands earn distinction where they serve a genuinely different customer.",
+        "The BikeWo Mobility Group includes PositiEV Mobility, Enlite EV Care, Ignesium Energy and BikeWo VZN. The parent brand leads; sub-brands serve distinct customer journeys within the stack.",
     },
     {
       question: "Can I work with just one business?",
       answer:
-        "Yes. Dealers work with Mobility Distribution through PositiEV. Fleet operators often start with leasing. Property managers engage Energy Infrastructure for charge points. Each business has its own sales and support team.",
+        "Yes. Dealers work with Mobility Distribution through PositiEV. Fleet operators often start with leasing. Property managers engage Energy Infrastructure for charge points. Each business has its own sales and support path.",
     },
     {
-      question: "Where is BikeWo VZN used?",
+      question: "Where does aviation logistics fit?",
       answer:
-        "VZN is the connected intelligence layer — a proprietary telematics and data platform for IoT, fleet intelligence and operational analytics that feed safety, efficiency and smarter decisions across the ecosystem.",
+        "Aviation logistics is a downstream diversification opportunity — built from the capabilities, customers and infrastructure of the 3PL core, expanded with discipline alongside energy, sourcing and VZN.",
     },
     {
       question: "How does BikeWo sit in the logistics value chain?",
       answer:
-        "We don’t compete in logistics execution. We build the mobility infrastructure that powers every delivery — own the asset, finance the asset, manage the asset, power the asset. The outcome is lower TCO, higher utilisation, scalable fleets and better margins.",
+        "We don’t compete in logistics execution. We build the mobility infrastructure that powers delivery — access, energise and optimise assets so operators get lower TCO, higher utilisation, scalable fleets and better margins.",
     },
     {
       question: "How do I become a channel partner?",
       answer:
-        "Contact our Mobility Distribution team through the contact page. We onboard dealers, fleet operators and charge-point hosts with training, marketing support and access to the full EMI platform.",
+        "Contact our Mobility Distribution team through the contact page. We onboard dealers, fleet operators and charge-point hosts with training and access across the EMI platform.",
       cta: { label: "Get in touch", href: "/contact" },
     },
   ],

@@ -48,13 +48,13 @@ export const CONTACT_TESTIMONIALS = [
 export const CONTACT_MISSION = {
   eyebrow: "We believe in a sustainable future.",
   textBefore: "At BikeWo, we truly believe clean mobility ",
-  highlight: "powers a better future. Energy & mobility infrastructure is",
+  highlight: "powers a better future. Energy & mobility infrastructure",
   textAfter:
-    " what connects mobility, energy and technology into smarter, more scalable logistics ecosystems.",
+    " connects mobility, energy and technology into smarter, more scalable logistics ecosystems.",
 };
 
 export const CONTACT_QUICK = [
-  { label: "Call Now", href: "tel:+914012345678", icon: "phone" as const },
+  { label: "Call Now", href: "tel:+917672007000", icon: "phone" as const },
   { label: "Chat Now", href: "/contact#form", icon: "chat" as const },
   { label: "Mail us", href: "mailto:brand@bikewo.in", icon: "mail" as const },
 ];
@@ -141,23 +141,26 @@ export const CONTACT_PAGE_WIDTH = "w-[90%] !max-w-none px-0";
 export const CONTACT_OFFICE_HEADING = {
   eyebrow: "Location",
   title: "Visit our office",
-  lede: "Headquarters in Gachibowli, Hyderabad — drop in, or write ahead and we’ll have the right team ready.",
+  lede: "Registered office in Madhapur, Hyderabad — drop in, or write ahead and we’ll have the right team ready.",
 } as const;
 
 export const CONTACT_OFFICE = {
-  label: "Headquarters",
-  city: "Gachibowli",
-  address: "Hyderabad, Telangana 500032",
+  label: "Registered office",
+  city: "Madhapur",
+  address:
+    "H.No. 1-90/7/B/38, Flat No. 201, 2nd Floor, Lakshmi Sai Damam, Road No. 5, Patrika Nagar, Madhapur, Hyderabad, Telangana 500081",
+  phone: "+91 76720 07000",
   email: "brand@bikewo.in",
   hours: "Available 24/7",
 } as const;
 
-const OFFICE_MAP_QUERY = "Gachibowli, Hyderabad, Telangana 500032";
+const OFFICE_MAP_QUERY =
+  "Lakshmi Sai Damam, Road No. 5, Patrika Nagar, Madhapur, Hyderabad, Telangana 500081";
 
 export const CONTACT_MAP = {
   embedSrc: `https://www.google.com/maps?q=${encodeURIComponent(OFFICE_MAP_QUERY)}&z=15&hl=en&output=embed`,
   directionsHref: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_MAP_QUERY)}`,
-  title: "Map of BikeWo headquarters in Gachibowli, Hyderabad",
+  title: "Map of BikeWo registered office in Madhapur, Hyderabad",
 };
 
 export const CONTACT_OFFICE_NOTE =

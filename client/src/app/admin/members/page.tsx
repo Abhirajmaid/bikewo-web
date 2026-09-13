@@ -1,20 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AddMemberModal } from "@/components/admin/AddMemberModal";
-import { DataTable } from "@/components/admin/DataTable";
+import { AddMemberModal, type MemberForm } from "@/components/admin/AddMemberModal";
+import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { PermissionsMatrix } from "@/components/admin/PermissionsMatrix";
 import { RoleBadge } from "@/components/admin/RoleBadge";
 import { StatCards } from "@/components/admin/StatCards";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
-import type { InternalMember } from "@/lib/admin/types";
+import { CMS_ROLES, type InternalMember } from "@/lib/admin/rbac";
 
 export default function MembersPage() {
   const [members, setMembers] = useState<InternalMember[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState<InternalMember | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
@@ -30,6 +32,80 @@ export default function MembersPage() {
     void load();
   }, []);
 
+  function openCreate() {
+    setEditing(null);
+    setError(null);
+    setModalOpen(true);
+  }
+
+  function openEdit(member: InternalMember) {
+    setEditing(member);
+    setError(null);
+    setModalOpen(true);
+  }
+
+  async function saveMember(form: MemberForm) {
+    setError(null);
+    const payload: Record<string, string> = {
+      name: form.name,
+      email: form.email,
+      cmsRole: form.cmsRole,
+      department: form.department || "—",
+    };
+    if (form.password) payload.password = form.password;
+
+    const res = await fetch(
+      editing ? `/api/cms/members/${editing.id}` : "/api/cms/members",
+      {
+        method: editing ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          editing
+            ? payload
+            : { ...payload, password: form.password },
+        ),
+      },
+    );
+    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    if (!res.ok) {
+      setError(data.error || "Save failed.");
+      return;
+    }
+    setModalOpen(false);
+    setEditing(null);
+    await load();
+  }
+
+  async function remove(member: InternalMember) {
+    if (!confirm(`Delete ${member.name}? This cannot be undone.`)) return;
+    setError(null);
+    const res = await fetch(`/api/cms/members/${member.id}`, { method: "DELETE" });
+    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    if (!res.ok) {
+      setError(data.error || "Delete failed.");
+      return;
+    }
+    await load();
+  }
+
+  async function toggleActive(member: InternalMember) {
+    const nextStatus = member.status === "suspended" ? "active" : "suspended";
+    const label = nextStatus === "suspended" ? "Deactivate" : "Reactivate";
+    if (!confirm(`${label} ${member.name}?`)) return;
+    setError(null);
+    const res = await fetch(`/api/cms/members/${member.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: nextStatus }),
+    });
+    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    if (!res.ok) {
+      setError(data.error || `${label} failed.`);
+      return;
+    }
+    await load();
+  }
+
   const active = members.filter((m) => m.status === "active").length;
   const invited = members.filter((m) => m.status === "invited").length;
 
@@ -41,7 +117,7 @@ export default function MembersPage() {
         actions={
           <button
             type="button"
-            onClick={() => setModalOpen(true)}
+            onClick={openCreate}
             className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
           >
             <span aria-hidden>+</span> Invite member
@@ -66,11 +142,55 @@ export default function MembersPage() {
           <ToolbarButton onClick={() => void load()}>Refresh</ToolbarButton>
         </div>
 
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
         {loading ? (
           <p className="text-sm text-slate">Loading…</p>
         ) : (
           <DataTable<InternalMember>
             data={members}
+            searchPlaceholder="Search members…"
+            getSearchText={(row) => `${row.name} ${row.email} ${row.department}`}
+            filters={[
+              {
+                key: "status",
+                label: "All statuses",
+                getValue: (row) => row.status,
+                options: [
+                  { value: "active", label: "Active" },
+                  { value: "invited", label: "Invited" },
+                  { value: "suspended", label: "Suspended" },
+                ],
+              },
+              {
+                key: "role",
+                label: "All roles",
+                getValue: (row) => row.cmsRole,
+                options: (Object.keys(CMS_ROLES) as Array<keyof typeof CMS_ROLES>).map(
+                  (role) => ({ value: role, label: CMS_ROLES[role].label }),
+                ),
+              },
+              { key: "department", label: "All departments", getValue: (row) => row.department },
+            ]}
+            sorts={[
+              {
+                key: "invited-desc",
+                label: "Newest invited",
+                compare: (a, b) => cmpDate(b.invitedAt, a.invitedAt),
+              },
+              {
+                key: "name",
+                label: "Name A–Z",
+                compare: (a, b) => cmpStr(a.name, b.name),
+              },
+              {
+                key: "active-desc",
+                label: "Recently active",
+                compare: (a, b) =>
+                  cmpDate(b.lastActiveAt ?? "", a.lastActiveAt ?? ""),
+              },
+            ]}
+            defaultSortKey="invited-desc"
             columns={[
               {
                 key: "name",
@@ -106,6 +226,35 @@ export default function MembersPage() {
                   <StatusBadge label={row.status} variant={publishVariant(row.status)} />
                 ),
               },
+              {
+                key: "actions",
+                header: "",
+                cell: (row) => (
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openEdit(row)}
+                      className="text-xs font-medium text-green-700 hover:underline"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void toggleActive(row)}
+                      className="text-xs font-medium text-amber-700 hover:underline"
+                    >
+                      {row.status === "suspended" ? "Activate" : "Deactivate"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void remove(row)}
+                      className="text-xs font-medium text-red-600 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ),
+              },
             ]}
           />
         )}
@@ -115,22 +264,15 @@ export default function MembersPage() {
 
       <AddMemberModal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        member={editing}
+        error={error}
+        onClose={() => {
+          setModalOpen(false);
+          setEditing(null);
+          setError(null);
+        }}
         onSubmit={(form) => {
-          void (async () => {
-            await fetch("/api/cms/members", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                name: form.name,
-                email: form.email,
-                cmsRole: form.cmsRole,
-                department: form.department || "—",
-                password: form.password,
-              }),
-            });
-            await load();
-          })();
+          void saveMember(form);
         }}
       />
     </>

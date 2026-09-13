@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
-import { DataTable } from "@/components/admin/DataTable";
+import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import { DRIVER_APPLICATIONS, JOB_APPLICATIONS } from "@/lib/admin/data";
@@ -68,7 +68,6 @@ export default function ApplicationsPage() {
               </button>
             ))}
           </div>
-          <ToolbarButton>Filter</ToolbarButton>
           <ToolbarButton>Export</ToolbarButton>
         </>
       }
@@ -76,6 +75,43 @@ export default function ApplicationsPage() {
       {tab === "driver" ? (
         <DataTable<DriverApplication>
           data={DRIVER_APPLICATIONS}
+          searchPlaceholder="Search drivers…"
+          getSearchText={(row) =>
+            `${row.name} ${row.phone} ${row.city} ${row.vehicleType} ${row.experience}`
+          }
+          filters={[
+            {
+              key: "status",
+              label: "All statuses",
+              getValue: (row) => row.status,
+              options: [
+                { value: "pending", label: "Pending" },
+                { value: "reviewing", label: "Reviewing" },
+                { value: "accepted", label: "Accepted" },
+                { value: "rejected", label: "Rejected" },
+              ],
+            },
+            { key: "city", label: "All cities", getValue: (row) => row.city },
+            { key: "vehicle", label: "All vehicles", getValue: (row) => row.vehicleType },
+          ]}
+          sorts={[
+            {
+              key: "submitted-desc",
+              label: "Newest first",
+              compare: (a, b) => cmpDate(b.submittedAt, a.submittedAt),
+            },
+            {
+              key: "submitted-asc",
+              label: "Oldest first",
+              compare: (a, b) => cmpDate(a.submittedAt, b.submittedAt),
+            },
+            {
+              key: "name",
+              label: "Name A–Z",
+              compare: (a, b) => cmpStr(a.name, b.name),
+            },
+          ]}
+          defaultSortKey="submitted-desc"
           selectionActions={[
             { label: "Mark reviewing" },
             { label: "Accept" },
@@ -112,6 +148,40 @@ export default function ApplicationsPage() {
       ) : (
         <DataTable<JobApplication>
           data={JOB_APPLICATIONS}
+          searchPlaceholder="Search applicants…"
+          getSearchText={(row) => `${row.name} ${row.email} ${row.position}`}
+          filters={[
+            {
+              key: "status",
+              label: "All statuses",
+              getValue: (row) => row.status,
+              options: [
+                { value: "pending", label: "Pending" },
+                { value: "reviewing", label: "Reviewing" },
+                { value: "accepted", label: "Accepted" },
+                { value: "rejected", label: "Rejected" },
+              ],
+            },
+            { key: "position", label: "All positions", getValue: (row) => row.position },
+          ]}
+          sorts={[
+            {
+              key: "submitted-desc",
+              label: "Newest first",
+              compare: (a, b) => cmpDate(b.submittedAt, a.submittedAt),
+            },
+            {
+              key: "submitted-asc",
+              label: "Oldest first",
+              compare: (a, b) => cmpDate(a.submittedAt, b.submittedAt),
+            },
+            {
+              key: "name",
+              label: "Name A–Z",
+              compare: (a, b) => cmpStr(a.name, b.name),
+            },
+          ]}
+          defaultSortKey="submitted-desc"
           selectionActions={[
             { label: "Mark reviewing" },
             { label: "Schedule interview" },

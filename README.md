@@ -20,10 +20,12 @@ cd client && npm run dev
 cd server && npm run develop
 ```
 
-The client runs on `http://localhost:3000`, Strapi on `http://localhost:1337`.
-They are not wired together yet for every page — the CMS for News & Media,
-team, contact and members now runs inside the Next.js app (`/admin`) with a
-local JSON database at `client/data/cms-db.json`.
+The client runs on `http://localhost:3000`. Content (News & Media, team,
+testimonials, careers, investors) is fetched from production Strapi via
+`STRAPI_URL` / `STRAPI_API_TOKEN` in `client/.env` — locally and in production.
+
+Admin login + contact inquiries still use a small local JSON file
+(`client/data/cms-db.json`, gitignored) because those are not Strapi content types.
 
 ### CMS
 
@@ -35,9 +37,6 @@ Open `http://localhost:3000/admin/login`
 
 - **Email:** `admin@bikewo.com`
 - **Password:** `BikeWo@CMS2026`
-
-News & Media is seeded with the NSE press-release PDFs. Team and contact start
-empty; the public contact form writes into CMS Contact.
 
 ## What is built
 

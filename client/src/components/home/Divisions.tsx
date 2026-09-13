@@ -18,8 +18,8 @@ export function Divisions() {
       <Container className="relative">
         <SectionHeading
           eyebrow="Businesses"
-          title="Six businesses. One EMI platform."
-          lede="Each business runs its own P&L and its own standards — and hands off to the next without the customer noticing a seam."
+          title="One EMI operating model."
+          lede="Source, distribute, enable, charge, service and connect — each division hands off to the next without the customer noticing a seam."
           action={
             <Button href="/businesses" variant="ghost" withArrow>
               All businesses

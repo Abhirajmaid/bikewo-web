@@ -15,13 +15,11 @@ const entry = ROUTE_INDEX["/about/esg"];
 
 export const metadata: Metadata = {
   title: entry?.title ?? "ESG",
-  description:
-    "Planet-positive mobility through clean energy and responsible operations. 2027 aspirations: 100M+ kilometres electrified, 10,000+ partners, 2.5 Mn+ tonnes CO₂ avoided p.a.",
+  description: ABOUT_ESG.lede,
   alternates: { canonical: "/about/esg" },
   openGraph: {
     title: `${entry?.title ?? "ESG"} — ${SITE.name}`,
-    description:
-      "Planet-positive mobility through clean energy and responsible operations — every published figure is a 2027 aspiration we will report against.",
+    description: ABOUT_ESG.lede,
     url: "/about/esg",
     type: "website",
   },

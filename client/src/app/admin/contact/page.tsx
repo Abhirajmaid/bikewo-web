@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
-import { DataTable } from "@/components/admin/DataTable";
+import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
+import { RowActions } from "@/components/admin/RowActions";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import type { CmsContactInquiry } from "@/lib/cms/types";
@@ -67,6 +68,41 @@ export default function ContactAdminPage() {
       ) : (
         <DataTable<CmsContactInquiry>
           data={items}
+          searchPlaceholder="Search inquiries…"
+          getSearchText={(row) =>
+            `${row.name} ${row.email} ${row.company} ${row.topic} ${row.message}`
+          }
+          filters={[
+            {
+              key: "status",
+              label: "All statuses",
+              getValue: (row) => row.status,
+              options: [
+                { value: "new", label: "New" },
+                { value: "in_progress", label: "In progress" },
+                { value: "resolved", label: "Resolved" },
+              ],
+            },
+            { key: "topic", label: "All topics", getValue: (row) => row.topic },
+          ]}
+          sorts={[
+            {
+              key: "submitted-desc",
+              label: "Newest first",
+              compare: (a, b) => cmpDate(b.submittedAt, a.submittedAt),
+            },
+            {
+              key: "submitted-asc",
+              label: "Oldest first",
+              compare: (a, b) => cmpDate(a.submittedAt, b.submittedAt),
+            },
+            {
+              key: "name",
+              label: "Name A–Z",
+              compare: (a, b) => cmpStr(a.name, b.name),
+            },
+          ]}
+          defaultSortKey="submitted-desc"
           columns={[
             {
               key: "name",
@@ -103,29 +139,25 @@ export default function ContactAdminPage() {
               key: "actions",
               header: "",
               cell: (row) => (
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => void setStatus(row.id, "in_progress")}
-                    className="text-xs font-medium text-indigo-700 hover:underline"
-                  >
-                    In progress
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void setStatus(row.id, "resolved")}
-                    className="text-xs font-medium text-green-700 hover:underline"
-                  >
-                    Resolve
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void remove(row.id)}
-                    className="text-xs font-medium text-red-600 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </div>
+                <RowActions
+                  actions={[
+                    {
+                      label: "In progress",
+                      variant: "progress",
+                      onClick: () => void setStatus(row.id, "in_progress"),
+                    },
+                    {
+                      label: "Resolve",
+                      variant: "resolve",
+                      onClick: () => void setStatus(row.id, "resolved"),
+                    },
+                    {
+                      label: "Delete",
+                      variant: "delete",
+                      onClick: () => void remove(row.id),
+                    },
+                  ]}
+                />
               ),
             },
           ]}

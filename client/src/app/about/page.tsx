@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutTimeline } from "@/components/about/AboutTimeline";
+import { AboutPlatform } from "@/components/about/AboutPlatform";
+import { AboutMarket } from "@/components/about/AboutMarket";
+import { AboutSolution } from "@/components/about/AboutSolution";
+import { AboutStrategy } from "@/components/about/AboutStrategy";
 import { AboutImpact } from "@/components/about/AboutImpact";
 import { AboutBelief } from "@/components/about/AboutBelief";
 import { AboutMissionVision } from "@/components/about/AboutMissionVision";
@@ -17,7 +21,7 @@ export const metadata: Metadata = {
   title: entry?.title ?? "About BikeWo",
   description:
     entry?.blurb ??
-    "BikeWo is building Energy & Mobility Infrastructure (EMI) to power the future of EV logistics. Logistics is our core. EMI is our differentiator.",
+    "BikeWo builds Energy & Mobility Infrastructure (EMI) for electric last-mile logistics. Logistics is our core. EMI is our differentiator.",
   keywords: [...SITE.keywords],
   alternates: { canonical: "/about" },
   openGraph: {
@@ -38,6 +42,10 @@ export default function AboutPage() {
     <>
       <AboutHero />
       <AboutTimeline />
+      <AboutPlatform />
+      <AboutMarket />
+      <AboutSolution />
+      <AboutStrategy />
       <AboutImpact />
       <AboutBelief />
       <AboutMissionVision />

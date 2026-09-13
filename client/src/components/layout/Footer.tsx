@@ -40,12 +40,12 @@ export function Footer() {
           <div className="max-w-xl">
             <Logo variant="reversed" height={40} />
             <p className="mt-6 font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] font-semibold leading-[1.2] tracking-tight text-white">
-              We move goods. We move{" "}
-              <span className="text-green-400">India</span>.
+              Moving goods. Moving{" "}
+              <span className="text-green-400">India</span> forward.
             </p>
             <p className="mt-4 max-w-md leading-relaxed text-white/60">
-              Logistics is our core. EMI is our differentiator — we build the
-              energy and mobility infrastructure behind every movement.
+              Logistics is our core. EMI is our differentiator — an integrated
+              platform for electric mobility.
             </p>
           </div>
 
@@ -130,8 +130,8 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <Mark className="h-5 w-auto text-green-400" />
             <p>
-              © {new Date().getFullYear()} {SITE.legalName}. All rights
-              reserved.
+              © {new Date().getFullYear()} {SITE.legalName}. CIN: {SITE.cin}.
+              All rights reserved.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
