@@ -42,9 +42,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
           },
           endpoint: env('AWS_ENDPOINT'),
           region: env('AWS_REGION', 'auto'),
-          forcePathStyle: true,
+          // Railway Buckets require virtual-hosted-style URLs (no forcePathStyle).
           params: {
-            ACL: env('AWS_ACL', 'private'),
             signedUrlExpires: env.int('AWS_SIGNED_URL_EXPIRES', 60 * 60),
             Bucket: env('AWS_BUCKET'),
           },

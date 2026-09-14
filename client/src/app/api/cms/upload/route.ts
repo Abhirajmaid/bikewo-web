@@ -24,42 +24,57 @@ export async function POST(request: Request) {
     );
   }
 
-  const form = await request.formData();
-  const file = form.get("file");
-  const folder = String(form.get("folder") || "uploads").replace(/[^a-z0-9/_-]/gi, "");
+  try {
+    const form = await request.formData();
+    const file = form.get("file");
+    const folder = String(form.get("folder") || "uploads").replace(
+      /[^a-z0-9/_-]/gi,
+      "",
+    );
 
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "file is required" }, { status: 400 });
-  }
-  if (!ALLOWED.has(file.type)) {
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: "file is required" }, { status: 400 });
+    }
+    if (!ALLOWED.has(file.type)) {
+      return NextResponse.json(
+        { error: "Only images (jpeg/png/webp/gif) and PDFs are allowed." },
+        { status: 400 },
+      );
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: "File must be under 25MB." },
+        { status: 400 },
+      );
+    }
+
+    const ext = file.name.includes(".")
+      ? file.name.slice(file.name.lastIndexOf(".")).toLowerCase()
+      : file.type === "application/pdf"
+        ? ".pdf"
+        : ".bin";
+    const safeBase = file.name
+      .replace(ext, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 60);
+    const key = `${folder}/${Date.now()}-${safeBase || "file"}${ext}`;
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await uploadObject(key, buffer, file.type);
+
+    return NextResponse.json({
+      key,
+      url: mediaPath(key),
+      contentType: file.type,
+      name: file.name,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Upload failed.";
+    console.error("[cms/upload]", message);
     return NextResponse.json(
-      { error: "Only images (jpeg/png/webp/gif) and PDFs are allowed." },
-      { status: 400 },
+      { error: `Upload failed: ${message}` },
+      { status: 500 },
     );
   }
-  if (file.size > 25 * 1024 * 1024) {
-    return NextResponse.json({ error: "File must be under 25MB." }, { status: 400 });
-  }
-
-  const ext = file.name.includes(".")
-    ? file.name.slice(file.name.lastIndexOf(".")).toLowerCase()
-    : file.type === "application/pdf"
-      ? ".pdf"
-      : ".bin";
-  const safeBase = file.name
-    .replace(ext, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 60);
-  const key = `${folder}/${Date.now()}-${safeBase || "file"}${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await uploadObject(key, buffer, file.type);
-
-  return NextResponse.json({
-    key,
-    url: mediaPath(key),
-    contentType: file.type,
-    name: file.name,
-  });
 }

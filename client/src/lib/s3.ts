@@ -7,24 +7,32 @@ function required(name: string) {
   return value;
 }
 
+/** Prefer AWS_ACCESS_SECRET; accept AWS_SECRET_ACCESS_KEY (Railway/AWS default name). */
+function accessSecret() {
+  return process.env.AWS_ACCESS_SECRET || process.env.AWS_SECRET_ACCESS_KEY;
+}
+
 export function s3Configured() {
   return Boolean(
     process.env.AWS_ENDPOINT &&
       process.env.AWS_BUCKET &&
       process.env.AWS_ACCESS_KEY_ID &&
-      process.env.AWS_ACCESS_SECRET,
+      accessSecret(),
   );
 }
 
 export function getS3() {
+  const secret = accessSecret();
+  if (!secret) throw new Error("Missing env AWS_ACCESS_SECRET");
+
   return new S3Client({
     region: process.env.AWS_REGION || "auto",
     endpoint: required("AWS_ENDPOINT"),
     credentials: {
       accessKeyId: required("AWS_ACCESS_KEY_ID"),
-      secretAccessKey: required("AWS_ACCESS_SECRET"),
+      secretAccessKey: secret,
     },
-    forcePathStyle: true,
+    // Railway Buckets (R2) require virtual-hosted-style URLs — do not force path style.
   });
 }
 
