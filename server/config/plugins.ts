@@ -38,14 +38,14 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
         s3Options: {
           credentials: {
             accessKeyId: env('AWS_ACCESS_KEY_ID'),
-            secretAccessKey: env('AWS_ACCESS_SECRET'),
+            secretAccessKey: env('AWS_SECRET_ACCESS_KEY', env('AWS_ACCESS_SECRET')),
           },
-          endpoint: env('AWS_ENDPOINT'),
-          region: env('AWS_REGION', 'auto'),
+          endpoint: env('AWS_ENDPOINT_URL', env('AWS_ENDPOINT')),
+          region: env('AWS_DEFAULT_REGION', env('AWS_REGION', 'auto')),
           // Railway Buckets require virtual-hosted-style URLs (no forcePathStyle).
           params: {
             signedUrlExpires: env.int('AWS_SIGNED_URL_EXPIRES', 60 * 60),
-            Bucket: env('AWS_BUCKET'),
+            Bucket: env('AWS_S3_BUCKET_NAME', env('AWS_BUCKET')),
           },
         },
       },

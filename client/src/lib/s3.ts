@@ -1,43 +1,44 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-function required(name: string) {
-  const value = process.env[name];
-  if (!value) throw new Error(`Missing env ${name}`);
-  return value;
+/** Prefer Railway bucket names; keep short aliases for older local/Vercel envs. */
+function env(...names: string[]) {
+  for (const name of names) {
+    const value = process.env[name];
+    if (value) return value;
+  }
+  return undefined;
 }
 
-/** Prefer AWS_ACCESS_SECRET; accept AWS_SECRET_ACCESS_KEY (Railway/AWS default name). */
-function accessSecret() {
-  return process.env.AWS_ACCESS_SECRET || process.env.AWS_SECRET_ACCESS_KEY;
+function required(...names: string[]) {
+  const value = env(...names);
+  if (!value) throw new Error(`Missing env ${names.join(" or ")}`);
+  return value;
 }
 
 export function s3Configured() {
   return Boolean(
-    process.env.AWS_ENDPOINT &&
-      process.env.AWS_BUCKET &&
-      process.env.AWS_ACCESS_KEY_ID &&
-      accessSecret(),
+    env("AWS_ENDPOINT_URL", "AWS_ENDPOINT") &&
+      env("AWS_S3_BUCKET_NAME", "AWS_BUCKET") &&
+      env("AWS_ACCESS_KEY_ID") &&
+      env("AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_SECRET"),
   );
 }
 
 export function getS3() {
-  const secret = accessSecret();
-  if (!secret) throw new Error("Missing env AWS_ACCESS_SECRET");
-
   return new S3Client({
-    region: process.env.AWS_REGION || "auto",
-    endpoint: required("AWS_ENDPOINT"),
+    region: env("AWS_DEFAULT_REGION", "AWS_REGION") || "auto",
+    endpoint: required("AWS_ENDPOINT_URL", "AWS_ENDPOINT"),
     credentials: {
       accessKeyId: required("AWS_ACCESS_KEY_ID"),
-      secretAccessKey: secret,
+      secretAccessKey: required("AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_SECRET"),
     },
     // Railway Buckets (R2) require virtual-hosted-style URLs — do not force path style.
   });
 }
 
 export function bucketName() {
-  return required("AWS_BUCKET");
+  return required("AWS_S3_BUCKET_NAME", "AWS_BUCKET");
 }
 
 export async function uploadObject(key: string, body: Buffer, contentType: string) {
