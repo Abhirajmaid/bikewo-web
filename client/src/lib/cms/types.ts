@@ -60,8 +60,35 @@ export type CmsMember = {
   status: MemberStatus;
 };
 
-/** Local JSON store — members auth + contact inbox only. Content lives in Strapi. */
+/** Site-wide CMS settings (footer, contact, SEO, socials). */
+export type CmsSiteSettings = {
+  name: string;
+  legalName: string;
+  cin: string;
+  nseSymbol: string;
+  tagline: string;
+  corporateTagline: string;
+  campaignTagline: string;
+  description: string;
+  keywords: string[];
+  brandEmail: string;
+  accountsEmail: string;
+  phone: string;
+  phoneTel: string;
+  officeLabel: string;
+  officeCity: string;
+  officeAddress: string;
+  officeHours: string;
+  officeNote: string;
+  socialLinkedin: string;
+  socialYoutube: string;
+  socialInstagram: string;
+  socialX: string;
+};
+
+/** Local JSON store — auth, contact inbox, site settings. Content lives in Strapi. */
 export type CmsDatabase = {
   contact: CmsContactInquiry[];
   members: CmsMember[];
+  settings?: CmsSiteSettings;
 };

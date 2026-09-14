@@ -4,7 +4,7 @@ import type { CmsDatabase } from "./types";
 const ADMIN_PASSWORD_HASH =
   "47f95977de91d99bb5ab6f2c3ead55c2:1af84ee643ffabb04ab0e960667444b1001f70c9fab8d34f1f9e370d4d5b18e9c86449cd0af9d070943f56d3052ae6a84a40c3bcdb1f907f6cae899dcd5ced5d";
 
-/** Local file DB only for CMS login + contact inbox. Content comes from Strapi. */
+/** Local file DB for CMS login, contact inbox, and site settings. Content comes from Strapi. */
 export function createSeedDatabase(): CmsDatabase {
   return {
     contact: [],

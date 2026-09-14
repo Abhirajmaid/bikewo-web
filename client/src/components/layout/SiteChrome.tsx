@@ -1,10 +1,17 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
 
-export function SiteChrome({ children }: { children: React.ReactNode }) {
+export function SiteChrome({
+  children,
+  header,
+  footer,
+}: {
+  children: ReactNode;
+  header: ReactNode;
+  footer: ReactNode;
+}) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isComingSoon = pathname === "/coming-soon";
@@ -15,9 +22,9 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      {header}
       <div id="main">{children}</div>
-      <Footer />
+      {footer}
     </>
   );
 }

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type ActionVariant = "preview" | "edit" | "delete" | "progress" | "resolve";
+type ActionVariant = "preview" | "edit" | "delete" | "progress" | "resolve" | "suspend";
 
 type RowAction = {
   label: string;
@@ -14,6 +14,7 @@ const tone: Record<ActionVariant, string> = {
   delete: "text-red-600 hover:bg-red-50",
   progress: "text-indigo-700 hover:bg-indigo-50",
   resolve: "text-green-700 hover:bg-green-50",
+  suspend: "text-amber-700 hover:bg-amber-50",
 };
 
 const icons: Record<ActionVariant, ReactNode> = {
@@ -46,6 +47,12 @@ const icons: Record<ActionVariant, ReactNode> = {
   resolve: (
     <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
       <path d="M20 6 9 17l-5-5" />
+    </svg>
+  ),
+  suspend: (
+    <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9 12h6" />
     </svg>
   ),
 };

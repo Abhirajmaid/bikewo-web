@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
@@ -18,6 +19,7 @@ const emptyForm = {
 };
 
 export default function TestimonialsPage() {
+  const confirm = useConfirm();
   const [items, setItems] = useState<TestimonialDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -76,7 +78,9 @@ export default function TestimonialsPage() {
     const data = (await res.json()) as { error?: string };
     setSaving(false);
     if (!res.ok) {
-      setError(data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.");
+      setError(
+        data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.",
+      );
       return;
     }
     setModalOpen(false);
@@ -84,8 +88,16 @@ export default function TestimonialsPage() {
   }
 
   async function remove(item: TestimonialDoc) {
-    if (!confirm("Delete this testimonial?")) return;
-    await fetch(`/api/cms/testimonials/${item.documentId}`, { method: "DELETE" });
+    if (
+      !(await confirm({
+        title: "Delete testimonial",
+        message: "Delete this testimonial? This action cannot be undone.",
+      }))
+    )
+      return;
+    await fetch(`/api/cms/testimonials/${item.documentId}`, {
+      method: "DELETE",
+    });
     await load();
   }
 
@@ -98,7 +110,10 @@ export default function TestimonialsPage() {
         onAdd={openCreate}
         stats={[
           { label: "Total stories", value: items.length },
-          { label: "With photo", value: items.filter((t) => t.avatarUrl).length },
+          {
+            label: "With photo",
+            value: items.filter((t) => t.avatarUrl).length,
+          },
           { label: "On homepage", value: items.length },
         ]}
         toolbarExtra={
@@ -168,7 +183,10 @@ export default function TestimonialsPage() {
                 key: "status",
                 header: "Status",
                 cell: (row) => (
-                  <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                  <StatusBadge
+                    label={row.status}
+                    variant={publishVariant(row.status)}
+                  />
                 ),
               },
               {
@@ -177,8 +195,16 @@ export default function TestimonialsPage() {
                 cell: (row) => (
                   <RowActions
                     actions={[
-                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
-                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                      {
+                        label: "Edit",
+                        variant: "edit",
+                        onClick: () => openEdit(row),
+                      },
+                      {
+                        label: "Delete",
+                        variant: "delete",
+                        onClick: () => void remove(row),
+                      },
                     ]}
                   />
                 ),
@@ -196,27 +222,39 @@ export default function TestimonialsPage() {
             </h2>
             <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Quote</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Quote
+                </span>
                 <textarea
                   value={form.quote}
-                  onChange={(e) => setForm((f) => ({ ...f, quote: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, quote: e.target.value }))
+                  }
                   rows={4}
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Name</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Name
+                </span>
                 <input
                   value={form.name}
-                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, name: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Role / attribution</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Role / attribution
+                </span>
                 <input
                   value={form.role}
-                  onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, role: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
@@ -230,12 +268,17 @@ export default function TestimonialsPage() {
                 hint="Upload to the Railway bucket, or use a site asset path."
               />
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Sort order</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Sort order
+                </span>
                 <input
                   type="number"
                   value={form.sortOrder}
                   onChange={(e) =>
-                    setForm((f) => ({ ...f, sortOrder: Number(e.target.value) || 0 }))
+                    setForm((f) => ({
+                      ...f,
+                      sortOrder: Number(e.target.value) || 0,
+                    }))
                   }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />

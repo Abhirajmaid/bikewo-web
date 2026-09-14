@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
@@ -21,6 +22,7 @@ const emptyForm = {
 };
 
 export default function CareersPage() {
+  const confirm = useConfirm();
   const [items, setItems] = useState<CareerDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -69,7 +71,9 @@ export default function CareersPage() {
     setSaving(true);
     setError(null);
     const res = await fetch(
-      editing?.documentId ? `/api/cms/careers/${editing.documentId}` : "/api/cms/careers",
+      editing?.documentId
+        ? `/api/cms/careers/${editing.documentId}`
+        : "/api/cms/careers",
       {
         method: editing?.documentId ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,7 +83,9 @@ export default function CareersPage() {
     const data = (await res.json()) as { error?: string };
     setSaving(false);
     if (!res.ok) {
-      setError(data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.");
+      setError(
+        data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.",
+      );
       return;
     }
     setModalOpen(false);
@@ -87,7 +93,13 @@ export default function CareersPage() {
   }
 
   async function remove(item: CareerDoc) {
-    if (!confirm("Delete this opening?")) return;
+    if (
+      !(await confirm({
+        title: "Delete opening",
+        message: "Delete this opening? This action cannot be undone.",
+      }))
+    )
+      return;
     await fetch(`/api/cms/careers/${item.documentId}`, { method: "DELETE" });
     await load();
   }
@@ -105,7 +117,10 @@ export default function CareersPage() {
           { label: "Total openings", value: items.length },
           { label: "Open positions", value: open },
           { label: "Closed", value: items.length - open },
-          { label: "Locations", value: new Set(items.map((c) => c.location)).size },
+          {
+            label: "Locations",
+            value: new Set(items.map((c) => c.location)).size,
+          },
         ]}
         toolbarExtra={
           <>
@@ -143,7 +158,11 @@ export default function CareersPage() {
                   { value: "Contract", label: "Contract" },
                 ],
               },
-              { key: "department", label: "All departments", getValue: (row) => row.department },
+              {
+                key: "department",
+                label: "All departments",
+                getValue: (row) => row.department,
+              },
             ]}
             sorts={[
               {
@@ -174,7 +193,11 @@ export default function CareersPage() {
                   </div>
                 ),
               },
-              { key: "location", header: "Location", cell: (row) => row.location },
+              {
+                key: "location",
+                header: "Location",
+                cell: (row) => row.location,
+              },
               { key: "type", header: "Type", cell: (row) => row.type },
               {
                 key: "posted",
@@ -190,7 +213,10 @@ export default function CareersPage() {
                 key: "status",
                 header: "Status",
                 cell: (row) => (
-                  <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                  <StatusBadge
+                    label={row.status}
+                    variant={publishVariant(row.status)}
+                  />
                 ),
               },
               {
@@ -199,8 +225,16 @@ export default function CareersPage() {
                 cell: (row) => (
                   <RowActions
                     actions={[
-                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
-                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                      {
+                        label: "Edit",
+                        variant: "edit",
+                        onClick: () => openEdit(row),
+                      },
+                      {
+                        label: "Delete",
+                        variant: "delete",
+                        onClick: () => void remove(row),
+                      },
                     ]}
                   />
                 ),
@@ -218,31 +252,45 @@ export default function CareersPage() {
             </h2>
             <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Title</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Title
+                </span>
                 <input
                   value={form.title}
-                  onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, title: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Location</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Location
+                </span>
                 <input
                   value={form.location}
-                  onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, location: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Department</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Department
+                </span>
                 <input
                   value={form.department}
-                  onChange={(e) => setForm((f) => ({ ...f, department: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, department: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Type</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Type
+                </span>
                 <select
                   value={form.type}
                   onChange={(e) =>
@@ -259,20 +307,29 @@ export default function CareersPage() {
                 </select>
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Posted</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Posted
+                </span>
                 <input
                   type="date"
                   value={form.postedAt}
-                  onChange={(e) => setForm((f) => ({ ...f, postedAt: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, postedAt: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Status</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Status
+                </span>
                 <select
                   value={form.status}
                   onChange={(e) =>
-                    setForm((f) => ({ ...f, status: e.target.value as JobStatus }))
+                    setForm((f) => ({
+                      ...f,
+                      status: e.target.value as JobStatus,
+                    }))
                   }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm"
                 >

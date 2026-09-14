@@ -100,7 +100,8 @@ export function DataTable<T extends { id: string }>({
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * pageSize;
   const rows = filtered.slice(start, start + pageSize);
-  const showControls = Boolean(getSearchText) || filters.length > 0 || sorts.length > 0;
+  const showControls =
+    Boolean(getSearchText) || filters.length > 0 || sorts.length > 0;
 
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
 
@@ -154,7 +155,10 @@ export function DataTable<T extends { id: string }>({
               key={filter.key}
               value={filterValues[filter.key] ?? ""}
               onChange={(e) =>
-                setFilterValues((prev) => ({ ...prev, [filter.key]: e.target.value }))
+                setFilterValues((prev) => ({
+                  ...prev,
+                  [filter.key]: e.target.value,
+                }))
               }
               className={selectClass}
               style={selectChevronStyle}
@@ -238,7 +242,10 @@ export function DataTable<T extends { id: string }>({
                       />
                     </td>
                     {columns.map((col) => (
-                      <td key={col.key} className={cn("px-4 py-3 text-slate", col.className)}>
+                      <td
+                        key={col.key}
+                        className={cn("px-4 py-3 text-slate", col.className)}
+                      >
                         {col.cell(row)}
                       </td>
                     ))}

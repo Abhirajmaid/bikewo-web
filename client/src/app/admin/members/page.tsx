@@ -1,17 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AddMemberModal, type MemberForm } from "@/components/admin/AddMemberModal";
+import {
+  AddMemberModal,
+  type MemberForm,
+} from "@/components/admin/AddMemberModal";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { PermissionsMatrix } from "@/components/admin/PermissionsMatrix";
 import { RoleBadge } from "@/components/admin/RoleBadge";
+import { RowActions } from "@/components/admin/RowActions";
 import { StatCards } from "@/components/admin/StatCards";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { ToolbarButton } from "@/components/admin/Toolbar";
 import { CMS_ROLES, type InternalMember } from "@/lib/admin/rbac";
 
 export default function MembersPage() {
+  const confirm = useConfirm();
   const [members, setMembers] = useState<InternalMember[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<InternalMember | null>(null);
@@ -60,9 +66,7 @@ export default function MembersPage() {
         method: editing ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          editing
-            ? payload
-            : { ...payload, password: form.password },
+          editing ? payload : { ...payload, password: form.password },
         ),
       },
     );
@@ -77,9 +81,17 @@ export default function MembersPage() {
   }
 
   async function remove(member: InternalMember) {
-    if (!confirm(`Delete ${member.name}? This cannot be undone.`)) return;
+    if (
+      !(await confirm({
+        title: "Delete member",
+        message: `Delete ${member.name}? This cannot be undone.`,
+      }))
+    )
+      return;
     setError(null);
-    const res = await fetch(`/api/cms/members/${member.id}`, { method: "DELETE" });
+    const res = await fetch(`/api/cms/members/${member.id}`, {
+      method: "DELETE",
+    });
     const data = (await res.json().catch(() => ({}))) as { error?: string };
     if (!res.ok) {
       setError(data.error || "Delete failed.");
@@ -91,7 +103,15 @@ export default function MembersPage() {
   async function toggleActive(member: InternalMember) {
     const nextStatus = member.status === "suspended" ? "active" : "suspended";
     const label = nextStatus === "suspended" ? "Deactivate" : "Reactivate";
-    if (!confirm(`${label} ${member.name}?`)) return;
+    if (
+      !(await confirm({
+        title: `${label} member`,
+        message: `${label} ${member.name}?`,
+        confirmLabel: label,
+        variant: "default",
+      }))
+    )
+      return;
     setError(null);
     const res = await fetch(`/api/cms/members/${member.id}`, {
       method: "PATCH",
@@ -150,7 +170,9 @@ export default function MembersPage() {
           <DataTable<InternalMember>
             data={members}
             searchPlaceholder="Search members…"
-            getSearchText={(row) => `${row.name} ${row.email} ${row.department}`}
+            getSearchText={(row) =>
+              `${row.name} ${row.email} ${row.department}`
+            }
             filters={[
               {
                 key: "status",
@@ -166,11 +188,18 @@ export default function MembersPage() {
                 key: "role",
                 label: "All roles",
                 getValue: (row) => row.cmsRole,
-                options: (Object.keys(CMS_ROLES) as Array<keyof typeof CMS_ROLES>).map(
-                  (role) => ({ value: role, label: CMS_ROLES[role].label }),
-                ),
+                options: (
+                  Object.keys(CMS_ROLES) as Array<keyof typeof CMS_ROLES>
+                ).map((role) => ({
+                  value: role,
+                  label: CMS_ROLES[role].label,
+                })),
               },
-              { key: "department", label: "All departments", getValue: (row) => row.department },
+              {
+                key: "department",
+                label: "All departments",
+                getValue: (row) => row.department,
+              },
             ]}
             sorts={[
               {
@@ -207,7 +236,11 @@ export default function MembersPage() {
                 header: "CMS role",
                 cell: (row) => <RoleBadge role={row.cmsRole} />,
               },
-              { key: "department", header: "Department", cell: (row) => row.department },
+              {
+                key: "department",
+                header: "Department",
+                cell: (row) => row.department,
+              },
               {
                 key: "invited",
                 header: "Invited",
@@ -223,36 +256,39 @@ export default function MembersPage() {
                 key: "status",
                 header: "Status",
                 cell: (row) => (
-                  <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                  <StatusBadge
+                    label={row.status}
+                    variant={publishVariant(row.status)}
+                  />
                 ),
               },
               {
                 key: "actions",
                 header: "",
                 cell: (row) => (
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(row)}
-                      className="text-xs font-medium text-green-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void toggleActive(row)}
-                      className="text-xs font-medium text-amber-700 hover:underline"
-                    >
-                      {row.status === "suspended" ? "Activate" : "Deactivate"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(row)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <RowActions
+                    actions={[
+                      {
+                        label: "Edit",
+                        variant: "edit",
+                        onClick: () => openEdit(row),
+                      },
+                      {
+                        label:
+                          row.status === "suspended"
+                            ? "Activate"
+                            : "Deactivate",
+                        variant:
+                          row.status === "suspended" ? "resolve" : "suspend",
+                        onClick: () => void toggleActive(row),
+                      },
+                      {
+                        label: "Delete",
+                        variant: "delete",
+                        onClick: () => void remove(row),
+                      },
+                    ]}
+                  />
                 ),
               },
             ]}

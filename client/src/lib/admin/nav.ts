@@ -33,6 +33,9 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   },
   {
     heading: "Settings",
-    items: [{ label: "Members", href: "/admin/members" }],
+    items: [
+      { label: "Site settings", href: "/admin/settings" },
+      { label: "Members", href: "/admin/members" },
+    ],
   },
 ];

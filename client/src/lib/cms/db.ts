@@ -1,7 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import path from "path";
 import { createSeedDatabase } from "./seed";
-import type { CmsContactInquiry, CmsDatabase, CmsMember } from "./types";
+import { mergeSiteSettings } from "./settings";
+import type { CmsContactInquiry, CmsDatabase, CmsMember, CmsSiteSettings } from "./types";
 
 // ponytail: /tmp on Vercel (read-only FS); ephemeral across instances — use Postgres/Blob if CMS must persist
 const DATA_DIR =
@@ -24,6 +25,7 @@ export function getDb(): CmsDatabase {
   return {
     contact: Array.isArray(raw.contact) ? raw.contact : [],
     members: Array.isArray(raw.members) ? raw.members : createSeedDatabase().members,
+    settings: raw.settings,
   };
 }
 
@@ -31,7 +33,11 @@ export function saveDb(db: CmsDatabase) {
   ensureDbFile();
   writeFileSync(
     DB_PATH,
-    JSON.stringify({ contact: db.contact, members: db.members }, null, 2),
+    JSON.stringify(
+      { contact: db.contact, members: db.members, settings: db.settings },
+      null,
+      2,
+    ),
     "utf8",
   );
 }
@@ -110,4 +116,21 @@ export function deleteMember(id: string) {
   if (db.members.length === before) return false;
   saveDb(db);
   return true;
+}
+
+/* -------------------------------------------------------------- Settings */
+
+export function getSiteSettings(): CmsSiteSettings {
+  return mergeSiteSettings(getDb().settings);
+}
+
+export function updateSiteSettings(patch: Partial<CmsSiteSettings>): CmsSiteSettings {
+  const db = getDb();
+  const cleaned = Object.fromEntries(
+    Object.entries(patch).filter(([, v]) => v !== undefined),
+  ) as Partial<CmsSiteSettings>;
+  const next = mergeSiteSettings({ ...db.settings, ...cleaned });
+  db.settings = next;
+  saveDb(db);
+  return next;
 }

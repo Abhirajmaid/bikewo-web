@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { RowActions } from "@/components/admin/RowActions";
@@ -24,6 +25,7 @@ const emptyForm = {
 };
 
 export default function InvestorsAdminPage() {
+  const confirm = useConfirm();
   const [items, setItems] = useState<InvestorDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -93,7 +95,10 @@ export default function InvestorsAdminPage() {
     const data = (await res.json()) as { error?: string };
     setSaving(false);
     if (!res.ok) {
-      setError(data.error || "Save failed. Is Strapi running with STRAPI_URL / STRAPI_API_TOKEN?");
+      setError(
+        data.error ||
+          "Save failed. Is Strapi running with STRAPI_URL / STRAPI_API_TOKEN?",
+      );
       return;
     }
     setModalOpen(false);
@@ -102,7 +107,13 @@ export default function InvestorsAdminPage() {
 
   async function remove(item: InvestorDoc) {
     if (!item.documentId) return;
-    if (!confirm("Delete this investor document?")) return;
+    if (
+      !(await confirm({
+        title: "Delete document",
+        message: "Delete this investor document? This action cannot be undone.",
+      }))
+    )
+      return;
     await fetch(`/api/cms/investors/${item.documentId}`, { method: "DELETE" });
     await load();
   }
@@ -135,16 +146,20 @@ export default function InvestorsAdminPage() {
           <DataTable<InvestorDoc>
             data={items}
             searchPlaceholder="Search documents…"
-            getSearchText={(row) => `${row.title} ${row.excerpt} ${row.typeLabel}`}
+            getSearchText={(row) =>
+              `${row.title} ${row.excerpt} ${row.typeLabel}`
+            }
             filters={[
               {
                 key: "type",
                 label: "All types",
                 getValue: (row) => row.type,
-                options: INVESTOR_TYPES.filter((t) => t.slug !== "all").map((t) => ({
-                  value: t.slug,
-                  label: t.label,
-                })),
+                options: INVESTOR_TYPES.filter((t) => t.slug !== "all").map(
+                  (t) => ({
+                    value: t.slug,
+                    label: t.label,
+                  }),
+                ),
               },
               {
                 key: "featured",
@@ -217,8 +232,16 @@ export default function InvestorsAdminPage() {
                 cell: (row) => (
                   <RowActions
                     actions={[
-                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
-                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                      {
+                        label: "Edit",
+                        variant: "edit",
+                        onClick: () => openEdit(row),
+                      },
+                      {
+                        label: "Delete",
+                        variant: "delete",
+                        onClick: () => void remove(row),
+                      },
                     ]}
                   />
                 ),
@@ -236,28 +259,41 @@ export default function InvestorsAdminPage() {
             </h2>
             <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Title</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Title
+                </span>
                 <input
                   value={form.title}
-                  onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, title: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Excerpt</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Excerpt
+                </span>
                 <textarea
                   value={form.excerpt}
-                  onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, excerpt: e.target.value }))
+                  }
                   rows={3}
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Type</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Type
+                </span>
                 <select
                   value={form.docType}
                   onChange={(e) =>
-                    setForm((f) => ({ ...f, docType: e.target.value as InvestorType }))
+                    setForm((f) => ({
+                      ...f,
+                      docType: e.target.value as InvestorType,
+                    }))
                   }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm"
                 >
@@ -269,11 +305,15 @@ export default function InvestorsAdminPage() {
                 </select>
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Date</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Date
+                </span>
                 <input
                   type="date"
                   value={form.date}
-                  onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, date: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
@@ -290,7 +330,9 @@ export default function InvestorsAdminPage() {
                 <input
                   type="checkbox"
                   checked={form.featured}
-                  onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, featured: e.target.checked }))
+                  }
                 />
                 Featured on investors page
               </label>

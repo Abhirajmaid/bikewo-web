@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Poppins, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE, SOCIALS } from "@/lib/site";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 
 /* Display face. Poppins carries a Devanagari cut — never substitute a
@@ -155,7 +157,9 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome header={<Header />} footer={<Footer />}>
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );

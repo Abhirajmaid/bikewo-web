@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
@@ -23,6 +24,7 @@ const emptyForm = {
 };
 
 export default function NewsMediaAdminPage() {
+  const confirm = useConfirm();
   const [items, setItems] = useState<NewsMediaDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -88,7 +90,9 @@ export default function NewsMediaAdminPage() {
       image: form.image.trim() || null,
     };
     const res = await fetch(
-      editing?.documentId ? `/api/cms/news/${editing.documentId}` : "/api/cms/news",
+      editing?.documentId
+        ? `/api/cms/news/${editing.documentId}`
+        : "/api/cms/news",
       {
         method: editing?.documentId ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -98,7 +102,9 @@ export default function NewsMediaAdminPage() {
     const data = (await res.json()) as { error?: string };
     setSaving(false);
     if (!res.ok) {
-      setError(data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.");
+      setError(
+        data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.",
+      );
       return;
     }
     setModalOpen(false);
@@ -106,7 +112,13 @@ export default function NewsMediaAdminPage() {
   }
 
   async function remove(item: NewsMediaDoc) {
-    if (!confirm("Delete this News & Media item?")) return;
+    if (
+      !(await confirm({
+        title: "Delete item",
+        message: "Delete this News & Media item? This action cannot be undone.",
+      }))
+    )
+      return;
     await fetch(`/api/cms/news/${item.documentId}`, { method: "DELETE" });
     await load();
   }
@@ -136,7 +148,10 @@ export default function NewsMediaAdminPage() {
           { label: "Total items", value: items.length },
           { label: "Published", value: published },
           { label: "Drafts", value: drafts },
-          { label: "With custom image", value: items.filter((i) => i.image).length },
+          {
+            label: "With custom image",
+            value: items.filter((i) => i.image).length,
+          },
         ]}
         toolbarExtra={
           <>
@@ -155,7 +170,9 @@ export default function NewsMediaAdminPage() {
           <DataTable<NewsMediaDoc>
             data={items}
             searchPlaceholder="Search news…"
-            getSearchText={(row) => `${row.title} ${row.excerpt} ${row.typeLabel} ${row.href}`}
+            getSearchText={(row) =>
+              `${row.title} ${row.excerpt} ${row.typeLabel} ${row.href}`
+            }
             filters={[
               {
                 key: "status",
@@ -176,7 +193,11 @@ export default function NewsMediaAdminPage() {
                   { value: "no", label: "Not featured" },
                 ],
               },
-              { key: "type", label: "All types", getValue: (row) => row.typeLabel },
+              {
+                key: "type",
+                label: "All types",
+                getValue: (row) => row.typeLabel,
+              },
             ]}
             sorts={[
               {
@@ -203,7 +224,9 @@ export default function NewsMediaAdminPage() {
                 cell: (row) => (
                   <div className="max-w-md">
                     <p className="font-medium text-ink">{row.title}</p>
-                    <p className="mt-0.5 truncate text-xs text-slate-400">{row.href}</p>
+                    <p className="mt-0.5 truncate text-xs text-slate-400">
+                      {row.href}
+                    </p>
                   </div>
                 ),
               },
@@ -216,7 +239,10 @@ export default function NewsMediaAdminPage() {
                 key: "status",
                 header: "Status",
                 cell: (row) => (
-                  <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                  <StatusBadge
+                    label={row.status}
+                    variant={publishVariant(row.status)}
+                  />
                 ),
               },
               {
@@ -225,9 +251,21 @@ export default function NewsMediaAdminPage() {
                 cell: (row) => (
                   <RowActions
                     actions={[
-                      { label: "Preview", variant: "preview", onClick: () => setPreviewing(row) },
-                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
-                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                      {
+                        label: "Preview",
+                        variant: "preview",
+                        onClick: () => setPreviewing(row),
+                      },
+                      {
+                        label: "Edit",
+                        variant: "edit",
+                        onClick: () => openEdit(row),
+                      },
+                      {
+                        label: "Delete",
+                        variant: "delete",
+                        onClick: () => void remove(row),
+                      },
                     ]}
                   />
                 ),
@@ -247,7 +285,9 @@ export default function NewsMediaAdminPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-display text-lg font-semibold text-ink">Card preview</h2>
+              <h2 className="font-display text-lg font-semibold text-ink">
+                Card preview
+              </h2>
               <button
                 type="button"
                 onClick={() => setPreviewing(null)}
@@ -283,7 +323,9 @@ export default function NewsMediaAdminPage() {
                   <Field label="Title">
                     <input
                       value={form.title}
-                      onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, title: e.target.value }))
+                      }
                       className={inputClass}
                       required
                     />
@@ -291,7 +333,9 @@ export default function NewsMediaAdminPage() {
                   <Field label="Excerpt">
                     <textarea
                       value={form.excerpt}
-                      onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, excerpt: e.target.value }))
+                      }
                       className={inputClass}
                       rows={3}
                     />
@@ -300,7 +344,9 @@ export default function NewsMediaAdminPage() {
                     <Field label="Type label">
                       <input
                         value={form.typeLabel}
-                        onChange={(e) => setForm((f) => ({ ...f, typeLabel: e.target.value }))}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, typeLabel: e.target.value }))
+                        }
                         className={inputClass}
                       />
                     </Field>
@@ -308,7 +354,9 @@ export default function NewsMediaAdminPage() {
                       <input
                         type="date"
                         value={form.date}
-                        onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, date: e.target.value }))
+                        }
                         className={inputClass}
                       />
                     </Field>
@@ -336,7 +384,10 @@ export default function NewsMediaAdminPage() {
                       <select
                         value={form.status}
                         onChange={(e) =>
-                          setForm((f) => ({ ...f, status: e.target.value as PublishStatus }))
+                          setForm((f) => ({
+                            ...f,
+                            status: e.target.value as PublishStatus,
+                          }))
                         }
                         className={inputClass}
                       >
@@ -349,12 +400,16 @@ export default function NewsMediaAdminPage() {
                       <input
                         type="checkbox"
                         checked={form.featured}
-                        onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, featured: e.target.checked }))
+                        }
                       />
                       Featured
                     </label>
                   </div>
-                  {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                  {error ? (
+                    <p className="text-sm text-red-600">{error}</p>
+                  ) : null}
                 </div>
 
                 <div>
@@ -363,7 +418,8 @@ export default function NewsMediaAdminPage() {
                   </p>
                   <NewsMediaCard item={previewItem} />
                   <p className="mt-3 text-xs text-slate-400">
-                    Blank image uses the same default indigo PDF preview as Investors cards.
+                    Blank image uses the same default indigo PDF preview as
+                    Investors cards.
                   </p>
                 </div>
               </div>
@@ -393,7 +449,13 @@ export default function NewsMediaAdminPage() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-sm font-medium text-ink">{label}</span>

@@ -1,11 +1,13 @@
 import Link from "next/link";
-import { NAV, SITE, SOCIALS, type NavNode } from "@/lib/site";
+import { NAV, type NavNode } from "@/lib/site";
 import { Logo } from "@/components/brand/Logo";
 import { Mark } from "@/components/brand/Mark";
 import { ArrowUpRightIcon } from "@/components/brand/Icons";
 import { Container } from "@/components/layout/Container";
 import { STATS_FOOTNOTE } from "@/lib/content";
 import { INVESTOR_TOPICS } from "@/lib/investors";
+import { getSiteSettings } from "@/lib/cms/db";
+import { settingsSocials } from "@/lib/cms/settings";
 
 /** Titles removed from the header stay out of the footer too. */
 const HIDDEN = new Set(["Subsidiaries", "Shram Sainik", "Sustainability"]);
@@ -24,6 +26,9 @@ const FOOTER_NAV: NavNode[] = NAV.map((n) =>
 
 /** 5.13 — Premium footer. Header sitemap plus Careers / Contact. */
 export function Footer() {
+  const site = getSiteSettings();
+  const socials = settingsSocials(site);
+
   const columns = FOOTER_NAV.filter((n) => n.children?.length && !HIDDEN.has(n.title));
   const singles = FOOTER_NAV.filter((n) => !n.children?.length && !HIDDEN.has(n.title));
 
@@ -50,7 +55,7 @@ export function Footer() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            {SOCIALS.map((s) => (
+            {socials.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
@@ -130,7 +135,7 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <Mark className="h-5 w-auto text-green-400" />
             <p>
-              © {new Date().getFullYear()} {SITE.legalName}. CIN: {SITE.cin}.
+              © {new Date().getFullYear()} {site.legalName}. CIN: {site.cin}.
               All rights reserved.
             </p>
           </div>
@@ -145,10 +150,10 @@ export function Footer() {
               Terms
             </Link>
             <a
-              href={`mailto:${SITE.brandEmail}`}
+              href={`mailto:${site.brandEmail}`}
               className="transition-colors hover:text-white"
             >
-              {SITE.brandEmail}
+              {site.brandEmail}
             </a>
           </div>
         </div>

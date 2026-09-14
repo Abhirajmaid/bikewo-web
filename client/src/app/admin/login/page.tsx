@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
@@ -17,8 +16,9 @@ function LoginForm() {
         ? rawNext
         : "/admin";
 
-  const [email, setEmail] = useState("admin@bikewo.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -93,14 +93,56 @@ function LoginForm() {
 
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-ink">Password</span>
-            <input
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-mist bg-white px-4 py-3 text-sm text-ink outline-none transition-[border-color,box-shadow] focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-mist bg-white py-3 pl-4 pr-11 text-sm text-ink outline-none transition-[border-color,box-shadow] focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 transition-colors hover:text-ink"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-5"
+                    aria-hidden
+                  >
+                    <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .698 10.747 10.747 0 0 1-1.444 2.49" />
+                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                    <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.698 10.75 10.75 0 0 1 4.446-4.86" />
+                    <path d="m2 2 20 20" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-5"
+                    aria-hidden
+                  >
+                    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </label>
 
           {error ? (
@@ -116,23 +158,7 @@ function LoginForm() {
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
-
-          <p className="text-center text-xs text-slate-400">
-            Default: admin@bikewo.com / BikeWo@CMS2026
-          </p>
         </form>
-
-        <div className="relative h-28 border-t border-mist/60">
-          <Image
-            src="/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png"
-            alt=""
-            fill
-            className="object-cover object-center opacity-90"
-            sizes="28rem"
-            priority
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-indigo-950/50 to-transparent" />
-        </div>
       </div>
     </div>
   );

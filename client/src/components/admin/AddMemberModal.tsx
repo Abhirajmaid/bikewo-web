@@ -46,11 +46,13 @@ export function AddMemberModal({
   const editing = Boolean(member);
   const [form, setForm] = useState<MemberForm>(emptyForm);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const displayError = externalError || error;
 
   useEffect(() => {
     if (!open) return;
     setError(null);
+    setShowPassword(false);
     if (member) {
       setForm({
         name: member.name,
@@ -108,7 +110,10 @@ export function AddMemberModal({
         className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-xl border border-mist/60 bg-white shadow-deep"
       >
         <div className="shrink-0 border-b border-mist/60 px-6 py-4">
-          <h2 id="add-member-title" className="font-display text-lg font-semibold text-ink">
+          <h2
+            id="add-member-title"
+            className="font-display text-lg font-semibold text-ink"
+          >
             {editing ? "Edit member" : "Invite internal member"}
           </h2>
           <p className="mt-0.5 text-sm text-slate-400">
@@ -124,7 +129,9 @@ export function AddMemberModal({
               <input
                 required
                 value={form.name}
-                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, name: e.target.value }))
+                }
                 placeholder="e.g. Priya Sharma"
                 className={inputClass}
               />
@@ -135,22 +142,75 @@ export function AddMemberModal({
                 required
                 type="email"
                 value={form.email}
-                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, email: e.target.value }))
+                }
                 placeholder="name@bikewo.com"
                 className={inputClass}
               />
             </Field>
 
-            <Field label={editing ? "New password" : "Temporary password"} required={!editing}>
-              <input
-                required={!editing}
-                type="password"
-                value={form.password}
-                onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                placeholder={editing ? "Leave blank to keep current" : "Min. 8 characters"}
-                minLength={editing ? undefined : 8}
-                className={inputClass}
-              />
+            <Field
+              label={editing ? "New password" : "Temporary password"}
+              required={!editing}
+            >
+              <div className="relative">
+                <input
+                  required={!editing}
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, password: e.target.value }))
+                  }
+                  placeholder={
+                    editing
+                      ? "Leave blank to keep current"
+                      : "Min. 8 characters"
+                  }
+                  minLength={editing ? undefined : 8}
+                  className={cn(inputClass, "pr-10")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 transition-colors hover:text-ink"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="size-4"
+                      aria-hidden
+                    >
+                      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .698 10.747 10.747 0 0 1-1.444 2.49" />
+                      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.698 10.75 10.75 0 0 1 4.446-4.86" />
+                      <path d="m2 2 20 20" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="size-4"
+                      aria-hidden
+                    >
+                      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  )}
+                </button>
+              </div>
               {editing ? (
                 <span className="mt-1 block text-xs text-slate-400">
                   Leave blank to keep the current password.
@@ -161,7 +221,9 @@ export function AddMemberModal({
             <Field label="Department">
               <select
                 value={form.department}
-                onChange={(e) => setForm((f) => ({ ...f, department: e.target.value }))}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, department: e.target.value }))
+                }
                 className={inputClass}
               >
                 {TEAM_DEPARTMENTS.map((dept) => (
@@ -170,7 +232,9 @@ export function AddMemberModal({
                   </option>
                 ))}
                 {form.department &&
-                !(TEAM_DEPARTMENTS as readonly string[]).includes(form.department) ? (
+                !(TEAM_DEPARTMENTS as readonly string[]).includes(
+                  form.department,
+                ) ? (
                   <option value={form.department}>{form.department}</option>
                 ) : null}
               </select>
@@ -209,7 +273,9 @@ export function AddMemberModal({
               </div>
             </Field>
 
-            {displayError ? <p className="text-sm text-red-600">{displayError}</p> : null}
+            {displayError ? (
+              <p className="text-sm text-red-600">{displayError}</p>
+            ) : null}
           </div>
 
           <div className="flex shrink-0 justify-end gap-2 border-t border-mist/60 px-6 py-4">

@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
 import { RowActions } from "@/components/admin/RowActions";
 import { ToolbarButton } from "@/components/admin/Toolbar";
-import {
-  LEADERSHIP_DIVISION_FILTERS,
-  TEAM_DEPARTMENTS,
-} from "@/lib/about";
+import { LEADERSHIP_DIVISION_FILTERS, TEAM_DEPARTMENTS } from "@/lib/about";
 import type { ActiveStatus } from "@/lib/admin/types";
 import type { CmsTeamMemberDoc } from "@/lib/strapi";
 
-const DIVISION_OPTIONS = LEADERSHIP_DIVISION_FILTERS.filter((f) => f.slug !== "all");
+const DIVISION_OPTIONS = LEADERSHIP_DIVISION_FILTERS.filter(
+  (f) => f.slug !== "all",
+);
 
 const emptyForm = {
   name: "",
@@ -32,6 +32,7 @@ const emptyForm = {
 };
 
 export default function TeamPage() {
+  const confirm = useConfirm();
   const [items, setItems] = useState<CmsTeamMemberDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -85,7 +86,9 @@ export default function TeamPage() {
     setSaving(true);
     setError(null);
     const res = await fetch(
-      editing?.documentId ? `/api/cms/team/${editing.documentId}` : "/api/cms/team",
+      editing?.documentId
+        ? `/api/cms/team/${editing.documentId}`
+        : "/api/cms/team",
       {
         method: editing?.documentId ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -95,7 +98,9 @@ export default function TeamPage() {
     const data = (await res.json()) as { error?: string };
     setSaving(false);
     if (!res.ok) {
-      setError(data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.");
+      setError(
+        data.error || "Save failed. Check STRAPI_URL / STRAPI_API_TOKEN.",
+      );
       return;
     }
     setModalOpen(false);
@@ -103,14 +108,23 @@ export default function TeamPage() {
   }
 
   async function remove(item: CmsTeamMemberDoc) {
-    if (!confirm("Delete this team member?")) return;
+    if (
+      !(await confirm({
+        title: "Delete team member",
+        message: "Delete this team member? This action cannot be undone.",
+      }))
+    )
+      return;
     await fetch(`/api/cms/team/${item.documentId}`, { method: "DELETE" });
     await load();
   }
 
   const active = items.filter((m) => m.status === "active").length;
   const departmentOptions = Array.from(
-    new Set([...TEAM_DEPARTMENTS, ...items.map((m) => m.department).filter(Boolean)]),
+    new Set([
+      ...TEAM_DEPARTMENTS,
+      ...items.map((m) => m.department).filter(Boolean),
+    ]),
   );
 
   return (
@@ -123,10 +137,15 @@ export default function TeamPage() {
         stats={[
           { label: "Total members", value: items.length },
           { label: "Active", value: active },
-          { label: "Departments", value: new Set(items.map((m) => m.department)).size },
+          {
+            label: "Departments",
+            value: new Set(items.map((m) => m.department)).size,
+          },
           { label: "Inactive", value: items.length - active },
         ]}
-        toolbarExtra={<ToolbarButton onClick={() => void load()}>Refresh</ToolbarButton>}
+        toolbarExtra={
+          <ToolbarButton onClick={() => void load()}>Refresh</ToolbarButton>
+        }
       >
         {loading ? (
           <p className="text-sm text-slate">Loading…</p>
@@ -134,7 +153,9 @@ export default function TeamPage() {
           <DataTable<CmsTeamMemberDoc>
             data={items}
             searchPlaceholder="Search team…"
-            getSearchText={(row) => `${row.name} ${row.email} ${row.role} ${row.department}`}
+            getSearchText={(row) =>
+              `${row.name} ${row.email} ${row.role} ${row.department}`
+            }
             filters={[
               {
                 key: "status",
@@ -145,12 +166,19 @@ export default function TeamPage() {
                   { value: "inactive", label: "Inactive" },
                 ],
               },
-              { key: "department", label: "All departments", getValue: (row) => row.department },
+              {
+                key: "department",
+                label: "All departments",
+                getValue: (row) => row.department,
+              },
               {
                 key: "division",
                 label: "All divisions",
                 getValue: (row) => row.division || "executive",
-                options: DIVISION_OPTIONS.map((d) => ({ value: d.slug, label: d.label })),
+                options: DIVISION_OPTIONS.map((d) => ({
+                  value: d.slug,
+                  label: d.label,
+                })),
               },
             ]}
             sorts={[
@@ -183,7 +211,11 @@ export default function TeamPage() {
                 ),
               },
               { key: "role", header: "Role", cell: (row) => row.role },
-              { key: "department", header: "Department", cell: (row) => row.department },
+              {
+                key: "department",
+                header: "Department",
+                cell: (row) => row.department,
+              },
               {
                 key: "joined",
                 header: "Date joined",
@@ -193,7 +225,10 @@ export default function TeamPage() {
                 key: "status",
                 header: "Status",
                 cell: (row) => (
-                  <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                  <StatusBadge
+                    label={row.status}
+                    variant={publishVariant(row.status)}
+                  />
                 ),
               },
               {
@@ -202,8 +237,16 @@ export default function TeamPage() {
                 cell: (row) => (
                   <RowActions
                     actions={[
-                      { label: "Edit", variant: "edit", onClick: () => openEdit(row) },
-                      { label: "Delete", variant: "delete", onClick: () => void remove(row) },
+                      {
+                        label: "Edit",
+                        variant: "edit",
+                        onClick: () => openEdit(row),
+                      },
+                      {
+                        label: "Delete",
+                        variant: "delete",
+                        onClick: () => void remove(row),
+                      },
                     ]}
                   />
                 ),
@@ -221,27 +264,39 @@ export default function TeamPage() {
             </h2>
             <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-4">
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Name</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Name
+                </span>
                 <input
                   value={form.name}
-                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, name: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Role</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Role
+                </span>
                 <input
                   value={form.role}
-                  onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, role: e.target.value }))
+                  }
                   placeholder="Shown under the name on the website"
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Department</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Department
+                </span>
                 <select
                   value={form.department}
-                  onChange={(e) => setForm((f) => ({ ...f, department: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, department: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm"
                 >
                   {departmentOptions.map((dept) => (
@@ -252,18 +307,26 @@ export default function TeamPage() {
                 </select>
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Email</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Email
+                </span>
                 <input
                   value={form.email}
-                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, email: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Division</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Division
+                </span>
                 <select
                   value={form.division}
-                  onChange={(e) => setForm((f) => ({ ...f, division: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, division: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm"
                 >
                   {DIVISION_OPTIONS.map((opt) => (
@@ -273,7 +336,8 @@ export default function TeamPage() {
                   ))}
                 </select>
                 <span className="mt-1 block text-xs text-slate-400">
-                  Controls which filter tab this person appears under on the leadership page.
+                  Controls which filter tab this person appears under on the
+                  leadership page.
                 </span>
               </label>
               <MediaUploadField
@@ -285,16 +349,22 @@ export default function TeamPage() {
                 hint="Upload a photo to the Railway bucket."
               />
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Joined (YYYY-MM-DD)</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Joined (YYYY-MM-DD)
+                </span>
                 <input
                   value={form.joinedAt}
-                  onChange={(e) => setForm((f) => ({ ...f, joinedAt: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, joinedAt: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                 />
               </label>
 
               <div className="border-t border-mist pt-3">
-                <p className="mb-2 text-sm font-medium text-ink">Social profiles</p>
+                <p className="mb-2 text-sm font-medium text-ink">
+                  Social profiles
+                </p>
                 <p className="mb-3 text-xs text-slate-400">
                   Icons appear on the member card when a URL is set.
                 </p>
@@ -307,10 +377,14 @@ export default function TeamPage() {
                   ] as const
                 ).map(([key, label]) => (
                   <label key={key} className="mb-3 block last:mb-0">
-                    <span className="mb-1 block text-sm font-medium text-ink">{label}</span>
+                    <span className="mb-1 block text-sm font-medium text-ink">
+                      {label}
+                    </span>
                     <input
                       value={form[key]}
-                      onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, [key]: e.target.value }))
+                      }
                       placeholder="https://"
                       className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
                     />
@@ -319,11 +393,16 @@ export default function TeamPage() {
               </div>
 
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-ink">Status</span>
+                <span className="mb-1 block text-sm font-medium text-ink">
+                  Status
+                </span>
                 <select
                   value={form.status}
                   onChange={(e) =>
-                    setForm((f) => ({ ...f, status: e.target.value as ActiveStatus }))
+                    setForm((f) => ({
+                      ...f,
+                      status: e.target.value as ActiveStatus,
+                    }))
                   }
                   className="w-full rounded-xl border border-mist px-3 py-2.5 text-sm"
                 >

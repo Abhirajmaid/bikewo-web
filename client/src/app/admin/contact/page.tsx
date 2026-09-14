@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
+import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
 import { RowActions } from "@/components/admin/RowActions";
 import { StatusBadge, publishVariant } from "@/components/admin/StatusBadge";
@@ -10,6 +11,7 @@ import type { CmsContactInquiry } from "@/lib/cms/types";
 import type { InquiryStatus } from "@/lib/admin/types";
 
 export default function ContactAdminPage() {
+  const confirm = useConfirm();
   const [items, setItems] = useState<CmsContactInquiry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +39,13 @@ export default function ContactAdminPage() {
   }
 
   async function remove(id: string) {
-    if (!confirm("Delete this inquiry?")) return;
+    if (
+      !(await confirm({
+        title: "Delete inquiry",
+        message: "Delete this inquiry? This action cannot be undone.",
+      }))
+    )
+      return;
     await fetch(`/api/cms/contact/${id}`, { method: "DELETE" });
     await load();
   }
@@ -57,13 +65,16 @@ export default function ContactAdminPage() {
         { label: "In progress", value: inProgress },
         { label: "Resolved", value: resolved },
       ]}
-      toolbarExtra={<ToolbarButton onClick={() => void load()}>Refresh</ToolbarButton>}
+      toolbarExtra={
+        <ToolbarButton onClick={() => void load()}>Refresh</ToolbarButton>
+      }
     >
       {loading ? (
         <p className="text-sm text-slate">Loading…</p>
       ) : items.length === 0 ? (
         <p className="rounded-xl border border-dashed border-mist bg-white px-4 py-10 text-center text-sm text-slate">
-          No contact submissions yet. New form posts from the website appear here.
+          No contact submissions yet. New form posts from the website appear
+          here.
         </p>
       ) : (
         <DataTable<CmsContactInquiry>
@@ -114,7 +125,11 @@ export default function ContactAdminPage() {
                 </div>
               ),
             },
-            { key: "company", header: "Company", cell: (row) => row.company || "—" },
+            {
+              key: "company",
+              header: "Company",
+              cell: (row) => row.company || "—",
+            },
             { key: "topic", header: "Topic", cell: (row) => row.topic },
             {
               key: "message",
@@ -132,7 +147,10 @@ export default function ContactAdminPage() {
               key: "status",
               header: "Status",
               cell: (row) => (
-                <StatusBadge label={row.status} variant={publishVariant(row.status)} />
+                <StatusBadge
+                  label={row.status}
+                  variant={publishVariant(row.status)}
+                />
               ),
             },
             {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -77,16 +78,14 @@ export function Hero() {
     <div ref={root} className="relative h-[100svh] min-h-[640px] overflow-hidden bg-neutral-950">
       {/* Plate */}
       <div data-hero-plate className="absolute inset-0 will-change-transform">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden
-          className="absolute inset-0 size-full object-cover object-center"
-        >
-          <source src="/heroVideo.mp4" type="video/mp4" />
-        </video>
+        <Image
+          src="/assets/hero-city.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
       </div>
 
       {/* Flat gray/black scrim for headline legibility */}

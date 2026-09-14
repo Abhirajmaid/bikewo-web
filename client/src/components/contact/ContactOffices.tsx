@@ -4,40 +4,41 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/brand/Icons";
 import {
-  CONTACT_MAP,
-  CONTACT_OFFICE,
   CONTACT_OFFICE_HEADING,
-  CONTACT_OFFICE_NOTE,
   CONTACT_PAGE_WIDTH,
 } from "@/lib/contact";
-import { SITE } from "@/lib/site";
-
-const DETAILS = [
-  {
-    icon: PinIcon,
-    label: "Address",
-    value: CONTACT_OFFICE.address,
-  },
-  {
-    icon: PhoneIcon,
-    label: "Call us",
-    value: CONTACT_OFFICE.phone,
-    href: `tel:${SITE.phoneTel}`,
-  },
-  {
-    icon: MailIcon,
-    label: "Write to us",
-    value: CONTACT_OFFICE.email,
-    href: `mailto:${CONTACT_OFFICE.email}`,
-  },
-  {
-    icon: ClockIcon,
-    label: "Appointments",
-    value: CONTACT_OFFICE.hours,
-  },
-] as const;
+import { getSiteSettings } from "@/lib/cms/db";
+import { settingsMap } from "@/lib/cms/settings";
 
 export function ContactOffices() {
+  const site = getSiteSettings();
+  const map = settingsMap(site);
+
+  const details = [
+    {
+      icon: PinIcon,
+      label: "Address",
+      value: site.officeAddress,
+    },
+    {
+      icon: PhoneIcon,
+      label: "Call us",
+      value: site.phone,
+      href: `tel:${site.phoneTel}`,
+    },
+    {
+      icon: MailIcon,
+      label: "Write to us",
+      value: site.brandEmail,
+      href: `mailto:${site.brandEmail}`,
+    },
+    {
+      icon: ClockIcon,
+      label: "Appointments",
+      value: site.officeHours,
+    },
+  ] as const;
+
   return (
     <section className="border-t border-indigo-100 bg-white py-16 md:py-24">
       <Container className={CONTACT_PAGE_WIDTH}>
@@ -53,8 +54,8 @@ export function ContactOffices() {
           <div className="overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-card lg:relative">
             <div className="relative h-72 sm:h-96 lg:h-128">
               <iframe
-                title={CONTACT_MAP.title}
-                src={CONTACT_MAP.embedSrc}
+                title={map.title}
+                src={map.embedSrc}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 allowFullScreen
@@ -66,15 +67,15 @@ export function ContactOffices() {
               <div className="flex flex-col gap-6 border-t border-indigo-100 bg-white p-6 lg:rounded-2xl lg:border lg:p-7 lg:shadow-lift">
                 <div>
                   <p className="font-display text-[11px] font-semibold uppercase tracking-[0.14em] text-green-700">
-                    {CONTACT_OFFICE.label}
+                    {site.officeLabel}
                   </p>
                   <h3 className="mt-2 font-display text-xl font-semibold leading-snug text-indigo-800">
-                    {CONTACT_OFFICE.city}
+                    {site.officeCity}
                   </h3>
                 </div>
 
                 <ul className="space-y-4">
-                  {DETAILS.map((item) => (
+                  {details.map((item) => (
                     <li key={item.label} className="flex items-start gap-3.5">
                       <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-green-50">
                         <item.icon size={22} />
@@ -99,7 +100,7 @@ export function ContactOffices() {
                 </ul>
 
                 <Button
-                  href={CONTACT_MAP.directionsHref}
+                  href={map.directionsHref}
                   variant="primary"
                   withArrow
                   target="_blank"
@@ -110,7 +111,7 @@ export function ContactOffices() {
                 </Button>
 
                 <p className="text-xs leading-relaxed text-slate-400">
-                  {CONTACT_OFFICE_NOTE}
+                  {site.officeNote}
                 </p>
               </div>
             </div>

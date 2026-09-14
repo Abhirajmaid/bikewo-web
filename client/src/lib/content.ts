@@ -34,7 +34,7 @@ export const HERO = {
 
 export const GLANCE = {
   badge: "About us",
-  lead: "BikeWo aims to own and operate the full-stack infrastructure enabling electric mobility at scale —",
+  lead: "BikeWo aims to own and operate the fullstack infrastructure enabling electric mobility at scale",
   rest: "across vehicles, energy, financing support, lifecycle services and intelligence. Logistics is our core. EMI is our differentiator.",
   cta: { label: "Read more about us", href: "/about" },
   image: {
