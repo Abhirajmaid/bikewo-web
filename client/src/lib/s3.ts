@@ -1,4 +1,9 @@
-import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutBucketCorsCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 /** Prefer Railway bucket names; keep short aliases for older local/Vercel envs. */
@@ -79,6 +84,51 @@ export async function signedPutUrl(
     }),
     { expiresIn },
   );
+}
+
+const DEFAULT_CORS_ORIGINS = [
+  "https://www.bikewo.in",
+  "https://bikewo.in",
+  "http://localhost:3000",
+];
+
+let corsReady: Promise<void> | null = null;
+
+/** Allow browser PUTs from the marketing site (Railway has no CORS UI). */
+export function ensureBucketCors() {
+  if (!corsReady) {
+    corsReady = (async () => {
+      const extra = (env("AWS_CORS_ORIGINS") || "")
+        .split(",")
+        .map((o) => o.trim())
+        .filter(Boolean);
+      const origins = [...new Set([...DEFAULT_CORS_ORIGINS, ...extra])];
+      const s3 = getS3();
+      await s3.send(
+        new PutBucketCorsCommand({
+          Bucket: bucketName(),
+          CORSConfiguration: {
+            CORSRules: [
+              {
+                AllowedHeaders: ["*"],
+                AllowedMethods: ["GET", "PUT", "HEAD"],
+                AllowedOrigins: origins,
+                ExposeHeaders: ["ETag", "Content-Type"],
+                MaxAgeSeconds: 3000,
+              },
+            ],
+          },
+        }),
+      );
+    })().catch((err) => {
+      corsReady = null;
+      console.error(
+        "[s3] PutBucketCors failed — configure CORS on the Railway bucket:",
+        err instanceof Error ? err.message : err,
+      );
+    });
+  }
+  return corsReady;
 }
 
 /** Public app path that proxies / redirects to the private bucket object. */

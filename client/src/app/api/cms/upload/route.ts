@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getSessionMember } from "@/lib/cms/auth";
-import { mediaPath, s3Configured, signedPutUrl } from "@/lib/s3";
+import {
+  ensureBucketCors,
+  mediaPath,
+  s3Configured,
+  signedPutUrl,
+} from "@/lib/s3";
 
 export const runtime = "nodejs";
 
@@ -77,6 +82,8 @@ export async function POST(request: Request) {
       .replace(/^-|-$/g, "")
       .slice(0, 60);
     const key = `${folder}/${Date.now()}-${safeBase || "file"}${ext}`;
+
+    await ensureBucketCors();
     const uploadUrl = await signedPutUrl(key, contentType);
 
     return NextResponse.json({

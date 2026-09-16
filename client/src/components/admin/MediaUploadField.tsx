@@ -70,7 +70,7 @@ export function MediaUploadField({
       if (!putRes.ok) {
         setError(
           putRes.status === 403
-            ? "Bucket rejected the upload (check CORS on the Railway bucket)."
+            ? "Bucket rejected the upload (CORS/credentials). Redeploy or set bucket CORS."
             : "Upload to storage failed.",
         );
         return;
@@ -78,8 +78,13 @@ export function MediaUploadField({
 
       onChange(data.url);
       setShowLink(false);
-    } catch {
-      setError("Upload failed.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      setError(
+        /failed to fetch|networkerror|cors/i.test(msg)
+          ? "Upload blocked by bucket CORS. Redeploy so CORS can be applied, or set it on Railway."
+          : "Upload failed.",
+      );
     } finally {
       setUploading(false);
     }
