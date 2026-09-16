@@ -29,23 +29,60 @@ export function MediaUploadField({
 
   async function uploadFile(file: File | null) {
     if (!file) return;
-    setUploading(true);
-    setError(null);
-    const body = new FormData();
-    body.set("file", file);
-    body.set("folder", folder);
-    const res = await fetch("/api/cms/upload", { method: "POST", body });
-    const data = (await res.json().catch(() => ({}))) as {
-      url?: string;
-      error?: string;
-    };
-    setUploading(false);
-    if (!res.ok || !data.url) {
-      setError(data.error || "Upload failed.");
+    const maxBytes = 20 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setError("File must be under 20MB.");
       return;
     }
-    onChange(data.url);
-    setShowLink(false);
+    const contentType =
+      file.type ||
+      (file.name.toLowerCase().endsWith(".pdf")
+        ? "application/pdf"
+        : "application/octet-stream");
+    setUploading(true);
+    setError(null);
+    try {
+      const signRes = await fetch("/api/cms/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType,
+          folder,
+          size: file.size,
+        }),
+      });
+      const data = (await signRes.json().catch(() => ({}))) as {
+        url?: string;
+        uploadUrl?: string;
+        error?: string;
+      };
+      if (!signRes.ok || !data.uploadUrl || !data.url) {
+        setError(data.error || "Upload failed.");
+        return;
+      }
+
+      const putRes = await fetch(data.uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": contentType },
+        body: file,
+      });
+      if (!putRes.ok) {
+        setError(
+          putRes.status === 403
+            ? "Bucket rejected the upload (check CORS on the Railway bucket)."
+            : "Upload to storage failed.",
+        );
+        return;
+      }
+
+      onChange(data.url);
+      setShowLink(false);
+    } catch {
+      setError("Upload failed.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   const lower = value.toLowerCase();
@@ -117,7 +154,8 @@ export function MediaUploadField({
             {uploading ? "Uploading…" : "Click to upload"}
           </span>
           <span className="text-xs text-slate">
-            or drag and drop · {accept.includes("pdf") ? "PDF" : "JPEG, PNG, WebP"}
+            or drag and drop ·{" "}
+            {accept.includes("pdf") ? "PDF up to 20MB" : "JPEG, PNG, WebP · 20MB max"}
           </span>
         </button>
       )}

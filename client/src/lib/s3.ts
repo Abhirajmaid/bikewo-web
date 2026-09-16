@@ -63,6 +63,24 @@ export async function signedGetUrl(key: string, expiresIn = 3600) {
   );
 }
 
+/** Browser uploads directly to the bucket (avoids Vercel/proxy body size limits). */
+export async function signedPutUrl(
+  key: string,
+  contentType: string,
+  expiresIn = 600,
+) {
+  const s3 = getS3();
+  return getSignedUrl(
+    s3,
+    new PutObjectCommand({
+      Bucket: bucketName(),
+      Key: key,
+      ContentType: contentType,
+    }),
+    { expiresIn },
+  );
+}
+
 /** Public app path that proxies / redirects to the private bucket object. */
 export function mediaPath(key: string) {
   return `/api/media/${key.split("/").map(encodeURIComponent).join("/")}`;
