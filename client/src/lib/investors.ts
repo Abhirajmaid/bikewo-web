@@ -36,6 +36,9 @@ export const INVESTOR_PAGE = {
   libraryCta: "Browse the full document library",
 };
 
+/** Dedicated listing for annual reports (legacy WordPress-style path). */
+export const ANNUAL_REPORTS_PATH = "/investor-relations/AnnualReports";
+
 export const INVESTOR_TYPES: { slug: InvestorType | "all"; label: string }[] = [
   { slug: "all", label: "All types" },
   { slug: "policy", label: "Policies" },

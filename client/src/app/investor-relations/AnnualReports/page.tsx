@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { ContactCTA } from "@/components/home/ContactCTA";
 import { InvestorsLibrary } from "@/components/investors/InvestorsLibrary";
 import { PageHero } from "@/components/ui/PageHero";
-import { INVESTOR_PAGE } from "@/lib/investors";
+import { ANNUAL_REPORTS_PATH, INVESTOR_PAGE } from "@/lib/investors";
 import { SITE } from "@/lib/site";
 import { listInvestorDocuments } from "@/lib/strapi";
 
-const PATH = "/investor-relations/AnnualReports";
+const PATH = ANNUAL_REPORTS_PATH;
 const TITLE = "Annual reports";
 const LEDE =
   "Statutory annual reports for BikeWo Green Tech Limited — operations, financials and governance by financial year.";

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SearchIcon } from "@/components/brand/Icons";
 import { DocumentCard } from "@/components/investors/DocumentCard";
@@ -10,6 +11,7 @@ import { Button, ButtonEl } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
+  ANNUAL_REPORTS_PATH,
   DOCS_PER_PAGE,
   featuredInvestorDocs,
   INVESTOR_PAGE,
@@ -33,6 +35,8 @@ export function InvestorsLibrary({
   /** Pre-select a document type (e.g. annual-report on legacy IR URLs). */
   initialType?: InvestorType | "all";
 }) {
+  const router = useRouter();
+  const lockedToAnnual = initialType === "annual-report";
   const [query, setQuery] = useState("");
   const [type, setType] = useState<InvestorType | "all">(initialType);
   const [topic, setTopic] = useState<InvestorTopic | "all">("all");
@@ -42,6 +46,10 @@ export function InvestorsLibrary({
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const typeSlug = params.get("type");
+    if (typeSlug === "annual-report" && !lockedToAnnual) {
+      router.replace(ANNUAL_REPORTS_PATH);
+      return;
+    }
     if (
       typeSlug &&
       INVESTOR_TYPES.some((t) => t.slug === typeSlug && t.slug !== "all")
@@ -55,16 +63,16 @@ export function InvestorsLibrary({
     ) {
       setTopic(topicSlug as InvestorTopic);
     }
-  }, []);
+  }, [lockedToAnnual, router]);
 
-  const featured =
-    initialType === "all" ? featuredInvestorDocs(docs) : [];
+  const featured = lockedToAnnual ? [] : featuredInvestorDocs(docs);
   const all = sortInvestorDocs(docs);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const activeType = lockedToAnnual ? "annual-report" : type;
     return all.filter((doc) => {
-      if (type !== "all" && doc.type !== type) return false;
+      if (activeType !== "all" && doc.type !== activeType) return false;
       if (topic !== "all" && doc.topic !== topic) return false;
       if (!q) return true;
       return (
@@ -73,7 +81,7 @@ export function InvestorsLibrary({
         doc.typeLabel.toLowerCase().includes(q)
       );
     });
-  }, [all, query, type, topic]);
+  }, [all, query, type, topic, lockedToAnnual]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / DOCS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
@@ -83,6 +91,10 @@ export function InvestorsLibrary({
   );
 
   const applyType = (next: InvestorType | "all") => {
+    if (next === "annual-report") {
+      router.push(ANNUAL_REPORTS_PATH);
+      return;
+    }
     setType(next);
     setPage(1);
   };
@@ -120,14 +132,26 @@ export function InvestorsLibrary({
         <Container>
           <SectionHeading
             title={
-              initialType === "annual-report"
-                ? "Annual reports"
-                : INVESTOR_PAGE.libraryTitle
+              lockedToAnnual ? "Annual reports" : INVESTOR_PAGE.libraryTitle
+            }
+            action={
+              lockedToAnnual ? (
+                <Button href="/investors" variant="ghost">
+                  ← All documents
+                </Button>
+              ) : undefined
             }
           />
 
           <Reveal delay={0.05}>
-            <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:mt-12 lg:grid-cols-[1fr_14rem_14rem]">
+            <div
+              className={cn(
+                "mt-10 grid gap-3 lg:mt-12",
+                lockedToAnnual
+                  ? "sm:grid-cols-1 lg:grid-cols-[1fr_14rem]"
+                  : "sm:grid-cols-2 lg:grid-cols-[1fr_14rem_14rem]",
+              )}
+            >
               <label className="relative block">
                 <span className="sr-only">Search documents</span>
                 <SearchIcon
@@ -146,22 +170,24 @@ export function InvestorsLibrary({
                 />
               </label>
 
-              <label className="block">
-                <span className="sr-only">Select type</span>
-                <select
-                  value={type}
-                  onChange={(e) =>
-                    applyType(e.target.value as InvestorType | "all")
-                  }
-                  className={fieldClass}
-                >
-                  {INVESTOR_TYPES.map((option) => (
-                    <option key={option.slug} value={option.slug}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              {lockedToAnnual ? null : (
+                <label className="block">
+                  <span className="sr-only">Select type</span>
+                  <select
+                    value={type}
+                    onChange={(e) =>
+                      applyType(e.target.value as InvestorType | "all")
+                    }
+                    className={fieldClass}
+                  >
+                    {INVESTOR_TYPES.map((option) => (
+                      <option key={option.slug} value={option.slug}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
 
               <label className="block">
                 <span className="sr-only">Select topic</span>
