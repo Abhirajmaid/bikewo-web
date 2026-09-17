@@ -25,24 +25,40 @@ import { cn, stagger } from "@/lib/utils";
 const fieldClass =
   "h-12 w-full rounded-full border border-indigo-200 bg-white px-4 font-display text-[13px] font-semibold text-indigo-800 outline-none transition-[border-color] duration-200 focus:border-indigo-800";
 
-export function InvestorsLibrary({ docs }: { docs: InvestorDoc[] }) {
+export function InvestorsLibrary({
+  docs,
+  initialType = "all",
+}: {
+  docs: InvestorDoc[];
+  /** Pre-select a document type (e.g. annual-report on legacy IR URLs). */
+  initialType?: InvestorType | "all";
+}) {
   const [query, setQuery] = useState("");
-  const [type, setType] = useState<InvestorType | "all">("all");
+  const [type, setType] = useState<InvestorType | "all">(initialType);
   const [topic, setTopic] = useState<InvestorTopic | "all">("all");
   const [page, setPage] = useState(1);
   const [active, setActive] = useState<InvestorDoc | null>(null);
 
   useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("topic");
+    const params = new URLSearchParams(window.location.search);
+    const typeSlug = params.get("type");
     if (
-      slug &&
-      INVESTOR_TOPICS.some((t) => t.slug === slug && t.slug !== "all")
+      typeSlug &&
+      INVESTOR_TYPES.some((t) => t.slug === typeSlug && t.slug !== "all")
     ) {
-      setTopic(slug as InvestorTopic);
+      setType(typeSlug as InvestorType);
+    }
+    const topicSlug = params.get("topic");
+    if (
+      topicSlug &&
+      INVESTOR_TOPICS.some((t) => t.slug === topicSlug && t.slug !== "all")
+    ) {
+      setTopic(topicSlug as InvestorTopic);
     }
   }, []);
 
-  const featured = featuredInvestorDocs(docs);
+  const featured =
+    initialType === "all" ? featuredInvestorDocs(docs) : [];
   const all = sortInvestorDocs(docs);
 
   const filtered = useMemo(() => {
@@ -102,7 +118,13 @@ export function InvestorsLibrary({ docs }: { docs: InvestorDoc[] }) {
 
       <Section id="library" tone="cloud">
         <Container>
-          <SectionHeading title={INVESTOR_PAGE.libraryTitle} />
+          <SectionHeading
+            title={
+              initialType === "annual-report"
+                ? "Annual reports"
+                : INVESTOR_PAGE.libraryTitle
+            }
+          />
 
           <Reveal delay={0.05}>
             <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:mt-12 lg:grid-cols-[1fr_14rem_14rem]">
