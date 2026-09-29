@@ -142,7 +142,6 @@ export const ABOUT_IMPACT = {
     "PositiEV Mobility",
     "Enlite EV Care",
     "Ignesium Energy",
-    "BikeWo VZN",
     "PositiEV",
   ],
   source:
@@ -239,7 +238,7 @@ export const ABOUT_PLATFORM = {
     },
     {
       index: "05",
-      title: "VZN intelligence",
+      title: "Fleet intelligence",
       short: "Connected optimisation",
       copy: "Connected data and optimisation that make capacity reliable and fleets smarter.",
     },
@@ -357,7 +356,6 @@ export const ABOUT_STRATEGY = {
       "Open energy infrastructure to third parties",
       "Aviation logistics",
       "Global sourcing & supply chain",
-      "Connected intelligence / VZN",
       "New mobility & infrastructure opportunities",
     ],
   },
@@ -413,7 +411,7 @@ export const ABOUT_FAQ = {
     {
       question: "What does BikeWo do?",
       answer:
-        "BikeWo Green Tech Limited is building Energy & Mobility Infrastructure (EMI) — an integrated platform spanning mobility assets, energy, financing support, lifecycle services and connected intelligence — so logistics operators can scale electric fleets without owning every vehicle.",
+        "BikeWo Green Tech Limited is building Energy & Mobility Infrastructure (EMI) — an integrated platform spanning mobility assets, energy, financing support, lifecycle services and fleet intelligence — so logistics operators can scale electric fleets without owning every vehicle.",
     },
     {
       question: "How is BikeWo different from a typical logistics company?",
@@ -479,7 +477,6 @@ export const LEADERSHIP_DIVISION_FILTERS = [
   { slug: "energy-infrastructure", label: "Energy infrastructure" },
   { slug: "lifecycle-services", label: "Lifecycle services" },
   { slug: "global-sourcing-supply-chain", label: "Global sourcing" },
-  { slug: "bikewo-vzn", label: "BikeWo VZN" },
 ] as const;
 
 /** Department options for CMS team members (admin form dropdown). */
@@ -490,7 +487,6 @@ export const TEAM_DEPARTMENTS = [
   "Energy infrastructure",
   "Lifecycle services",
   "Global sourcing",
-  "BikeWo VZN",
   "Technology",
   "Operations",
   "People & culture",
@@ -520,7 +516,7 @@ export const ABOUT_ESG = {
     {
       label: "Platform layers",
       value: "5",
-      detail: "Mobility assets, energy, financing support, lifecycle services and VZN intelligence.",
+      detail: "Mobility assets, energy, financing support, lifecycle services and fleet intelligence.",
     },
     {
       label: "Addressable SOM",

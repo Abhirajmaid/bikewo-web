@@ -1,13 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import {
   CONTACT_PAGE_WIDTH,
   CONTACT_STAT,
-  CONTACT_TESTIMONIALS,
   CONTACT_TOPICS,
   type ContactTopic,
 } from "@/lib/contact";
@@ -18,7 +16,6 @@ const inputClass =
 
 export function ContactFormSection() {
   const [topic, setTopic] = useState<ContactTopic>("Fleet Pricing");
-  const [slide, setSlide] = useState(0);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -144,8 +141,8 @@ export function ContactFormSection() {
                 </form>
               </div>
 
-              {/* Stats & testimonial slider */}
-              <div className="grid min-h-full grid-rows-[auto_1fr_auto]">
+              {/* Stats */}
+              <div>
                 <div>
                   <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-white">
                     <span aria-hidden className="size-1.5 rounded-full bg-white" />
@@ -164,56 +161,6 @@ export function ContactFormSection() {
                   <p className="mt-3 max-w-md text-sm leading-relaxed text-white/65">
                     {CONTACT_STAT.copy}
                   </p>
-                </div>
-
-                <div className="relative mt-5 min-h-72">
-                  <div className="absolute inset-0 overflow-hidden">
-                    <div
-                      className="flex h-full gap-3 transition-transform duration-500 ease-out"
-                      style={{ transform: `translateX(calc(${-slide} * 87%))` }}
-                    >
-                      {CONTACT_TESTIMONIALS.map((item) => (
-                        <article
-                          key={item.name}
-                          className="relative h-full w-[82%] shrink-0 overflow-hidden rounded-2xl"
-                        >
-                          <Image
-                            src={item.image}
-                            alt=""
-                            fill
-                            sizes="(min-width: 1024px) 32vw, 80vw"
-                            className="object-cover object-top saturate-[0.85]"
-                          />
-                          <div className="absolute inset-0 bg-linear-to-t from-[#052016]/90 via-[#052016]/25 to-transparent" />
-                          <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-                            <p className="text-sm leading-relaxed text-white md:text-[15px]">
-                              &ldquo;{item.quote}&rdquo;
-                            </p>
-                            <p className="mt-3 text-sm font-semibold text-white">
-                              {item.name}, {item.role}
-                            </p>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-5 flex justify-center gap-2" role="tablist" aria-label="Testimonials">
-                  {CONTACT_TESTIMONIALS.map((item, i) => (
-                    <button
-                      key={item.name}
-                      type="button"
-                      role="tab"
-                      aria-selected={slide === i}
-                      aria-label={`Show testimonial ${i + 1}`}
-                      onClick={() => setSlide(i)}
-                      className={cn(
-                        "size-2 rounded-full transition-colors",
-                        slide === i ? "bg-white" : "bg-white/30 hover:bg-white/50",
-                      )}
-                    />
-                  ))}
                 </div>
               </div>
             </div>

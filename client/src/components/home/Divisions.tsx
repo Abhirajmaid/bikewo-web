@@ -59,7 +59,7 @@ export function Divisions() {
                     {division.copy}
                   </p>
                   <span className="mt-5 inline-flex items-center gap-2 font-display text-sm font-semibold text-green-700">
-                    {division.href === "/coming-soon" ? "Coming Soon" : "Explore"}
+                    Explore
                     <ArrowRightIcon
                       size={16}
                       className="transition-transform duration-200 group-hover:translate-x-1"
@@ -69,6 +69,28 @@ export function Divisions() {
               </Link>
             </Reveal>
           ))}
+
+          <Reveal as="li" delay={stagger(DIVISIONS.length, 0.05)}>
+            <Link
+              href="/businesses"
+              className="group relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-lg bg-indigo-800 p-8 transition-shadow duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:shadow-[0_12px_32px_rgb(36_31_93/0.24)]"
+            >
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_85%_15%,rgb(42_183_124/0.28),transparent_55%)]"
+              />
+              <span className="relative eyebrow text-green-300">All businesses</span>
+              <h3 className="relative mt-auto font-display text-2xl font-semibold leading-snug text-white">
+                Check full business details
+              </h3>
+              <p className="relative mt-3 text-[15px] leading-relaxed text-white/70">
+                See how every division fits into one EMI operating model — from sourcing to service.
+              </p>
+              <span className="relative mt-6 inline-flex size-12 items-center justify-center rounded-full bg-green-500 text-indigo-950 transition-transform duration-200 group-hover:translate-x-1">
+                <ArrowRightIcon size={20} />
+              </span>
+            </Link>
+          </Reveal>
         </ul>
       </Container>
     </Section>

@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/Reveal";
 export const metadata: Metadata = {
   title: "Coming Soon",
   description:
-    "BikeWo VZN and Ignesium Energy are on their way. Explore the rest of the EMI ecosystem or get in touch.",
+    "Ignesium Energy is on its way. Explore the rest of the EMI ecosystem or get in touch.",
   alternates: { canonical: "/coming-soon" },
   robots: { index: false, follow: true },
 };

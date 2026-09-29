@@ -26,25 +26,6 @@ export const CONTACT_STAT = {
   copy: "We are dedicated to addressing your inquiries efficiently. Our team provides clear, effective solutions that meet your needs, ensuring a smooth experience.",
 };
 
-export const CONTACT_TESTIMONIALS = [
-  {
-    quote:
-      "This service exceeded all my expectations. The team was professional, prompt, and incredibly skilled. Highly recommended!",
-    name: "Rajesh Kumar",
-    role: "Fleet Operator, Hyderabad",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&h=1100&fit=crop&crop=face",
-  },
-  {
-    quote:
-      "BikeWo routed us to the right division on the first call. No hand-offs, no runaround — just the team that could actually help.",
-    name: "Priya Nair",
-    role: "Operations Lead, Pune",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&h=1100&fit=crop&crop=face",
-  },
-] as const;
-
 export const CONTACT_MISSION = {
   eyebrow: "We believe in a sustainable future.",
   textBefore: "At BikeWo, we truly believe clean mobility ",

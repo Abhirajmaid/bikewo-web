@@ -56,7 +56,7 @@ export const BUSINESSES_MODEL = {
     { label: "Enable", detail: "Flexible leasing" },
     { label: "Charge", detail: "Energy network" },
     { label: "Service", detail: "EV Care" },
-    { label: "Connect", detail: "Data · VZN" },
+    { label: "Connect", detail: "Fleet data" },
   ],
 };
 
@@ -155,7 +155,7 @@ export const BUSINESSES_MARKET = {
 export const BUSINESSES_PARTNERS = {
   eyebrow: "The BikeWo Mobility Group",
   title: "Subsidiaries carrying the masterbrand forward.",
-  lede: "Each company owns a layer of the stack — distribution, service, energy or intelligence — under one EMI platform.",
+  lede: "Each company owns a layer of the stack — distribution, service or energy — under one EMI platform.",
   items: SUBSIDIARIES.map((sub) => ({
     name: sub.name,
     kind: sub.kind,
@@ -219,14 +219,12 @@ export const BUSINESSES_INSIGHTS = {
 export const BUSINESSES_DIVISIONS = {
   eyebrow: "What we do",
   title: "Businesses across the EMI stack.",
-  lede: "Distribution, leasing, energy, lifecycle, sourcing and connected intelligence — with adjacent opportunities like aviation logistics as the 3PL core deepens.",
+  lede: "Distribution, leasing, energy, lifecycle and sourcing — with adjacent opportunities like aviation logistics as the 3PL core deepens.",
   items: DIVISIONS.map((d, i) => {
-    const ids = ["distribution", "leasing", "energy", "lifecycle", "sourcing", "vzn"] as const;
+    const ids = ["distribution", "leasing", "energy", "lifecycle", "sourcing"] as const;
     const imageOverrides: Record<string, string> = {
       "/businesses/global-sourcing-supply-chain":
         "/assets/hf_20260806_143951_b9e268b4-988c-4f03-8c76-7fddced07800.png",
-      "/coming-soon":
-        "/assets/hf_20260806_145121_78a71faf-e9a4-4f69-aed6-06b239e1ae81.png",
     };
     return {
       ...d,
@@ -252,10 +250,6 @@ export const BUSINESSES_ADJACENT = {
     {
       title: "Global sourcing",
       copy: "Supply-chain partnerships that support quality, scale and cost leadership.",
-    },
-    {
-      title: "Connected intelligence / VZN",
-      copy: "Telematics and optimisation layered across the asset network.",
     },
   ],
 };
@@ -330,7 +324,7 @@ export const BUSINESSES_FAQ = {
     {
       question: "What is the relationship between BikeWo and its subsidiaries?",
       answer:
-        "The BikeWo Mobility Group includes PositiEV Mobility, Enlite EV Care, Ignesium Energy and BikeWo VZN. The parent brand leads; sub-brands serve distinct customer journeys within the stack.",
+        "The BikeWo Mobility Group includes PositiEV Mobility, Enlite EV Care and Ignesium Energy. The parent brand leads; sub-brands serve distinct customer journeys within the stack.",
     },
     {
       question: "Can I work with just one business?",
@@ -340,7 +334,7 @@ export const BUSINESSES_FAQ = {
     {
       question: "Where does aviation logistics fit?",
       answer:
-        "Aviation logistics is a downstream diversification opportunity — built from the capabilities, customers and infrastructure of the 3PL core, expanded with discipline alongside energy, sourcing and VZN.",
+        "Aviation logistics is a downstream diversification opportunity — built from the capabilities, customers and infrastructure of the 3PL core, expanded with discipline alongside energy and sourcing.",
     },
     {
       question: "How does BikeWo sit in the logistics value chain?",

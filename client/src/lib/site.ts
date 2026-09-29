@@ -56,8 +56,6 @@ export const SITE = {
     "PositiEV",
     "Enlite EV Care",
     "Ignesium Energy",
-    "BikeWo VZN",
-    "connected intelligence",
   ],
 } as const;
 
@@ -152,13 +150,6 @@ export const NAV: NavNode[] = [
         blurb:
           "Energy infrastructure and solutions powering clean mobility at scale.",
       },
-      {
-        title: "BikeWo VZN",
-        href: "/coming-soon",
-        logo: "/assets/bikewo_vzn.png",
-        blurb:
-          "Connected intelligence platform for IoT, fleet and operational analytics.",
-      },
     ],
   },
   {
@@ -198,7 +189,7 @@ export const NAV: NavNode[] = [
     title: "Contact",
     href: "/contact",
     blurb:
-      "Talk to the team behind distribution, leasing, energy, service, sourcing or intelligence.",
+      "Talk to the team behind distribution, leasing, energy, service or sourcing.",
   },
 ];
 

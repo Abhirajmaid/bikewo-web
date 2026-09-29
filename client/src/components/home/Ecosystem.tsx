@@ -21,7 +21,7 @@ function pos(angle: number) {
   };
 }
 
-/** Interactive ecosystem — BikeWo at the centre, six businesses on the orbit. */
+/** Interactive ecosystem — BikeWo at the centre, five businesses on the orbit. */
 export function Ecosystem() {
   const [activeId, setActiveId] = useState(ECOSYSTEM[0].id);
   const reduced = useReducedMotion();

@@ -26,7 +26,6 @@ export const HERO = {
     "Energy Infrastructure",
     "Lifecycle Services",
     "Global Sourcing",
-    "Connected Intelligence",
   ],
 };
 
@@ -47,7 +46,7 @@ export const GLANCE = {
       suffix: "",
       label: "EMI platform layers",
       detail:
-        "Mobility assets, energy, financing support, lifecycle services and VZN intelligence.",
+        "Mobility assets, energy, financing support, lifecycle services and fleet intelligence.",
     },
     {
       value: 2500,
@@ -102,7 +101,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     detail:
       "Flexible asset leasing that turns vehicle ownership into managed, on-demand fleet capacity.",
     href: "/businesses/mobility-asset-leasing",
-    angle: 60,
+    angle: 72,
   },
   {
     id: "energy",
@@ -111,7 +110,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     detail:
       "Charging and battery swapping infrastructure that keeps electric fleets energised and available.",
     href: "/businesses/energy-infrastructure",
-    angle: 120,
+    angle: 144,
   },
   {
     id: "lifecycle",
@@ -120,7 +119,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     detail:
       "Through Enlite EV Care — maintenance, spare parts, roadside assistance and battery care for uptime.",
     href: "/businesses/lifecycle-services",
-    angle: 180,
+    angle: 216,
   },
   {
     id: "sourcing",
@@ -129,16 +128,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
     detail:
       "Global partnerships and supply-chain capability that support quality, scale and cost leadership.",
     href: "/businesses/global-sourcing-supply-chain",
-    angle: 240,
-  },
-  {
-    id: "vzn",
-    title: "Connected Intelligence",
-    short: "VZN",
-    detail:
-      "VZN — connected optimisation for safety, efficiency and smarter fleet decisions.",
-    href: "/coming-soon",
-    angle: 300,
+    angle: 288,
   },
 ];
 
@@ -180,13 +170,6 @@ export const DIVISIONS = [
     image: "/assets/div-sourcing.png",
     href: "/businesses/global-sourcing-supply-chain",
   },
-  {
-    index: "06",
-    title: "Connected Intelligence",
-    copy: "VZN — connected optimisation for fleet safety, efficiency and smarter operating decisions.",
-    image: "/assets/div-vzn.png",
-    href: "/coming-soon",
-  },
 ];
 
 /* ------------------------------------------------------- 5.5 Subsidiaries */
@@ -224,17 +207,6 @@ export const SUBSIDIARIES = [
     href: "/coming-soon",
     variant: "accent" as const,
     image: "/assets/hf_20260806_143952_059129b3-b95c-4bc3-b79f-2067db331c84.png",
-  },
-  {
-    index: "04",
-    name: "BikeWo VZN",
-    kind: "Subsidiary",
-    copy: "Connected intelligence — telematics and operational analytics for safer, smarter fleets.",
-    cta: "Explore",
-    href: "/coming-soon",
-    logo: "/assets/bikewo_vzn.png",
-    variant: "photo" as const,
-    image: "/assets/div-vzn.png",
   },
 ];
 
@@ -283,7 +255,7 @@ export const SUSTAINABILITY = {
       label: "EMI platform layers",
       value: "5",
       detail:
-        "Mobility assets, energy, financing support, lifecycle services and connected intelligence.",
+        "Mobility assets, energy, financing support, lifecycle services and fleet intelligence.",
       icon: "recycle" as const,
     },
   ],
@@ -351,7 +323,7 @@ export const NEWS = [
     href: "/media/training-academy-expansion",
   },
   {
-    tag: "BikeWo VZN",
+    tag: "Lifecycle Services",
     date: "2026-06-11",
     title: "Predictive maintenance moves from pilot to fleet-wide",
     copy: "Telemetry now flags battery degradation before it becomes an unplanned workshop visit.",
@@ -367,7 +339,7 @@ export const CAREERS = {
   lede: "Last-mile logistics at the core. An EMI platform across vehicles, energy, financing, service and intelligence — built to work every day.",
   roles: [
     { title: "Charging Network Engineer", location: "Hyderabad", type: "Full-time" },
-    { title: "Fleet Data Scientist — VZN", location: "Hyderabad", type: "Full-time" },
+    { title: "Fleet Data Scientist", location: "Hyderabad", type: "Full-time" },
     { title: "Regional Service Manager", location: "Hyderabad", type: "Full-time" },
     { title: "Channel Development Lead", location: "Hyderabad", type: "Full-time" },
   ],
