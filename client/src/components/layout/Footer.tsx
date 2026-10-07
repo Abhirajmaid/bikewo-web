@@ -25,8 +25,8 @@ const FOOTER_NAV: NavNode[] = NAV.map((n) =>
 );
 
 /** 5.13 — Premium footer. Header sitemap plus Careers / Contact. */
-export function Footer() {
-  const site = getSiteSettings();
+export async function Footer() {
+  const site = await getSiteSettings();
   const socials = settingsSocials(site);
 
   const columns = FOOTER_NAV.filter((n) => n.children?.length && !HIDDEN.has(n.title));

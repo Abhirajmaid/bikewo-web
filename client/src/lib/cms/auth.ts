@@ -95,7 +95,7 @@ export async function getSessionMember(): Promise<CmsMember | null> {
   if (!token) return null;
   const payload = unsign(token);
   if (!payload) return null;
-  const db = getDb();
+  const db = await getDb();
   const member = db.members.find((m) => m.id === payload.memberId);
   if (!member || member.status !== "active") return null;
   return member;
@@ -113,12 +113,12 @@ export function publicMember(member: CmsMember) {
 }
 
 export async function authenticate(email: string, password: string) {
-  const db = getDb();
+  const db = await getDb();
   const member = db.members.find(
     (m) => m.email.toLowerCase() === email.toLowerCase() && m.status === "active",
   );
   if (!member || !verifyPassword(password, member.passwordHash)) return null;
-  updateMember(member.id, { lastActiveAt: new Date().toISOString() });
+  await updateMember(member.id, { lastActiveAt: new Date().toISOString() });
   return member;
 }
 

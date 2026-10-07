@@ -38,7 +38,7 @@ export async function PATCH(request: Request, ctx: Ctx) {
     );
   }
 
-  const item = updateMember(id, patch);
+  const item = await updateMember(id, patch);
   if (!item) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ item: publicMember(item) });
 }
@@ -52,7 +52,7 @@ export async function DELETE(_request: Request, ctx: Ctx) {
   if (id === member.id) {
     return NextResponse.json({ error: "You cannot delete your own account." }, { status: 400 });
   }
-  if (!deleteMember(id)) {
+  if (!(await deleteMember(id))) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
   return NextResponse.json({ ok: true });

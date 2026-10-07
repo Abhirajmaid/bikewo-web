@@ -1,27 +1,17 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import path from "path";
+import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { bucketName, getS3, s3Configured } from "@/lib/s3";
 import { createSeedDatabase } from "./seed";
 import { mergeSiteSettings } from "./settings";
 import type { CmsContactInquiry, CmsDatabase, CmsMember, CmsSiteSettings } from "./types";
 
-// ponytail: /tmp on Vercel (read-only FS); ephemeral across instances — use Postgres/Blob if CMS must persist
-const DATA_DIR =
-  process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
-    ? "/tmp"
-    : path.join(process.cwd(), "data");
+// Serverless/container filesystems are wiped on restart, so production state lives in the bucket.
+const S3_KEY = "cms/cms-db.json";
+const DATA_DIR = path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "cms-db.json");
 
-function ensureDbFile() {
-  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-  if (!existsSync(DB_PATH)) {
-    writeFileSync(DB_PATH, JSON.stringify(createSeedDatabase(), null, 2), "utf8");
-  }
-}
-
-export function getDb(): CmsDatabase {
-  ensureDbFile();
-  const raw = JSON.parse(readFileSync(DB_PATH, "utf8")) as Partial<CmsDatabase>;
-  // Drop legacy news/team keys from older local seeds
+function normalize(raw: Partial<CmsDatabase>): CmsDatabase {
   return {
     contact: Array.isArray(raw.contact) ? raw.contact : [],
     members: Array.isArray(raw.members) ? raw.members : createSeedDatabase().members,
@@ -29,17 +19,50 @@ export function getDb(): CmsDatabase {
   };
 }
 
-export function saveDb(db: CmsDatabase) {
-  ensureDbFile();
-  writeFileSync(
-    DB_PATH,
-    JSON.stringify(
-      { contact: db.contact, members: db.members, settings: db.settings },
-      null,
-      2,
-    ),
-    "utf8",
+async function readRaw(): Promise<Partial<CmsDatabase> | null> {
+  if (s3Configured()) {
+    try {
+      const res = await getS3().send(
+        new GetObjectCommand({ Bucket: bucketName(), Key: S3_KEY }),
+      );
+      return JSON.parse((await res.Body?.transformToString()) || "{}");
+    } catch (err) {
+      const name = (err as { name?: string }).name;
+      if (name === "NoSuchKey" || name === "NotFound") return null;
+      throw err;
+    }
+  }
+  if (!existsSync(DB_PATH)) return null;
+  return JSON.parse(readFileSync(DB_PATH, "utf8"));
+}
+
+export async function getDb(): Promise<CmsDatabase> {
+  const raw = await readRaw();
+  if (raw) return normalize(raw);
+  const seed = createSeedDatabase();
+  await saveDb(seed);
+  return normalize(seed);
+}
+
+export async function saveDb(db: CmsDatabase) {
+  const body = JSON.stringify(
+    { contact: db.contact, members: db.members, settings: db.settings },
+    null,
+    2,
   );
+  if (s3Configured()) {
+    await getS3().send(
+      new PutObjectCommand({
+        Bucket: bucketName(),
+        Key: S3_KEY,
+        Body: body,
+        ContentType: "application/json",
+      }),
+    );
+    return;
+  }
+  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
+  writeFileSync(DB_PATH, body, "utf8");
 }
 
 function nextId(prefix: string) {
@@ -48,15 +71,17 @@ function nextId(prefix: string) {
 
 /* --------------------------------------------------------------- Contact */
 
-export function listContact() {
-  return [...getDb().contact].sort(
+export async function listContact() {
+  return [...(await getDb()).contact].sort(
     (a, b) =>
       new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
   );
 }
 
-export function createContact(input: Omit<CmsContactInquiry, "id" | "submittedAt" | "status">) {
-  const db = getDb();
+export async function createContact(
+  input: Omit<CmsContactInquiry, "id" | "submittedAt" | "status">,
+) {
+  const db = await getDb();
   const item: CmsContactInquiry = {
     ...input,
     id: nextId("ci"),
@@ -64,73 +89,80 @@ export function createContact(input: Omit<CmsContactInquiry, "id" | "submittedAt
     status: "new",
   };
   db.contact.unshift(item);
-  saveDb(db);
+  await saveDb(db);
   return item;
 }
 
-export function updateContact(id: string, patch: Partial<CmsContactInquiry>) {
-  const db = getDb();
+export async function updateContact(id: string, patch: Partial<CmsContactInquiry>) {
+  const db = await getDb();
   const idx = db.contact.findIndex((c) => c.id === id);
   if (idx < 0) return null;
   db.contact[idx] = { ...db.contact[idx], ...patch, id };
-  saveDb(db);
+  await saveDb(db);
   return db.contact[idx];
 }
 
-export function deleteContact(id: string) {
-  const db = getDb();
+export async function deleteContact(id: string) {
+  const db = await getDb();
   const before = db.contact.length;
   db.contact = db.contact.filter((c) => c.id !== id);
   if (db.contact.length === before) return false;
-  saveDb(db);
+  await saveDb(db);
   return true;
 }
 
 /* --------------------------------------------------------------- Members */
 
-export function listMembers() {
-  return [...getDb().members];
+export async function listMembers() {
+  return [...(await getDb()).members];
 }
 
-export function createMember(input: Omit<CmsMember, "id">) {
-  const db = getDb();
+export async function createMember(input: Omit<CmsMember, "id">) {
+  const db = await getDb();
   const item: CmsMember = { ...input, id: nextId("im") };
   db.members.push(item);
-  saveDb(db);
+  await saveDb(db);
   return item;
 }
 
-export function updateMember(id: string, patch: Partial<CmsMember>) {
-  const db = getDb();
+export async function updateMember(id: string, patch: Partial<CmsMember>) {
+  const db = await getDb();
   const idx = db.members.findIndex((m) => m.id === id);
   if (idx < 0) return null;
   db.members[idx] = { ...db.members[idx], ...patch, id };
-  saveDb(db);
+  await saveDb(db);
   return db.members[idx];
 }
 
-export function deleteMember(id: string) {
-  const db = getDb();
+export async function deleteMember(id: string) {
+  const db = await getDb();
   const before = db.members.length;
   db.members = db.members.filter((m) => m.id !== id);
   if (db.members.length === before) return false;
-  saveDb(db);
+  await saveDb(db);
   return true;
 }
 
 /* -------------------------------------------------------------- Settings */
 
-export function getSiteSettings(): CmsSiteSettings {
-  return mergeSiteSettings(getDb().settings);
+export async function getSiteSettings(): Promise<CmsSiteSettings> {
+  try {
+    return mergeSiteSettings((await getDb()).settings);
+  } catch (err) {
+    console.error("[cms/db] settings read failed, using defaults:", err);
+    return mergeSiteSettings(undefined);
+  }
 }
 
-export function updateSiteSettings(patch: Partial<CmsSiteSettings>): CmsSiteSettings {
-  const db = getDb();
+export async function updateSiteSettings(
+  patch: Partial<CmsSiteSettings>,
+): Promise<CmsSiteSettings> {
+  const db = await getDb();
   const cleaned = Object.fromEntries(
     Object.entries(patch).filter(([, v]) => v !== undefined),
   ) as Partial<CmsSiteSettings>;
   const next = mergeSiteSettings({ ...db.settings, ...cleaned });
   db.settings = next;
-  saveDb(db);
+  await saveDb(db);
   return next;
 }

@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   return NextResponse.json({
-    items: listMembers().map(publicMember),
+    items: (await listMembers()).map(publicMember),
   });
 }
 
@@ -34,14 +34,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const exists = listMembers().some(
+  const exists = (await listMembers()).some(
     (m) => m.email.toLowerCase() === body.email!.trim().toLowerCase(),
   );
   if (exists) {
     return NextResponse.json({ error: "A member with that email already exists." }, { status: 409 });
   }
 
-  const item = createMember({
+  const item = await createMember({
     name: body.name.trim(),
     email: body.email.trim().toLowerCase(),
     passwordHash: hashPassword(body.password),

@@ -8,8 +8,7 @@ import { listCareers, listNewsMedia, listTeamMembers } from "@/lib/strapi";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const contact = listContact();
-  const members = listMembers();
+  const [contact, members] = await Promise.all([listContact(), listMembers()]);
   const newContacts = contact.filter((c) => c.status === "new").length;
   const pendingApps =
     DRIVER_APPLICATIONS.filter((a) => a.status === "pending").length +

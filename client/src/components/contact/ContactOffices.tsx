@@ -10,8 +10,8 @@ import {
 import { getSiteSettings } from "@/lib/cms/db";
 import { settingsMap } from "@/lib/cms/settings";
 
-export function ContactOffices() {
-  const site = getSiteSettings();
+export async function ContactOffices() {
+  const site = await getSiteSettings();
   const map = settingsMap(site);
 
   const details = [

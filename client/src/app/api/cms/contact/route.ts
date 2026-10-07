@@ -7,5 +7,5 @@ export async function GET() {
   if (!member) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  return NextResponse.json({ items: listContact() });
+  return NextResponse.json({ items: await listContact() });
 }

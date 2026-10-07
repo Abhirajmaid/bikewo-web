@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const item = createContact({
+  const item = await createContact({
     name: `${firstName} ${lastName}`.trim(),
     email,
     phone: body?.phone?.trim() || "",

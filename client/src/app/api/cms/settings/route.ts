@@ -12,7 +12,7 @@ export async function GET() {
   if (!hasPermission(member.cmsRole, "settings:manage")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  return NextResponse.json({ settings: getSiteSettings() });
+  return NextResponse.json({ settings: await getSiteSettings() });
 }
 
 export async function PUT(request: Request) {
@@ -29,7 +29,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Invalid body." }, { status: 400 });
   }
 
-  const settings = updateSiteSettings({
+  const settings = await updateSiteSettings({
     name: body.name?.trim(),
     legalName: body.legalName?.trim(),
     cin: body.cin?.trim(),
