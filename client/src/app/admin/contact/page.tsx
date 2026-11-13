@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ContentPage } from "@/components/admin/ContentPage";
 import { useConfirm } from "@/components/admin/ConfirmModal";
 import { cmpDate, cmpStr, DataTable } from "@/components/admin/DataTable";
@@ -14,6 +14,7 @@ export default function ContactAdminPage() {
   const confirm = useConfirm();
   const [items, setItems] = useState<CmsContactInquiry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewing, setViewing] = useState<CmsContactInquiry | null>(null);
 
   async function load() {
     setLoading(true);
@@ -35,6 +36,9 @@ export default function ContactAdminPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
+    setViewing((current) =>
+      current?.id === id ? { ...current, status } : current,
+    );
     await load();
   }
 
@@ -47,6 +51,7 @@ export default function ContactAdminPage() {
     )
       return;
     await fetch(`/api/cms/contact/${id}`, { method: "DELETE" });
+    setViewing((current) => (current?.id === id ? null : current));
     await load();
   }
 
@@ -94,7 +99,11 @@ export default function ContactAdminPage() {
                 { value: "resolved", label: "Resolved" },
               ],
             },
-            { key: "topic", label: "All topics", getValue: (row) => row.topic },
+            {
+              key: "topic",
+              label: "All topics",
+              getValue: (row) => row.topic,
+            },
           ]}
           sorts={[
             {
@@ -135,7 +144,14 @@ export default function ContactAdminPage() {
               key: "message",
               header: "Message",
               cell: (row) => (
-                <p className="max-w-xs truncate text-slate">{row.message}</p>
+                <button
+                  type="button"
+                  onClick={() => setViewing(row)}
+                  title="Open full message"
+                  className="block max-w-xs truncate text-left text-slate hover:text-ink hover:underline"
+                >
+                  {row.message || "—"}
+                </button>
               ),
             },
             {
@@ -160,6 +176,11 @@ export default function ContactAdminPage() {
                 <RowActions
                   actions={[
                     {
+                      label: "View message",
+                      variant: "preview",
+                      onClick: () => setViewing(row),
+                    },
+                    {
                       label: "In progress",
                       variant: "progress",
                       onClick: () => void setStatus(row.id, "in_progress"),
@@ -181,7 +202,153 @@ export default function ContactAdminPage() {
           ]}
         />
       )}
+
+      {viewing ? (
+        <InquiryDetailModal
+          inquiry={viewing}
+          onClose={() => setViewing(null)}
+          onSetStatus={(status) => void setStatus(viewing.id, status)}
+        />
+      ) : null}
     </ContentPage>
+  );
+}
+
+function InquiryDetailModal({
+  inquiry,
+  onClose,
+  onSetStatus,
+}: {
+  inquiry: CmsContactInquiry;
+  onClose: () => void;
+  onSetStatus: (status: InquiryStatus) => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  const details: { label: string; value: ReactNode }[] = [
+    {
+      label: "Email",
+      value: inquiry.email ? (
+        <a
+          href={`mailto:${inquiry.email}`}
+          className="text-indigo-600 hover:underline"
+        >
+          {inquiry.email}
+        </a>
+      ) : (
+        "—"
+      ),
+    },
+    {
+      label: "Phone",
+      value: inquiry.phone ? (
+        <a
+          href={`tel:${inquiry.phone}`}
+          className="text-indigo-600 hover:underline"
+        >
+          {inquiry.phone}
+        </a>
+      ) : (
+        "—"
+      ),
+    },
+    { label: "Company", value: inquiry.company || "—" },
+    { label: "Topic", value: inquiry.topic || "—" },
+    { label: "Submitted", value: formatDateTime(inquiry.submittedAt) },
+    {
+      label: "Status",
+      value: (
+        <StatusBadge
+          label={inquiry.status}
+          variant={publishVariant(inquiry.status)}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inquiry-title"
+        className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-lift"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-mist/60 px-6 py-4">
+          <div className="min-w-0">
+            <h2
+              id="inquiry-title"
+              className="truncate font-display text-lg font-semibold text-ink"
+            >
+              {inquiry.name || "Inquiry"}
+            </h2>
+            <p className="text-xs text-slate-400">Contact form inquiry</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="shrink-0 text-sm text-slate hover:text-ink"
+          >
+            Close
+          </button>
+        </div>
+
+        <div className="overflow-y-auto px-6 py-5">
+          <dl className="grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
+            {details.map((d) => (
+              <div key={d.label} className="min-w-0">
+                <dt className="text-xs font-medium text-slate-400">
+                  {d.label}
+                </dt>
+                <dd className="mt-0.5 break-words text-ink">{d.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-5">
+            <p className="text-xs font-medium text-slate-400">Message</p>
+            <p className="mt-1 whitespace-pre-wrap break-words rounded-lg border border-mist/60 bg-cloud px-4 py-3 text-sm leading-relaxed text-ink">
+              {inquiry.message || "No message provided."}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex shrink-0 flex-wrap justify-end gap-2 border-t border-mist/60 px-6 py-4">
+          {inquiry.status !== "in_progress" ? (
+            <button
+              type="button"
+              onClick={() => onSetStatus("in_progress")}
+              className="rounded-lg border border-mist/80 px-4 py-2 text-sm font-medium text-slate hover:bg-cloud hover:text-ink"
+            >
+              Mark in progress
+            </button>
+          ) : null}
+          {inquiry.status !== "resolved" ? (
+            <button
+              type="button"
+              onClick={() => onSetStatus("resolved")}
+              className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-ink/90"
+            >
+              Mark resolved
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </div>
   );
 }
 
