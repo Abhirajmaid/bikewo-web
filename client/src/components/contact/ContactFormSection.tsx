@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import {
@@ -18,6 +18,12 @@ export function ContactFormSection() {
   const [topic, setTopic] = useState<ContactTopic>("Fleet Pricing");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  // When the form became usable; sent with the submission as a spam signal.
+  const startedAt = useRef<number | null>(null);
+
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
 
   return (
     <section id="form" className="bg-white py-10 md:py-14">
@@ -49,6 +55,10 @@ export function ContactFormSection() {
                         phone: String(data.get("phone") || ""),
                         topic,
                         message: String(data.get("message") || ""),
+                        website: String(data.get("website") || ""),
+                        elapsedMs: startedAt.current
+                          ? Date.now() - startedAt.current
+                          : 0,
                       }),
                     })
                       .then(async (res) => {
@@ -60,6 +70,7 @@ export function ContactFormSection() {
                         }
                         setStatus("ok");
                         form.reset();
+                        startedAt.current = Date.now();
                       })
                       .catch(() => {
                         setStatus("error");
@@ -67,6 +78,14 @@ export function ContactFormSection() {
                       });
                   }}
                 >
+                  {/* Honeypot: off-screen and skipped by keyboard / screen readers, so only bots fill it. */}
+                  <div aria-hidden className="absolute -left-[9999px] size-px overflow-hidden">
+                    <label>
+                      Website
+                      <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+                    </label>
+                  </div>
+
                   <div className="grid gap-5 sm:grid-cols-2">
                     <label className="block">
                       <span className="mb-2 block text-sm text-white/80">First Name</span>
