@@ -1,26 +1,42 @@
+import { randomBytes, scryptSync } from "crypto";
 import type { CmsDatabase } from "./types";
 
-/** Pre-hashed password for BikeWo@CMS2026 (scrypt salt:hash). */
-const ADMIN_PASSWORD_HASH =
-  "47f95977de91d99bb5ab6f2c3ead55c2:1af84ee643ffabb04ab0e960667444b1001f70c9fab8d34f1f9e370d4d5b18e9c86449cd0af9d070943f56d3052ae6a84a40c3bcdb1f907f6cae899dcd5ced5d";
+/**
+ * First-run admin password comes from the environment (never hard-code it in this public repo).
+ * Same scrypt "salt:hash" format as hashPassword() in ./auth (not imported: auth -> db -> seed).
+ */
+function seedAdminPasswordHash(): string | null {
+  const password = process.env.CMS_SEED_ADMIN_PASSWORD;
+  if (!password) return null;
+  const salt = randomBytes(16).toString("hex");
+  return `${salt}:${scryptSync(password, salt, 64).toString("hex")}`;
+}
 
 /** Local file DB for CMS login, contact inbox, and site settings. Content comes from Strapi. */
 export function createSeedDatabase(): CmsDatabase {
+  const passwordHash = seedAdminPasswordHash();
+  if (!passwordHash) {
+    console.warn(
+      "[cms] CMS_SEED_ADMIN_PASSWORD is not set: creating the CMS with no admin account. Set it and start with an empty CMS store to create admin@bikewo.com.",
+    );
+  }
   return {
     contact: [],
     applications: [],
-    members: [
-      {
-        id: "im-admin",
-        name: "CMS Admin",
-        email: "admin@bikewo.com",
-        passwordHash: ADMIN_PASSWORD_HASH,
-        cmsRole: "super_admin",
-        department: "Technology",
-        invitedAt: "2026-01-01",
-        lastActiveAt: null,
-        status: "active",
-      },
-    ],
+    members: passwordHash
+      ? [
+          {
+            id: "im-admin",
+            name: "CMS Admin",
+            email: "admin@bikewo.com",
+            passwordHash,
+            cmsRole: "super_admin",
+            department: "Technology",
+            invitedAt: "2026-01-01",
+            lastActiveAt: null,
+            status: "active",
+          },
+        ]
+      : [],
   };
 }
