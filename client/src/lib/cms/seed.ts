@@ -8,6 +8,7 @@ const ADMIN_PASSWORD_HASH =
 export function createSeedDatabase(): CmsDatabase {
   return {
     contact: [],
+    applications: [],
     members: [
       {
         id: "im-admin",
