@@ -1,5 +1,6 @@
 import type {
   ActiveStatus,
+  ApplicationStatus,
   CmsRole,
   InquiryStatus,
   MemberStatus,
@@ -48,6 +49,38 @@ export type CmsContactInquiry = {
   status: InquiryStatus;
 };
 
+export type CmsJobReference = {
+  name: string;
+  company: string;
+  designation: string;
+  phone: string;
+  email: string;
+};
+
+/** A candidate's application to a live career opening (submitted from /careers). */
+export type CmsJobApplication = {
+  id: string;
+  /** Strapi documentId of the career opening. */
+  openingId: string;
+  /** Opening title when the candidate applied (kept if the opening is later edited or removed). */
+  position: string;
+  name: string;
+  phone: string;
+  email: string;
+  linkedin: string;
+  /** Annual CTC in INR; 0 for freshers. */
+  currentCtc: number;
+  expectedCtc: number;
+  noticePeriod: string;
+  coverLetter: string;
+  /** Private bucket keys, served only through the signed-in admin API. */
+  cvKey: string;
+  coverLetterKey: string;
+  references: CmsJobReference[];
+  submittedAt: string;
+  status: ApplicationStatus;
+};
+
 export type CmsMember = {
   id: string;
   name: string;
@@ -86,9 +119,10 @@ export type CmsSiteSettings = {
   socialX: string;
 };
 
-/** Local JSON store — auth, contact inbox, site settings. Content lives in Strapi. */
+/** Local JSON store — auth, contact inbox, job applications, site settings. Content lives in Strapi. */
 export type CmsDatabase = {
   contact: CmsContactInquiry[];
+  applications: CmsJobApplication[];
   members: CmsMember[];
   settings?: CmsSiteSettings;
 };

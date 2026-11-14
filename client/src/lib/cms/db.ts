@@ -1,10 +1,16 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import path from "path";
-import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { bucketName, getS3, s3Configured } from "@/lib/s3";
 import { createSeedDatabase } from "./seed";
 import { mergeSiteSettings } from "./settings";
-import type { CmsContactInquiry, CmsDatabase, CmsMember, CmsSiteSettings } from "./types";
+import type {
+  CmsContactInquiry,
+  CmsDatabase,
+  CmsJobApplication,
+  CmsMember,
+  CmsSiteSettings,
+} from "./types";
 
 // Serverless/container filesystems are wiped on restart, so production state lives in the bucket.
 const S3_KEY = "cms/cms-db.json";
@@ -14,6 +20,7 @@ const DB_PATH = path.join(DATA_DIR, "cms-db.json");
 function normalize(raw: Partial<CmsDatabase>): CmsDatabase {
   return {
     contact: Array.isArray(raw.contact) ? raw.contact : [],
+    applications: Array.isArray(raw.applications) ? raw.applications : [],
     members: Array.isArray(raw.members) ? raw.members : createSeedDatabase().members,
     settings: raw.settings,
   };
@@ -46,7 +53,12 @@ export async function getDb(): Promise<CmsDatabase> {
 
 export async function saveDb(db: CmsDatabase) {
   const body = JSON.stringify(
-    { contact: db.contact, members: db.members, settings: db.settings },
+    {
+      contact: db.contact,
+      applications: db.applications,
+      members: db.members,
+      settings: db.settings,
+    },
     null,
     2,
   );
@@ -109,6 +121,110 @@ export async function deleteContact(id: string) {
   if (db.contact.length === before) return false;
   await saveDb(db);
   return true;
+}
+
+/* ---------------------------------------------------------- Applications */
+
+/** Bucket prefix for CVs / cover letters. Blocked from the public /api/media proxy. */
+export const APPLICATION_FILES_PREFIX = "careers-applications/";
+
+export async function listApplications() {
+  return [...(await getDb()).applications].sort(
+    (a, b) =>
+      new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
+  );
+}
+
+export function newApplicationId() {
+  return nextId("ja");
+}
+
+export async function createApplication(
+  input: Omit<CmsJobApplication, "submittedAt" | "status">,
+) {
+  const db = await getDb();
+  const item: CmsJobApplication = {
+    ...input,
+    submittedAt: new Date().toISOString(),
+    status: "pending",
+  };
+  db.applications.unshift(item);
+  await saveDb(db);
+  return item;
+}
+
+export async function getApplication(id: string) {
+  return (await getDb()).applications.find((a) => a.id === id) ?? null;
+}
+
+export async function updateApplication(
+  id: string,
+  patch: Pick<CmsJobApplication, "status">,
+) {
+  const db = await getDb();
+  const idx = db.applications.findIndex((a) => a.id === id);
+  if (idx < 0) return null;
+  db.applications[idx] = { ...db.applications[idx], status: patch.status };
+  await saveDb(db);
+  return db.applications[idx];
+}
+
+export async function deleteApplication(id: string) {
+  const db = await getDb();
+  const item = db.applications.find((a) => a.id === id);
+  if (!item) return false;
+  db.applications = db.applications.filter((a) => a.id !== id);
+  await saveDb(db);
+  for (const key of [item.cvKey, item.coverLetterKey]) {
+    if (key) await deleteApplicationFile(key).catch(() => undefined);
+  }
+  return true;
+}
+
+function localFilePath(key: string) {
+  return path.join(DATA_DIR, ...key.split("/"));
+}
+
+/** Store an uploaded PDF in the bucket (or ./data locally when no bucket is configured). */
+export async function saveApplicationFile(key: string, body: Buffer) {
+  if (s3Configured()) {
+    await getS3().send(
+      new PutObjectCommand({
+        Bucket: bucketName(),
+        Key: key,
+        Body: body,
+        ContentType: "application/pdf",
+      }),
+    );
+    return;
+  }
+  const file = localFilePath(key);
+  mkdirSync(path.dirname(file), { recursive: true });
+  writeFileSync(file, body);
+}
+
+export async function readApplicationFile(key: string): Promise<Buffer | null> {
+  if (s3Configured()) {
+    try {
+      const res = await getS3().send(
+        new GetObjectCommand({ Bucket: bucketName(), Key: key }),
+      );
+      const bytes = await res.Body?.transformToByteArray();
+      return bytes ? Buffer.from(bytes) : null;
+    } catch {
+      return null;
+    }
+  }
+  const file = localFilePath(key);
+  return existsSync(file) ? readFileSync(file) : null;
+}
+
+async function deleteApplicationFile(key: string) {
+  if (s3Configured()) {
+    await getS3().send(new DeleteObjectCommand({ Bucket: bucketName(), Key: key }));
+    return;
+  }
+  rmSync(localFilePath(key), { force: true });
 }
 
 /* --------------------------------------------------------------- Members */
