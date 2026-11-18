@@ -91,7 +91,7 @@ export const NAV: NavNode[] = [
       "One EMI operating model — source, distribute, enable, charge, service and connect.",
     children: [
       {
-        title: "Mobility Distribution",
+        title: "Logistics",
         href: "https://positievmobility.com/",
         external: true,
         blurb:

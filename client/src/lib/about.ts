@@ -472,7 +472,7 @@ export const ABOUT_NEWS = [
 export const LEADERSHIP_DIVISION_FILTERS = [
   { slug: "all", label: "All" },
   { slug: "executive", label: "Executive" },
-  { slug: "mobility-distribution", label: "Mobility distribution" },
+  { slug: "mobility-distribution", label: "Logistics" },
   { slug: "mobility-asset-leasing", label: "Mobility asset leasing" },
   { slug: "energy-infrastructure", label: "Energy infrastructure" },
   { slug: "lifecycle-services", label: "Lifecycle services" },
@@ -482,7 +482,7 @@ export const LEADERSHIP_DIVISION_FILTERS = [
 /** Department options for CMS team members (admin form dropdown). */
 export const TEAM_DEPARTMENTS = [
   "Executive",
-  "Mobility distribution",
+  "Logistics",
   "Mobility asset leasing",
   "Energy infrastructure",
   "Lifecycle services",

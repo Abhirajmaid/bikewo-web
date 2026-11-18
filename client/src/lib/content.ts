@@ -21,7 +21,7 @@ export const HERO = {
   primaryCta: { label: "Explore Ecosystem", href: "#ecosystem" },
   secondaryCta: { label: "About us", href: "/about" },
   marquee: [
-    "Mobility Distribution",
+    "Logistics",
     "Asset Leasing",
     "Energy Infrastructure",
     "Lifecycle Services",
@@ -87,7 +87,7 @@ export type EcosystemNode = {
 export const ECOSYSTEM: EcosystemNode[] = [
   {
     id: "distribution",
-    title: "Mobility Distribution",
+    title: "Logistics",
     short: "Vehicles",
     detail:
       "Vehicle sourcing and distribution through PositiEV — a technology-led EV channel for dealers and fleets.",
@@ -137,7 +137,7 @@ export const ECOSYSTEM: EcosystemNode[] = [
 export const DIVISIONS = [
   {
     index: "01",
-    title: "Mobility Distribution",
+    title: "Logistics",
     copy: "Vehicle sourcing and distribution through PositiEV — India’s technology-led EV channel network.",
     image: "/assets/hf_20260806_143951_30c91bb1-6891-40a3-8985-0e68a4501e54.png",
     href: "/businesses/mobility-distribution",

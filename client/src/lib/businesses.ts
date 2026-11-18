@@ -279,7 +279,7 @@ export const BUSINESSES_TESTIMONIALS = {
       role: "Dealer Principal, Jaipur",
       avatar:
         "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=700&fit=crop&crop=face",
-      tags: ["Mobility Distribution", "Enlite EV Care", "Channel Partners"],
+      tags: ["Logistics", "Enlite EV Care", "Channel Partners"],
     },
     {
       heroQuote:
@@ -329,7 +329,7 @@ export const BUSINESSES_FAQ = {
     {
       question: "Can I work with just one business?",
       answer:
-        "Yes. Dealers work with Mobility Distribution through PositiEV. Fleet operators often start with leasing. Property managers engage Energy Infrastructure for charge points. Each business has its own sales and support path.",
+        "Yes. Dealers work with Logistics through PositiEV. Fleet operators often start with leasing. Property managers engage Energy Infrastructure for charge points. Each business has its own sales and support path.",
     },
     {
       question: "Where does aviation logistics fit?",
@@ -344,7 +344,7 @@ export const BUSINESSES_FAQ = {
     {
       question: "How do I become a channel partner?",
       answer:
-        "Contact our Mobility Distribution team through the contact page. We onboard dealers, fleet operators and charge-point hosts with training and access across the EMI platform.",
+        "Contact our Logistics team through the contact page. We onboard dealers, fleet operators and charge-point hosts with training and access across the EMI platform.",
       cta: { label: "Get in touch", href: "/contact" },
     },
   ],
